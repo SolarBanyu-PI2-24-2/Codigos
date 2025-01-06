@@ -1,6 +1,6 @@
 # Guia de Uso do Docker para o Projeto
 
-### 1. Configuração do Ambiente Django
+## 1. Configuração do Ambiente Django
 
 **Descrição**: Preparar o ambiente local para o desenvolvimento utilizando django.
 
