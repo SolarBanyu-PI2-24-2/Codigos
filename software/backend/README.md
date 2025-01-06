@@ -61,7 +61,6 @@
     ```
         python manage.py runserver
     ```
----  
 
 
 ## 2. Instalação do Docker e Docker Compose
