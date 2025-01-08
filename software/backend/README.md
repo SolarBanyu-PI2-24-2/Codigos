@@ -1,69 +1,6 @@
 # Guia de Uso do Docker para o Projeto
 
-## 1. Configuração do Ambiente Django
-
-**Descrição**: Preparar o ambiente local para o desenvolvimento utilizando django.
-
--  **Passos**:
-
-1. Instalar Python 3.10 ou superior.
-
-2. Criar um ambiente virtual.
-
-    - **Linux:**
-
-    ```
-        pip install virtualenv
-
-        virtualenv myenv    
-    ```
-
-    - **Windows:**
-
-    ```
-        pip install virtualenv
-
-        python -m virtualenv myenv  
-    ```
-
-3. Ativar o ambiente virtual e instalar django.
-
-    - **Linux:**
-
-    ```
-        source myenv/bin/activate
-        
-        pip install django
-    ```
-
-    - **Windows:**
-
-    ```
-        myenv\Scripts\activate
-        
-        pip install django
-    ```
-
-4. Verificar instalação
-
-    ```
-        django-admin --version
-    ```
-
-5. Criação inicial do projeto
-
-    ```
-        django-admin startproject nome_projeto
-    ```
-
-6. Inicialização inicial do servidor de desenvolvimento
-
-    ```
-        python manage.py runserver
-    ```
-
-
-## 2. Instalação do Docker e Docker Compose
+## 1. Instalação do Docker e Docker Compose
 
 Antes de começar, é necessário instalar o Docker e o Docker Compose.
 
@@ -87,7 +24,7 @@ Antes de começar, é necessário instalar o Docker e o Docker Compose.
 
 - Siga as instruções no site oficial do [Docker Compose](https://docs.docker.com/compose/install/).
 
-## 2. Execução do Docker
+## 3. Execução do Docker
 
 ### Configure o arquivo .env
 
@@ -113,7 +50,7 @@ Isso iniciará os seguintes serviços:
   - email: user@locahost.com
   - senha: password
   
-## 3. Criar server para gerenciar bancop
+## 4. Criar server para gerenciar bancop
 
 1. Acesso o pgadmin
 2. Criar novo servidor
