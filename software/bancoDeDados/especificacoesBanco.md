@@ -8,6 +8,6 @@
 | Repositório de documentação| [Acesse aqui](https://documentacao-relatorio-2d8035.gitlab.io/) |
 
 ## Histórico de versão
-| Data | Versão | Descrição | Autores | 
+| Data | Versão | Descrição | Autores | | Revisão | 
 |-------|------|-----------|------------|
-| 12/12/2024  | 1.0 | Criação da documentação| Mylena |  
+| 12/12/2024  | 1.0 | Criação da documentação| Mylena | Bruno Araújo | 
