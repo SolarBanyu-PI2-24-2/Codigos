@@ -1,0 +1,4 @@
+# Embarcados #
+/software/embarcado/.env
+/software/embarcado/djangoapp/*/__pycache__
+/software/embarcado/djangoapp/db.sqlite3
