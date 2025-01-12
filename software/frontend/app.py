@@ -2,6 +2,7 @@ import streamlit as st
 
 pages = {
     "": [
+        st.Page("pages/login.py", title="Login"),
         st.Page("pages/home.py", title="Home"),
         st.Page("pages/dashboard.py", title="Monitoramento"),
         st.Page("pages/report.py", title="Relatório"),
