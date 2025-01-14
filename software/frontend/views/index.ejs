@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SolarBanyu</title>
+    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Coluna Esquerda -->
+        <div class="left">
+            <img src="https://gitlab.com/unb-esw/fga-pi2/semestre-2024-3/squad04/documentacao-relatorio/-/raw/main/docs/assets/software/identidadeVisual/logoClaraSemBg.png?ref_type=heads" alt="Logo Solar Banyu" class="logo">
+        </div>
+        <!-- Coluna Direita -->
+        <div class="right">
+            <div class="login-box">
+                <h2>Bem-vindo ao SolarBanyu</h2>
+                <form id="loginForm">
+                    <label for="username" class="form-label">Usuário</label>
+                    <input class="form-input" type="text" id="username" name="username" placeholder="Usuário">
+                    
+                    <label for="password" class="form-label">Senha</label>
+                    <input class="form-input" type="password" id="password" name="password" placeholder="Senha">
+                    
+                    <a href="#" class="forgot-link">Esqueci meus dados</a>
+                    
+                    <button type="button" class="form-button" onclick="validateLogin()">Acessar</button>
+                </form>
+                <p class="small-text">
+                    Seus dados estão seguros. Utilizamos tecnologia de criptografia.
+                </p>
+                <p class="small-text-footer">
+                    Squad 4 - FCTE: PI2
+                </p>
+            </div>
+        </div>
+    </div>
+    <script src="/js/scripts.js"></script>
+</body>
+</html>
