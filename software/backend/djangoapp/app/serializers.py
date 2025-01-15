@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from .models import Usuario, Endereco, Dispositivo, Sensor, DadosSensor, Alerta, Consumo
+from django.contrib.auth.models import User
 
 class UsuarioSerializer(serializers.ModelSerializer):
   class Meta:
@@ -35,3 +36,9 @@ class ConsumoSerializer(serializers.ModelSerializer):
   class Meta:
     model = Consumo
     fields = '__all__'
+
+# Default user class from django
+class UserSerializer(serializers.ModelSerializer):
+    class Meta(object):
+        model = User 
+        fields = ['id', 'username', 'password', 'email']

@@ -3,6 +3,9 @@ from django.urls import path, re_path
 from . import views
 
 urlpatterns = [
+    re_path('login', views.login),
+    re_path('signup', views.signup),
+    re_path('test_token', views.test_token),
     path('', views.index, name='index'),
     path('usuarios/', views.UsuariosView.as_view(), name='usuarios_view'),
     path('usuario/<uuid:pk>/', views.UsuarioView.as_view(), name='usuario_view'),
