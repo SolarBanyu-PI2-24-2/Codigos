@@ -8,3 +8,19 @@ function validateLogin() {
         alert("Usuário ou senha incorretos.");
     }
 }
+
+
+document.querySelectorAll('.faq-question').forEach(button => {
+    button.addEventListener('click', () => {
+        const faqAnswer = button.nextElementSibling;
+        const icon = button.querySelector('i');
+
+        if (faqAnswer.style.display === 'block') {
+            faqAnswer.style.display = 'none';
+            icon.classList.remove('active');
+        } else {
+            faqAnswer.style.display = 'block';
+            icon.classList.add('active');
+        }
+    });
+});
