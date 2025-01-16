@@ -1,61 +1,40 @@
-<em>// Definindo o pino ao qual o sensor está conectado
-const int sensorPin = 1; // Altere conforme necessário
- 
-// Variáveis para cálculo de vazão
-volatile unsigned int pulseCount; // Variável para contar pulsos
-float flowRate; // Vazão em litros por minuto
-unsigned int flowMilliLitres; // Quantidade de água passada (em mililitros)
-unsigned long totalMilliLitres; // Total de água passada (em mililitros)
-unsigned long oldTime; // Armazena o tempo anterior
- 
-// Interrupção para contar pulsos
-void pulseCounter() {
-  pulseCount++;
+const int pinoSensor = 27; // Pino digital para o sensor
+volatile int pulsos = 0;
+const float fatorCalibracao = 4.78; // Fator de calibração do sensor de acordo com a sua alimentação
+
+float fluxoLitrosPorMinuto = 0.0; // Taxa de fluxo em L/min
+float volumeTotal = 0.0; // Volume total em litros
+
+unsigned long tempoAnterior = 0; // Armazena o tempo da última atualização
+
+void IRAM_ATTR contarPulsos() {
+  pulsos++; // Incrementa a contagem de pulsos
 }
- 
+
 void setup() {
-  Serial.begin(9600);
-  pinMode(sensorPin, INPUT);
-  digitalWrite(sensorPin, HIGH); // Ativar pull-up
-  pulseCount = 0;
-  flowRate = 0.0;
-  flowMilliLitres = 0;
-  totalMilliLitres = 0;
-  oldTime = 0;
- 
-  // Configura a interrupção para contar pulsos
-  attachInterrupt(digitalPinToInterrupt(sensorPin), pulseCounter, FALLING);
+  Serial.begin(115200); // Inicializa a comunicação serial
+  Serial.println("Monitoramento de Vazão com ESP32");
+  pinMode(pinoSensor, INPUT_PULLUP); // Configura o pino do sensor como entrada
+  attachInterrupt(digitalPinToInterrupt(pinoSensor), contarPulsos, RISING); // Configura interrupção para contar pulsos
 }
- 
+
 void loop() {
-  // Calcula o tempo decorrido
-  unsigned long currentTime = millis();
-  unsigned long elapsedTime = currentTime - oldTime;</em>
-<em>
-  // Se passou um segundo desde a última vez
-  if (elapsedTime > 1000) {</em>
-<em>
-    // Calcula a vazão
-    flowRate = (1000.0 / (elapsedTime)) * pulseCount;
- 
-    // Resetar contadores
-    pulseCount = 0;
-    oldTime = currentTime;
- 
-    // Calcula a quantidade de água passada
-    flowMilliLitres = (flowRate / 60) * 1000;
- 
-    // Adiciona à quantidade total
-    totalMilliLitres += flowMilliLitres;
- 
-    // Imprime os resultados
-    Serial.print("Vazao: ");
-    Serial.print(flowRate);
-    Serial.print(" L/min - ");
-    Serial.print("Quantidade de agua: ");
-    Serial.print(flowMilliLitres);
-    Serial.print(" mL/segundo - Total: ");
-    Serial.print(totalMilliLitres);
-    Serial.println(" mL");
+  unsigned long tempoAtual = millis(); // Tempo atual em milissegundos
+  unsigned long intervalo = tempoAtual - tempoAnterior; // Calcula o intervalo de tempo
+
+  if (intervalo >= 500) { // Atualiza a cada 500 ms
+    tempoAnterior = tempoAtual; // Atualiza o tempo anterior
+    fluxoLitrosPorMinuto = (pulsos / fatorCalibracao); // Calcula a taxa de fluxo
+    volumeTotal += (fluxoLitrosPorMinuto / 110.0); // Calcula o volume total
+
+    Serial.print("Fluxo: ");
+    Serial.print(fluxoLitrosPorMinuto, 2); // Exibe a taxa de fluxo com 2 casas decimais
+    Serial.println(" L/min");
+
+    Serial.print("Volume Total: ");
+    Serial.print(volumeTotal, 2); // Exibe o volume total com 2 casas decimais
+    Serial.println(" L");
+
+    pulsos = 0; // Reinicia a contagem de pulsos
   }
-}</em>
+}
