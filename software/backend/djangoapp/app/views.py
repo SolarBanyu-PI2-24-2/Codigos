@@ -49,6 +49,24 @@ def test_token(request):
 def index(request):
   return HttpResponse("SolarBanyu")
 
+def water_amount_over_time(request):
+  return HttpResponse(1)
+
+def water_amount_per_day(request):
+  return HttpResponse(1)
+
+def water_temperature_over_time(request):
+  return HttpResponse(1)
+
+def water_temperature_amplitude_per_day(request):
+  return HttpResponse(1)
+
+def water_ph_over_time(request):
+  return HttpResponse(1)
+
+def battery_voltage_over_time(request):
+  return HttpResponse(1)
+
 class UsuariosView(generics.ListCreateAPIView):
   queryset = Usuario.objects.all()
   serializer_class = UsuarioSerializer
