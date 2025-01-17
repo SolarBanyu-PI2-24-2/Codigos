@@ -1,7 +1,7 @@
 #include <OneWire.h>
 #include <DallasTemperature.h>
 
-const int PINO_ONEWIRE = 25; // Define o pino do sensor
+const int PINO_ONEWIRE = 35; // Define o pino do sensor
 OneWire oneWire(PINO_ONEWIRE); // Cria um objeto OneWire
 DallasTemperature sensor(&oneWire); // Informa a referência da biblioteca DallasTemperature para o OneWire
 DeviceAddress endereco_temp; // Armazena o endereço do sensor no barramento
