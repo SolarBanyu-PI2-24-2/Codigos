@@ -138,13 +138,16 @@
                         </table>
                     </div>
                     <div class="installation-actions">
-                        <button class="support-btn">Pedir suporte</button>
-                        <button class="add-unit-btn">Adicionar nova unidade</button>
+                        <button id="supportButton" class="support-btn">Pedir suporte</button>
+                        <button id="addUnitButton" class="add-unit-btn">Adicionar nova unidade</button>
                     </div>
                 </div>
             </div>
-        </div>
-        
+        </div>        
     </div>
+                             <!-- Incluir os modais -->
+                             <%- include('partials/pedirSuporte') %>
+                             <%- include('partials/adicionarUnidade') %>
+        <script src="/js/popup.js"></script>
 </body>
 </html>

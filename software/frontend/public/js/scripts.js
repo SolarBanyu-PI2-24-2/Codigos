@@ -9,7 +9,7 @@ function validateLogin() {
     }
 }
 
-
+// perguntas faq
 document.querySelectorAll('.faq-question').forEach(button => {
     button.addEventListener('click', () => {
         const faqAnswer = button.nextElementSibling;
