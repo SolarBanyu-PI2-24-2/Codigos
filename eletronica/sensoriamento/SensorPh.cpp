@@ -1,7 +1,9 @@
 #include <arduino.h>
 
+// Sensor de pH
+
 // Configurações
-int pHSense          = 0; // Pinagem ADC para o sensor de pH GPIO0
+int pHSense          = 36; // Pinagem ADC para o sensor de pH GPIO36
 int samples          = 20; // Número de amostras para média
 float adc_resolution = 4095.0; // Resolução ADC do ESP32-C6 (12 bits)
 float vRef           = 3.3; // Tensão de referência do ADC do ESP32-C6
@@ -25,8 +27,8 @@ void loop() {
     int from_ad = analogRead(pHSense);
     measurings += from_ad;
     delay(10);
-    Serial.print("ADC Raw Value: ");
-    Serial.println(from_ad);
+    //Serial.print("ADC Raw Value: ");
+    //Serial.println(from_ad);
   }
   
   // Cálculo da média e conversão para tensão
