@@ -1,4 +1,4 @@
-const int pinoSensor = 27; // Pino digital para o sensor
+const int pinoSensor = 25; // Pino digital para o sensor
 volatile int pulsos = 0;
 const float fatorCalibracao = 4.78; // Fator de calibração do sensor de acordo com a sua alimentação
 
