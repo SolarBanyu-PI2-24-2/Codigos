@@ -17,8 +17,6 @@ class Usuario(models.Model):
     def __str__(self):
         return self.nome
 
-
-
 class Endereco(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     cep = models.CharField(max_length=8, null=False)
@@ -32,7 +30,7 @@ class Endereco(models.Model):
 
     def __str__(self):
         return f"{self.rua}, {self.numero} - {self.cidade}"
-    
+
 class Dispositivo(models.Model):
     num_serie = models.CharField(max_length=100, primary_key=True)
     modelo = models.CharField(max_length=255, null=False)
@@ -47,17 +45,17 @@ class Dispositivo(models.Model):
 
     def __str__(self):
         return self.modelo
-    
+
 class Sensor(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    tipo = models.CharField(max_length=50, null=False)                           # TODO: talvez transformar em ENUM 
+    tipo = models.CharField(max_length=50, null=False)                           # TODO: talvez transformar em ENUM
     ativo = models.BooleanField(default=True, null=False)
-    criado_em = models.DateTimeField(auto_now_add=True) 
+    criado_em = models.DateTimeField(auto_now_add=True)
     dispositivo_id = models.ForeignKey(Dispositivo, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.tipo
-    
+
 class DadosSensor(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     valor = models.DecimalField(max_digits=10, decimal_places=2, null=False)
@@ -67,7 +65,7 @@ class DadosSensor(models.Model):
 
     def __str__(self):
         return f"{self.valor} {self.unidade}"
-    
+
 class Alerta(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     tipo = models.CharField(max_length=50, null=False)
@@ -77,7 +75,7 @@ class Alerta(models.Model):
     criado_em = models.DateTimeField(auto_now_add=True, null=False)
     atualizado_em = models.DateTimeField(auto_now=True)
     dispositivo_id = models.ForeignKey(Dispositivo, on_delete=models.CASCADE)
-    
+
     def __str__(self):
         return f"{self.tipo} - {self.descricao}"
 
