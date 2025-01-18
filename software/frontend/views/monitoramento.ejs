@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="/css/styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link rel="icon" href="/assets/favicon.png" type="image/png">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
     <%- include('partials/sidebar') %>
@@ -16,8 +17,107 @@
         <div class="dashboard">
             <h1>Monitoramento</h1>
             <p>Acompanhe os dados do sistema em gráficos detalhados.</p>
-            
+
+            <div class="chart-container">
+                <div class="dropdown">
+                    <button id="dropdownButton" class="dropdown-button">Volume de água dessalinizada <i class="fas fa-chevron-down"></i></button>
+                    <ul id="dropdownMenu" class="dropdown-menu">
+                        <li onclick="changeChart('Volume de água dessalinizada', [10, 20, 30, 82, 50, 25, 15, 60, 45, 70, 55, 40], 'Meses')">Volume de água dessalinizada</li>
+                        <li onclick="changeChart('Energia consumida', [100, 200, 150, 300, 250, 400, 350, 450, 500, 550, 600, 650], 'Meses')">Energia consumida</li>
+                        <li onclick="changeChart('Ph da água', [7, 7.2, 7.4, 7.1, 7.3, 7.5, 7.2, 7.1, 7.3, 7.4, 7.5, 7.2], 'Meses')">Ph da água</li>
+                        <li onclick="changeChart('Temperatura da água', [20, 22, 21, 23, 24, 25, 26, 24, 23, 22, 21, 20], 'Meses')">Temperatura da água</li>
+                        <li onclick="changeChart('Alertas', [2, 4, 3, 5, 6, 4, 3, 7, 5, 6, 4, 3], 'Meses')">Alertas</li>
+                    </ul>
+                </div>
+                <canvas id="waterChart"></canvas>
+            </div>
+
+            <div class="info-cards">
+                <div class="card">
+                    <h3>Total de água produzida</h3>
+                    <p>25.000 L</p>
+                </div>
+                <div class="card">
+                    <h3>Dias em funcionamento</h3>
+                    <p>260 dias</p>
+                </div>
+                <div class="card">
+                    <h3>Total de alertas</h3>
+                    <p>7 alertas</p>
+                </div>
+                <div class="card">
+                    <h3>Última atualização</h3>
+                    <p>20/11/2024</p>
+                </div>
+            </div>
         </div>
     </div>
+
+    <script>
+        const ctx = document.getElementById('waterChart').getContext('2d');
+        const waterChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: ["Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"],
+                datasets: [{
+                    label: 'Volume de água dessalinizada',
+                    data: [10, 20, 30, 82, 50, 25, 15, 60, 45, 70, 55, 40],
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                    borderWidth: 2,
+                    pointRadius: 5,
+                    pointBackgroundColor: 'rgba(54, 162, 235, 1)'
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: 'Litros'
+                        }
+                    },
+                    x: {
+                        title: {
+                            display: true,
+                            text: 'Meses'
+                        }
+                    }
+                },
+                plugins: {
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                return `${context.raw} litros`;
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        document.getElementById('dropdownButton').addEventListener('click', () => {
+            const menu = document.getElementById('dropdownMenu');
+            menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
+        });
+
+        function changeChart(title, data, xAxisLabel) {
+            waterChart.data.datasets[0].label = title;
+            waterChart.data.datasets[0].data = data;
+            waterChart.options.scales.x.title.text = xAxisLabel;
+            waterChart.update();
+            document.getElementById('dropdownButton').innerHTML = `${title} <i class='fas fa-chevron-down'></i>`;
+            document.getElementById('dropdownMenu').style.display = 'none';
+        }
+
+        window.addEventListener('click', (e) => {
+            const dropdown = document.querySelector('.dropdown');
+            if (!dropdown.contains(e.target)) {
+                document.getElementById('dropdownMenu').style.display = 'none';
+            }
+        });
+    </script>
 </body>
 </html>
