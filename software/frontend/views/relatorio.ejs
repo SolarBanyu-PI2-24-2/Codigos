@@ -3,11 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Relatório-SolarBanyu</title>
+    <title>SolarBanyu Report</title>
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/css/styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link rel="icon" href="/assets/favicon.png" type="image/png">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.2/html2pdf.bundle.js"></script>
 </head>
 <body>
     <%- include('partials/sidebar') %>
@@ -15,8 +16,125 @@
         <%- include('partials/header') %>
         <div class="dashboard">
             <h1>Relatório</h1>
-            <p>Gere relatórios e veja o histórico completo do seu sistema.</p>            
+            <p>Gere relatórios e veja o histórico completo do seu sistema.</p>
+        </div>
+
+        <!-- 2x2 Grid -->
+        <div class="grid-container-report">
+            <!-- First column, first row -->
+            <div class="box alerts">
+                <span class="small-text">Alertas do SolarBanyu</span>
+                <h2>3 alertas não resolvidos</h2>
+            </div>
+
+            <!-- Second column, first row -->
+            <div class="box button">
+                <a href="alertas" class="btn-yellow">Ir para alertas</a>
+            </div>
+
+            <!-- First column, second row -->
+            <div class="box chart">
+                <h3>Resumo dos últimos 6 meses</h3>
+                <div id="chart">
+                    <!-- Canvas for the chart -->
+                    <canvas id="solarChart"></canvas>
+                </div>
+                <div class="legend">
+                    <div class="legend-left">
+                        <ul>
+                            <li><span class="line red"></span> Temperatura</li>
+                            <li><span class="line lightblue"></span> pH da água</li>
+                        </ul>
+                    </div>
+                    <div class="legend-right">
+                        <ul>
+                            <li><span class="line blue"></span> Volume de água dessalinizada</li>
+                            <li><span class="line energy"></span> Consumo de energia</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Second column, second row -->
+            <div class="box last-update">
+                <div class="update-info">
+                    <span>Última atualização</span>
+                    <p>20/11/2024</p>
+                </div>
+                <div class="buttons">
+                    <button class="btn-yellow" id="downloadButton">Salvar em PDF</button>
+                    <button class="btn-yellow">Compartilhar</button>
+                    <button class="btn-yellow" id="supportButton">Pedir suporte</button>
+                    <div id="supportModal" class="modal">
+                        <div class="modal-content">
+                            <span class="close-modal" id="closeSupportModal">&times;</span>
+                            <h2>Pedir Suporte</h2>
+                            <p>Escolha uma opção de suporte:</p>
+                            <ul>
+                                <li><a href="tel:+551199999999" class="support-option-modal">📞 Ligue para nós</a></li>
+                                <li><a href="mailto:suporte@solarbanyu.com" class="support-option-modal">📧 Enviar um e-mail</a></li>
+                                <li><button class="support-option-modal" id="startChat">💬 Iniciar um chat</button></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
+
+    <!-- Chart.js script -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        var ctx = document.getElementById('solarChart').getContext('2d');
+        var solarChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: ['1 mês', '2 meses', '3 meses', '4 meses', '5 meses', '6 meses'],
+                datasets: [{
+                    label: 'Temperatura',
+                    data: [20, 21, 22, 19, 23, 24],
+                    borderColor: 'red',
+                    fill: false
+                }, {
+                    label: 'pH da água',
+                    data: [7, 6.9, 7.1, 7, 7.2, 7],
+                    borderColor: 'lightblue',
+                    fill: false
+                }, {
+                    label: 'Volume de água dessalinizada',
+                    data: [100, 150, 200, 170, 180, 210],
+                    borderColor: 'blue',
+                    fill: false
+                }, {
+                    label: 'Consumo de energia',
+                    data: [50, 55, 60, 45, 50, 70],
+                    borderColor: 'yellow',
+                    fill: false
+                }]
+            }
+        });
+    </script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const supportButton = document.getElementById("supportButton");
+            const supportModal = document.getElementById("supportModal");
+            const closeSupportModal = document.getElementById("closeSupportModal");
+
+            supportButton.addEventListener("click", () => {
+                supportModal.style.display = "flex";
+            });
+
+            closeSupportModal.addEventListener("click", () => {
+                supportModal.style.display = "none";
+            });
+
+            window.addEventListener("click", (event) => {
+                if (event.target === supportModal) {
+                    supportModal.style.display = "none";
+                }
+            });
+        });
+    </script>
 </body>
 </html>
