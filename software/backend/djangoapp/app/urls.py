@@ -21,4 +21,5 @@ urlpatterns = [
     path('alerta/<uuid:pk>/', views.AlertaView.as_view(), name='alerta_view'),
     path('consumos/', views.ConsumosView.as_view(), name='consumos_view'),
     path('consumo/<uuid:pk>/', views.ConsumoView.as_view(), name='consumo_view'),
+    path('vazao_tempo/<str:num_serie_dispositivo>/', views.vazao_tempo, name='vazao_tempo'),
 ]
