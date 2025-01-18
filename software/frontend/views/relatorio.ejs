@@ -116,6 +116,23 @@
     </script>
 
     <script>
+        document.getElementById('downloadButton').addEventListener('click', function() {
+            const chartCanvas = document.getElementById('solarChart');
+            
+            const options = {
+                margin: 10,
+                filename: 'relatorio_solarbanyu.pdf',
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 2 },
+                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+            };
+
+            // Criando a imagem a partir do canvas e gerando o PDF
+            html2pdf().from(chartCanvas).set(options).save();
+        });
+    </script>
+
+    <script>
         document.addEventListener("DOMContentLoaded", () => {
             const supportButton = document.getElementById("supportButton");
             const supportModal = document.getElementById("supportModal");
