@@ -15,7 +15,6 @@ html, body {
     height: 100%;
     margin: 0;
     padding: 0;
-    font-family: 'Arial', sans-serif;
     background-color: #f9f9f9;
 }
 .container {
@@ -1009,107 +1008,111 @@ html, body {
     color: white;
 }
 
-/* popup */
-
+/* Estilo para o modal */
 .modal {
-    display: none; 
+    display: none; /* Escondido por padrão */
     position: fixed;
     z-index: 1000;
     left: 0;
     top: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.5); 
-    display: flex;
+    background-color: rgba(0, 0, 0, 0.5); /* Fundo escuro */
     justify-content: center;
-    align-items: center; 
-    overflow: hidden; /* Evita rolagem da página ao modal estar aberto */
+    align-items: center;
 }
 
-/* Conteúdo do modal */
+/* Estilo do conteúdo do modal */
 .modal-content {
-    background: #fff;
-    padding: 20px 30px;
-    border-radius: 10px;
-    width: 40%; 
-    max-width: 600px;
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
     text-align: center;
-    position: relative;
+    width: 50%;
+    margin: auto;
 }
 
-
-.modal-content h2 {
-    font-size: 1.8rem;
-    font-weight: bold;
-    color: #333;
-    margin-bottom: 15px;
-}
-
-
-.modal-content p {
-    font-size: 1rem;
-    color: #666;
-    margin-bottom: 20px;
-}
-
-
+/* Estilo do botão de fechar */
 .close-modal {
-    position: absolute;
-    top: 15px;
-    right: 20px;
+    color: #aaa;
+    float: right;
     font-size: 1.5rem;
-    color: #999;
+    font-weight: bold;
     cursor: pointer;
-    transition: color 0.3s;
 }
 
 .close-modal:hover {
-    color: #333;
+    color: #000;
 }
 
-
+/* Estilo das opções dentro do modal */
 .modal-content ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
+    list-style: none; /* Remove os marcadores da lista */
+    padding: 0; /* Remove o padding padrão */
+    text-align: center; /* Centraliza o conteúdo horizontalmente */
 }
-
 
 .modal-content ul li {
-    font-size: 1rem;
+    margin: 20px 0; /* Adiciona espaço entre os itens */
+    display: inline-block; /* Garante que os itens sejam tratados como elementos inline */
 }
 
-
 .support-option-modal {
-    display: inline-block;
-    font-size: 1rem;
-    font-weight: 500;
-    color: #007BFF;
+    display: flex;
+    margin: 10px 0;
     text-decoration: none;
-    border: 1px solid #007BFF;
-    border-radius: 5px;
-    padding: 10px 15px;
-    transition: all 0.3s ease;
+    color: #007BFF;
+    font-weight: bold;
+    font-size: 1rem;
+    cursor: pointer;
+    padding: 8px 12px; /* Ajusta o espaço interno */
+    border-radius: 4px;
+    background-color: transparent; /* Sem fundo inicialmente */
+    transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 .support-option-modal:hover {
+    color: #fff;
+    background-color: #007BFF;
+}
+/* Estilo do formulário */
+.modal-label {
+    display: block;
+    font-size: 1rem;
+    font-weight: bold;
+    margin-bottom: 10px;
+    text-align: left;
+    color: #555;
+}
+
+.modal-input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 1rem;
+    color: #555;
+}
+
+.modal-input:focus {
+    border-color: #007BFF;
+    outline: none;
+}
+
+/* Botão de envio */
+.btn-submit-modal {
     background-color: #007BFF;
     color: #fff;
-}
-
-
-.support-option-modal#startChat {
-    background-color: #FFB300;
-    color: #fff;
     border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1rem;
     font-weight: bold;
-    transition: background-color 0.3s ease;
 }
 
-.support-option-modal#startChat:hover {
-    background-color: #FF6E00;
+.btn-submit-modal:hover {
+    background-color: #0056b3;
 }
