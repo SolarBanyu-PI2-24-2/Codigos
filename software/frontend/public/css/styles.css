@@ -1117,7 +1117,6 @@ html, body {
     background-color: #0056b3;
 }
 
-/* Estilo para o dropdown */
 .dropdown {
     position: relative;
     display: inline-block;
@@ -1127,7 +1126,7 @@ html, body {
 
 .dropdown-button {
     background-color: #f0f0f0;
-    color: #333;
+    color: #4B75FF;
     font-family: 'Poppins', sans-serif;
     font-size: 16px;
     font-weight: 600;
@@ -1170,7 +1169,7 @@ html, body {
     font-family: 'Poppins', sans-serif;
     font-size: 14px;
     font-weight: 500;
-    color: #333;
+    color: #4B75FF;
     padding: 10px 15px;
     cursor: pointer;
     transition: background-color 0.3s ease, color 0.3s ease;
@@ -1183,4 +1182,48 @@ html, body {
 
 .dropdown-menu li:not(:last-child) {
     border-bottom: 1px solid #eee;
+}
+
+
+.info-cards {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px; 
+    flex-wrap: wrap; 
+}
+
+.info-cards .card {
+    flex: 1; 
+    min-width: 200px; 
+    max-width: 300px; 
+    background-color: #f9f9f9; 
+    border: 1px solid #ddd; 
+    border-radius: 10px; 
+    padding: 20px;
+    text-align: center;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); 
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.info-cards .card:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.2); 
+}
+.info-cards .card h3 {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 10px;
+    color: #333;
+}
+
+.info-cards .card p {
+    font-size: 16px;
+    font-weight: 500;
+    color: #555;
+}
+
+.chart-container {
+    width: 100%; 
+    max-width: 98%;
+    margin: 0 auto; 
 }

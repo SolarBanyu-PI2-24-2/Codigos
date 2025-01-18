@@ -18,6 +18,7 @@
             <h1>Monitoramento</h1>
             <p>Acompanhe os dados do sistema em gráficos detalhados.</p>
 
+            <!-- Dropdown para escolher o gráfico -->
             <div class="chart-container">
                 <div class="dropdown">
                     <button id="dropdownButton" class="dropdown-button">Volume de água dessalinizada <i class="fas fa-chevron-down"></i></button>
@@ -29,9 +30,20 @@
                         <li onclick="changeChart('Alertas', [2, 4, 3, 5, 6, 4, 3, 7, 5, 6, 4, 3], 'Meses')">Alertas</li>
                     </ul>
                 </div>
+
+                <!-- Dropdown para escolher o período (semana ou mês) -->
+                <div class="dropdown" id="periodDropdown">
+                    <button id="periodDropdownButton" class="dropdown-button">Período: Mensal <i class="fas fa-chevron-down"></i></button>
+                    <ul id="periodDropdownMenu" class="dropdown-menu">
+                        <li onclick="changePeriod('Mensal')">Mensal</li>
+                        <li onclick="changePeriod('Semanal')">Semanal</li>
+                    </ul>
+                </div>
+
                 <canvas id="waterChart"></canvas>
             </div>
 
+            <!-- Cartões de informações -->
             <div class="info-cards">
                 <div class="card">
                     <h3>Total de água produzida</h3>
@@ -103,6 +115,7 @@
             menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
         });
 
+        // Função para atualizar o título e dados do gráfico
         function changeChart(title, data, xAxisLabel) {
             waterChart.data.datasets[0].label = title;
             waterChart.data.datasets[0].data = data;
@@ -112,10 +125,33 @@
             document.getElementById('dropdownMenu').style.display = 'none';
         }
 
+        // Função para mudar o período (mensal ou semanal)
+        function changePeriod(period) {
+            let newLabels = [];
+            let newData = [];
+
+            if (period === 'Mensal') {
+                newLabels = ["Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"];
+                newData = [10, 20, 30, 82, 50, 25, 15, 60, 45, 70, 55, 40]; // Exemplo de dados mensais
+            } else if (period === 'Semanal') {
+                newLabels = ["Semana 1", "Semana 2", "Semana 3", "Semana 4"];
+                newData = [15, 30, 45, 60]; // Exemplo de dados semanais
+            }
+
+            waterChart.data.labels = newLabels;
+            waterChart.data.datasets[0].data = newData;
+            waterChart.options.scales.x.title.text = `Período: ${period}`;
+            waterChart.update();
+            document.getElementById('periodDropdownButton').innerHTML = `Período: ${period} <i class='fas fa-chevron-down'></i>`;
+            document.getElementById('periodDropdownMenu').style.display = 'none';
+        }
+
+        // Esconde o dropdown quando clicar fora dele
         window.addEventListener('click', (e) => {
             const dropdown = document.querySelector('.dropdown');
             if (!dropdown.contains(e.target)) {
                 document.getElementById('dropdownMenu').style.display = 'none';
+                document.getElementById('periodDropdownMenu').style.display = 'none';
             }
         });
     </script>
