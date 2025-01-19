@@ -242,6 +242,7 @@ def water_ph_x_temperature(request):
   return HttpResponse(1)
 
 # Estado de Nível de Água (Boia)
+@api_interface
 def presenca_agua(request, num_serie_dispositivo):
   """
   Retorna todas as medições de estado de presença de água no range especificado na boia (obs.: é dado binário):
@@ -265,13 +266,28 @@ def presenca_agua(request, num_serie_dispositivo):
   return json_success_response(data = response_data)
 
 # Mudança no Nível de Água ao Longo do Tempo
-# Linha
-# Tempo
-# Altura do Nível (m)
-# Dados de altura
-# Média, valores extremos, taxa de enchimento
-def water_level_change_over_time(request):
-  return HttpResponse(1)
+@api_interface
+def nivel_agua(request, num_serie_dispositivo):
+  """
+  Retorna todas as medições de nível d'água no range especificado na boia:
+  [
+    {
+      "valor": 99.0,
+      "unidade": "m",
+      "criado_em": "2020-01-01T00:00:00.0"
+    }
+  ]
+  """
+  before, after = fetch_data_filters(request)
+
+  response_data = list(
+    DadosSensor
+      .objects
+      .filter(sensor_id__dispositivo_id__num_serie=num_serie_dispositivo, sensor_id__tipo=Sensor.NIVEL_AGUA, criado_em__gte=after, criado_em__lt=before)
+      .values('valor', 'unidade', 'criado_em')
+  )
+
+  return json_success_response(data = response_data)
 
 # Tensão da Bateria ao Longo do Tempo
 # Linha
