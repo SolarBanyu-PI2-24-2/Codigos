@@ -242,13 +242,27 @@ def water_ph_x_temperature(request):
   return HttpResponse(1)
 
 # Estado de Nível de Água (Boia)
-# Barras
-# Tempo
-# Estado (presença/ausência)
-# Dados binários de presença
-# Contagem de transições, duração do estado
-def water_level(request):
-  return HttpResponse(1)
+def presenca_agua(request, num_serie_dispositivo):
+  """
+  Retorna todas as medições de estado de presença de água no range especificado na boia (obs.: é dado binário):
+  [
+    {
+      "valor": 1.0,
+      "unidade": "Bool",
+      "criado_em": "2020-01-01T00:00:00.0"
+    }
+  ]
+  """
+  before, after = fetch_data_filters(request)
+
+  response_data = list(
+    DadosSensor
+      .objects
+      .filter(sensor_id__dispositivo_id__num_serie=num_serie_dispositivo, sensor_id__tipo=Sensor.PRESENCA_AGUA, criado_em__gte=after, criado_em__lt=before)
+      .values('valor', 'unidade', 'criado_em')
+  )
+
+  return json_success_response(data = response_data)
 
 # Mudança no Nível de Água ao Longo do Tempo
 # Linha

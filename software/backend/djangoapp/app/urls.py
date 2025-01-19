@@ -26,4 +26,5 @@ urlpatterns = [
     path('temperatura_tempo/<str:num_serie_dispositivo>/', views.temperatura_tempo, name='temperatura_tempo'),
     path('amplitude_termica/<str:num_serie_dispositivo>/', views.amplitude_termica, name='amplitude_termica'),
     path('ph_tempo/<str:num_serie_dispositivo>/', views.ph_tempo, name='ph_tempo'),
+    path('presenca_agua/<str:num_serie_dispositivo>/', views.presenca_agua, name='presenca_agua'),
 ]
