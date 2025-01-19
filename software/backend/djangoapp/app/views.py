@@ -209,8 +209,28 @@ def amplitude_termica(request, num_serie_dispositivo):
 # pH
 # Dados de pH
 # Média, desvio padrão, erro percentual
-def water_ph_over_time(request):
-  return HttpResponse(1)
+@api_interface
+def ph_tempo(request, num_serie_dispositivo):
+  """
+  Retorna todas as medições de ph d'água no range especificado no seguinte formato:
+  [
+    {
+      "valor": 99.0,
+      "unidade": "pH",
+      "criado_em": "2020-01-01T00:00:00.0"
+    }
+  ]
+  """
+  before, after = fetch_data_filters(request)
+
+  response_data = list(
+    DadosSensor
+      .objects
+      .filter(sensor_id__dispositivo_id__num_serie=num_serie_dispositivo, sensor_id__tipo=Sensor.PH_AGUA, criado_em__gte=after, criado_em__lt=before)
+      .values('valor', 'unidade', 'criado_em')
+  )
+
+  return json_success_response(data = response_data)
 
 # pH x Temperatura
 # Dispersão
