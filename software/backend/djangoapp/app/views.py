@@ -1,5 +1,8 @@
+import traceback
+
 from django.shortcuts import render
 from django.http import HttpResponse, JsonResponse
+from django.db.models import Count
 
 from rest_framework import status, generics
 
@@ -18,6 +21,17 @@ from rest_framework.permissions import IsAuthenticated
 from django.shortcuts import get_object_or_404
 
 from .lib.response import json_success_response, json_error_response
+
+def api_interface(func):
+  def handle_errors(*args, **kwargs):
+    try:
+      return func(*args, **kwargs)
+    except:
+      return json_error_response(message = traceback.format_exc())
+  return handle_errors
+
+def fetch_data_filters(request):
+  return (request.GET.get('before', '3000-01-01'), request.GET.get('after', '2000-01-01'))
 
 @api_view(['POST'])
 def login(request):
@@ -51,51 +65,144 @@ def index(request):
   return HttpResponse("SolarBanyu")
 
 # Vazão ao Longo do Tempo
-# Linha
-# Tempo
-# Vazão (L/min)
-# Dados de vazão
-# Média, volume total acumulado
+@api_interface
 def vazao_tempo(request, num_serie_dispositivo):
-  before = request.GET.get('before', None)
-  after = request.GET.get('after', None)
+  """
+  Retorna todas as medições de vazão d'água no range especificado no seguinte formato:
+  [
+    {
+      "valor": 99.0,
+      "unidade": "L/min",
+      "criado_em": "2020-01-01T00:00:00.0"
+    }
+  ]
+  """
+  before, after = fetch_data_filters(request)
+  response_data = list(
+    DadosSensor
+      .objects
+      .filter(sensor_id__dispositivo_id__num_serie=num_serie_dispositivo, sensor_id__tipo=Sensor.VAZAO_AGUA, criado_em__gte=after, criado_em__lt=before)
+      .values('valor', 'unidade', 'criado_em')
+  )
 
-  response_data = {}
+  return json_success_response(data = response_data)
 
-  response_data = {
-    'num_serie_dispositivo': num_serie_dispositivo,
-    'before': before,
-    'after': after,
-  }
-
-  return json_success_response(response_data)
 
 # Volume Acumulado por Dia
-# Barras
-# Dias
-# Volume (L)
-# Dados de vazão
-# Total acumulado por dia
-def water_amount_per_day(request):
-  return HttpResponse(1)
+@api_interface
+def volume_acumulado_dia(request, num_serie_dispositivo):
+  """
+  Retorna o volume acumulado de água por dia considerando a média os dados de vazão coletados e multiplicando por 1440 (minutos diários);
+  Aqui assume-se que quando o sistema está desligado o dado de vazão é enviado como 0 e os dados de vazão são enviados com no mínimo 1 minuto de intervalo.
+  [
+    {
+      "valor": 99.0,
+      "unidade": "L",
+      "dia": "2020-01-01T00:00:00.0Z"
+    }
+  ]
+  """
+  before, after = fetch_data_filters(request)
+
+  raw_data = list(DadosSensor.objects.raw(
+    """
+    SELECT 1 as id, (SUM("app_dadossensor"."valor") / COUNT(*)) * 1440 as valor, 'L' as unidade, DATE_TRUNC('day', "app_dadossensor"."criado_em") as dia
+      FROM "app_dadossensor"
+      INNER JOIN "app_sensor"
+        ON ("app_dadossensor"."sensor_id_id" = "app_sensor"."id" AND "app_sensor"."dispositivo_id_id" = %s AND "app_sensor"."tipo" = %s)
+      WHERE ("app_dadossensor"."criado_em" >= %s AND "app_dadossensor"."criado_em" < %s)
+      GROUP BY DATE_TRUNC('day', "app_dadossensor"."criado_em")
+    """,
+    [
+      num_serie_dispositivo,
+      Sensor.VAZAO_AGUA,
+      after,
+      before,
+    ]
+  ))
+
+  response_data = []
+  for item in raw_data:
+    response_data.append(
+      {
+        'valor': item.valor,
+        'unidade': item.unidade,
+        'dia': item.dia,
+      }
+    )
+
+  return json_success_response(data = response_data)
 
 # Temperatura ao Longo do Tempo
-# Linha
-# Tempo
-# Temperatura (°C)
-# Dados de temperatura
-# Média, valores extremos
-def water_temperature_over_time(request):
-  return HttpResponse(1)
+@api_interface
+def temperatura_tempo(request, num_serie_dispositivo):
+  """
+  Retorna todas as medições de temperatura d'água no range especificado no seguinte formato:
+  [
+    {
+      "valor": 99.0,
+      "unidade": "ºC",
+      "criado_em": "2020-01-01T00:00:00.0"
+    }
+  ]
+  """
+  before, after = fetch_data_filters(request)
+
+  response_data = list(
+    DadosSensor
+      .objects
+      .filter(sensor_id__dispositivo_id__num_serie=num_serie_dispositivo, sensor_id__tipo=Sensor.TEMPERATURA_AGUA, criado_em__gte=after, criado_em__lt=before)
+      .values('valor', 'unidade', 'criado_em')
+  )
+
+  return json_success_response(data = response_data)
 
 # Amplitude Térmica
-# Área
-# Tempo
-# Temperatura (°C)
-# Dados de temperatura
-# Diferença entre máximo e mínimo diário
-def water_temperature_amplitude_per_day(request):
-  return HttpResponse(1)
+@api_interface
+def amplitude_termica(request, num_serie_dispositivo):
+  """
+  Retorna a temperatura maxima e minima da água de cada dia presente no intervalo de tempo informado.
+  [
+    {
+      "valor_minimo": 99.0,
+      "valor_maximo": 99.0,
+      "unidade": "ºC",
+      "dia": "2020-01-01T00:00:00.0"
+    }
+  ]
+  """
+  before, after = fetch_data_filters(request)
+
+  raw_data = list(
+    DadosSensor.objects.raw(
+      """
+      SELECT 1 as id, MIN(valor) as valor_minimo, MAX(valor) as valor_maximo, 'ºC' as unidade, DATE_TRUNC('day', "app_dadossensor"."criado_em") as dia
+        FROM "app_dadossensor"
+        INNER JOIN "app_sensor"
+          ON ("app_dadossensor"."sensor_id_id" = "app_sensor"."id" AND "app_sensor"."dispositivo_id_id" = %s AND "app_sensor"."tipo" = %s)
+        WHERE ("app_dadossensor"."criado_em" >= %s AND "app_dadossensor"."criado_em" < %s)
+        GROUP BY DATE_TRUNC('day', "app_dadossensor"."criado_em")
+      """,
+      [
+        num_serie_dispositivo,
+        Sensor.TEMPERATURA_AGUA,
+        after,
+        before,
+      ]
+    )
+  )
+
+  response_data = []
+  for item in raw_data:
+    response_data.append(
+      {
+        'valor_minimo': item.valor_minimo,
+        'valor_maximo': item.valor_maximo,
+        'dia': item.dia,
+      }
+    )
+
+  return json_success_response(data = response_data)
 
 # pH ao Longo do Tempo
 # Linha
@@ -103,8 +210,28 @@ def water_temperature_amplitude_per_day(request):
 # pH
 # Dados de pH
 # Média, desvio padrão, erro percentual
-def water_ph_over_time(request):
-  return HttpResponse(1)
+@api_interface
+def ph_tempo(request, num_serie_dispositivo):
+  """
+  Retorna todas as medições de ph d'água no range especificado no seguinte formato:
+  [
+    {
+      "valor": 99.0,
+      "unidade": "pH",
+      "criado_em": "2020-01-01T00:00:00.0"
+    }
+  ]
+  """
+  before, after = fetch_data_filters(request)
+
+  response_data = list(
+    DadosSensor
+      .objects
+      .filter(sensor_id__dispositivo_id__num_serie=num_serie_dispositivo, sensor_id__tipo=Sensor.PH_AGUA, criado_em__gte=after, criado_em__lt=before)
+      .values('valor', 'unidade', 'criado_em')
+  )
+
+  return json_success_response(data = response_data)
 
 # pH x Temperatura
 # Dispersão
@@ -116,31 +243,76 @@ def water_ph_x_temperature(request):
   return HttpResponse(1)
 
 # Estado de Nível de Água (Boia)
-# Barras
-# Tempo
-# Estado (presença/ausência)
-# Dados binários de presença
-# Contagem de transições, duração do estado
-def water_level(request):
-  return HttpResponse(1)
+@api_interface
+def presenca_agua(request, num_serie_dispositivo):
+  """
+  Retorna todas as medições de estado de presença de água no range especificado na boia (obs.: é dado binário):
+  [
+    {
+      "valor": 1.0,
+      "unidade": "Bool",
+      "criado_em": "2020-01-01T00:00:00.0"
+    }
+  ]
+  """
+  before, after = fetch_data_filters(request)
+
+  response_data = list(
+    DadosSensor
+      .objects
+      .filter(sensor_id__dispositivo_id__num_serie=num_serie_dispositivo, sensor_id__tipo=Sensor.PRESENCA_AGUA, criado_em__gte=after, criado_em__lt=before)
+      .values('valor', 'unidade', 'criado_em')
+  )
+
+  return json_success_response(data = response_data)
 
 # Mudança no Nível de Água ao Longo do Tempo
-# Linha
-# Tempo
-# Altura do Nível (m)
-# Dados de altura
-# Média, valores extremos, taxa de enchimento
-def water_level_change_over_time(request):
-  return HttpResponse(1)
+@api_interface
+def nivel_agua(request, num_serie_dispositivo):
+  """
+  Retorna todas as medições de nível d'água no range especificado na boia:
+  [
+    {
+      "valor": 99.0,
+      "unidade": "m",
+      "criado_em": "2020-01-01T00:00:00.0"
+    }
+  ]
+  """
+  before, after = fetch_data_filters(request)
+
+  response_data = list(
+    DadosSensor
+      .objects
+      .filter(sensor_id__dispositivo_id__num_serie=num_serie_dispositivo, sensor_id__tipo=Sensor.NIVEL_AGUA, criado_em__gte=after, criado_em__lt=before)
+      .values('valor', 'unidade', 'criado_em')
+  )
+
+  return json_success_response(data = response_data)
 
 # Tensão da Bateria ao Longo do Tempo
-# Linha
-# Tempo
-# Tensão (V)
-# Dados de tensão
-# Média, energia total acumulada, potência
-def battery_voltage_over_time(request):
-  return HttpResponse(1)
+@api_interface
+def voltagem_bateria(request, num_serie_dispositivo):
+  """
+  Retorna todas as medições de voltagem da bateria no range especificado:
+  [
+    {
+      "valor": 12.0,
+      "unidade": "V",
+      "criado_em": "2020-01-01T00:00:00.0"
+    }
+  ]
+  """
+  before, after = fetch_data_filters(request)
+
+  response_data = list(
+    DadosSensor
+      .objects
+      .filter(sensor_id__dispositivo_id__num_serie=num_serie_dispositivo, sensor_id__tipo=Sensor.VOLTAGEM, criado_em__gte=after, criado_em__lt=before)
+      .values('valor', 'unidade', 'criado_em')
+  )
+
+  return json_success_response(data = response_data)
 
 # Consumo Total de Água e Energia
 # Linha Dupla
@@ -148,10 +320,10 @@ def battery_voltage_over_time(request):
 # Volume (L), Energia (kWh)
 # Dados de volume e energia
 # Tendência acumulativa
-def water_and_energy_consumption(request):
+def consumo_agua_x_energia(request):
   return HttpResponse(1)
 
-def water_flow_x_temperature(request):
+def vazao_x_temperatura(request):
   return HttpResponse(1)
 
 # Eficiência de Dessalinização
@@ -160,10 +332,10 @@ def water_flow_x_temperature(request):
 # Razão (água/energia)
 # Dados de água dessalinizada e energia
 # Média da eficiência por dia
-def desalinization_efficience(request):
+def eficiencia_sistema(request):
   return HttpResponse(1)
 
-def consumption_by_system_state(request):
+def consumo_energia_estado(request):
   return HttpResponse(1)
 
 # Comparação de Níveis de Água entre Unidades
@@ -172,17 +344,91 @@ def consumption_by_system_state(request):
 # Nível (médio)
 # Dados de nível de diferentes unidades
 # Diferença de altura entre unidades
-def water_level_in_many_units(request):
-  return HttpResponse(1)
+@api_interface
+def nivel_agua_multiplas_unidades(request, num_serie_dispositivo):
+  """
+  Retorna todas as medições de nível d'água no range especificado na boia em várias unidades de medida:
+  [
+    {
+      "valores": [
+        {
+          "valor": 99.0,
+          "unidade": "L"
+        },
+        {
+          "valor": 99.0,
+          "unidade": "mL"
+        },
+        {
+          "valor": 99.0,
+          "unidade": "m3"
+        },
+        {
+          "valor": 99.0,
+          "unidade": "gal"
+        }
+      ],
+      "criado_em": "2020-01-01T00:00:00.0"
+    }
+  ]
+  """
+  before, after = fetch_data_filters(request)
+
+  pre_response_data = list(
+    DadosSensor
+      .objects
+      .filter(sensor_id__dispositivo_id__num_serie=num_serie_dispositivo, sensor_id__tipo=Sensor.NIVEL_AGUA, criado_em__gte=after, criado_em__lt=before)
+      .values('valor', 'unidade', 'criado_em')
+  )
+
+  response_data = []
+  for item in pre_response_data:
+    response_data.append(
+      {
+        'valores': [
+          { 'valor': item['valor'], 'unidade': 'L' },
+          { 'valor': float(item['valor']) * 1000.0, 'unidade': 'mL' },
+          { 'valor': float(item['valor']) / 1000.0, 'unidade': 'm3' },
+          { 'valor': float(item['valor']) / 3.78541, 'unidade': 'gal' },
+        ],
+        'criado_em': item['criado_em'],
+      }
+    )
+
+  return json_success_response(data = response_data)
 
 # Histograma de Frequências de pH
-# Histograma
-# Faixas de pH
-# Frequência
-# Dados de pH
-# Distribuição de pH no período analisado
-def water_ph_grouped_in_time(request):
-  return HttpResponse(1)
+@api_interface
+def histograma_ph(request, num_serie_dispositivo):
+  """
+  Retorna os dados de PH da água no intervalo de datas especificado agrupados por valor para serem usados como histograma:
+  [
+    {
+      "valor": "14.27",
+      "unidade": "pH",
+      "criado_em": "2025-01-19T21:35:19.416Z",
+      "dcount": 5
+    },
+    {
+      "valor": "7.0",
+      "unidade": "pH",
+      "criado_em": "2025-01-19T21:35:19.416Z",
+      "dcount": 2
+    }
+  ]
+  """
+  before, after = fetch_data_filters(request)
+
+  response_data = list(
+    DadosSensor
+      .objects
+      .filter(sensor_id__dispositivo_id__num_serie=num_serie_dispositivo, sensor_id__tipo=Sensor.PH_AGUA, criado_em__gte=after, criado_em__lt=before)
+      .values('valor', 'unidade', 'criado_em')
+      .annotate(dcount=Count('valor'))
+      .order_by()
+  )
+
+  return json_success_response(data = response_data)
 
 # Tensão vs. Vazão
 # Dispersão
@@ -190,7 +436,7 @@ def water_ph_grouped_in_time(request):
 # Tensão (V)
 # Dados de vazão e tensão
 # Correlação entre tensão e vazão
-def water_flow_x_system_votalge(request):
+def tensao_x_vazao(request):
   return HttpResponse(1)
 
 # Eventos Críticos ao Longo do Tempo
@@ -199,7 +445,7 @@ def water_flow_x_system_votalge(request):
 # Eventos (picos críticos)
 # Dados de vazão, temperatura
 # Identificação de picos simultâneos
-def critical_events_over_time(request):
+def eventos_criticos(request):
   return HttpResponse(1)
 
 # Vazão e Volume Acumulado
@@ -225,7 +471,7 @@ def critical_events_over_time(request):
 # Porcentagem
 # Dados de tensão e estado
 # Tempo em carga/descarga e estado inativo
-def battery_level_by_system_state(request):
+def bateria_x_estado_sistema(request):
   return HttpResponse(1)
 
 # Histórico de Consumo de Energia
@@ -234,7 +480,7 @@ def battery_level_by_system_state(request):
 # Energia (kWh)
 # Dados de tensão
 # Tendência de consumo médio por dia
-def consumption_mean_per_day(request):
+def consumo_energia(request):
   return HttpResponse(1)
 
 # Projeção de Consumo de Água
@@ -243,7 +489,7 @@ def consumption_mean_per_day(request):
 # Volume Estimado (L)
 # Dados de volume acumulado
 # Previsão baseada em médias históricas
-def water_consumption_prediction_per_day(request):
+def projecao_consumo_agua(request):
   return HttpResponse(1)
 
 class UsuariosView(generics.ListCreateAPIView):

@@ -22,4 +22,13 @@ urlpatterns = [
     path('consumos/', views.ConsumosView.as_view(), name='consumos_view'),
     path('consumo/<uuid:pk>/', views.ConsumoView.as_view(), name='consumo_view'),
     path('vazao_tempo/<str:num_serie_dispositivo>/', views.vazao_tempo, name='vazao_tempo'),
+    path('volume_acumulado_dia/<str:num_serie_dispositivo>/', views.volume_acumulado_dia, name='volume_acumulado_dia'),
+    path('temperatura_tempo/<str:num_serie_dispositivo>/', views.temperatura_tempo, name='temperatura_tempo'),
+    path('amplitude_termica/<str:num_serie_dispositivo>/', views.amplitude_termica, name='amplitude_termica'),
+    path('ph_tempo/<str:num_serie_dispositivo>/', views.ph_tempo, name='ph_tempo'),
+    path('presenca_agua/<str:num_serie_dispositivo>/', views.presenca_agua, name='presenca_agua'),
+    path('nivel_agua/<str:num_serie_dispositivo>/', views.nivel_agua, name='nivel_agua'),
+    path('voltagem_bateria/<str:num_serie_dispositivo>/', views.voltagem_bateria, name='voltagem_bateria'),
+    path('nivel_agua_multiplas_unidades/<str:num_serie_dispositivo>/', views.nivel_agua_multiplas_unidades, name='nivel_agua_multiplas_unidades'),
+    path('histograma_ph/<str:num_serie_dispositivo>/', views.histograma_ph, name='histograma_ph'),
 ]
