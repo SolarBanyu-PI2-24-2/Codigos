@@ -88,13 +88,49 @@ def vazao_tempo(request, num_serie_dispositivo):
 
 
 # Volume Acumulado por Dia
-# Barras
-# Dias
-# Volume (L)
-# Dados de vazão
-# Total acumulado por dia
-def water_amount_per_day(request):
-  return HttpResponse(1)
+@api_interface
+def volume_acumulado_dia(request, num_serie_dispositivo):
+  """
+  Retorna o volume acumulado de água por dia considerando a média os dados de vazão coletados e multiplicando por 1440 (minutos diários);
+  Aqui assume-se que quando o sistema está desligado o dado de vazão é enviado como 0 e os dados de vazão são enviados com no mínimo 1 minuto de intervalo.
+  [
+    {
+      "valor": 99.0,
+      "unidade": "L",
+      "dia": "2020-01-01T00:00:00.0Z"
+    }
+  ]
+  """
+  before, after = fetch_data_filters(request)
+
+  raw_data = list(DadosSensor.objects.raw(
+    """
+    SELECT 1 as id, (SUM("app_dadossensor"."valor") / COUNT(*)) * 1440 as valor, 'L' as unidade, DATE_TRUNC('day', "app_dadossensor"."criado_em") as dia
+      FROM "app_dadossensor"
+      INNER JOIN "app_sensor"
+        ON ("app_dadossensor"."sensor_id_id" = "app_sensor"."id" AND "app_sensor"."dispositivo_id_id" = %s AND "app_sensor"."tipo" = %s)
+      WHERE ("app_dadossensor"."criado_em" >= %s AND "app_dadossensor"."criado_em" < %s)
+      GROUP BY DATE_TRUNC('day', "app_dadossensor"."criado_em")
+    """,
+    [
+      num_serie_dispositivo,
+      Sensor.VAZAO_AGUA,
+      after,
+      before,
+    ]
+  ))
+
+  response_data = []
+  for item in raw_data:
+    response_data.append(
+      {
+        'valor': item.valor,
+        'unidade': item.unidade,
+        'dia': item.dia,
+      }
+    )
+
+  return json_success_response(data = response_data)
 
 # Temperatura ao Longo do Tempo
 # Linha
