@@ -730,4 +730,41 @@ html, body {
 
 .faq-actions button:hover {
     background-color: #FFB300;
+}/* Barra de pesquisa */
+.header .search-bar {
+    flex: 50%;
+    display: flex; /* Alinha o botão ao lado do input */
+    gap: 0.5rem; /* Espaço entre o botão e o input */
+}
+
+.header .search-bar input {
+    flex: 1; /* O input ocupa todo o espaço disponível */
+    padding: 0.5rem 1rem; /* Espaçamento interno */
+    border: 1px solid #ddd; /* Borda clara */
+    border-radius: 25px; /* Arredondado */
+    font-size: 1rem; /* Texto legível */
+    background-color: #f9f9f9; /* Fundo claro */
+    outline: none; /* Remove contorno ao focar */
+}
+
+.header .search-bar input::placeholder {
+    color: #aaa; /* Placeholder cinza */
+}
+
+.header .search-bar button {
+    display: flex; /* Alinha o ícone no centro */
+    justify-content: center; 
+    align-items: center;
+    padding: 0.5rem; /* Espaçamento interno */
+    background-color: #007BFF; /* Cor de fundo do botão */
+    color: #fff; /* Cor do ícone */
+    border: none; /* Remove a borda */
+    border-radius: 50%; /* Botão circular */
+    cursor: pointer;
+    width: 40px; /* Largura do botão */
+    height: 40px; /* Altura do botão */
+}
+
+.header .search-bar button i {
+    font-size: 1.2rem; /* Tamanho do ícone */
 }

@@ -23,6 +23,11 @@ app.get('/home', (req, res) => {
     res.render('home', { currentUrl: '/home' });
 });
 
+app.get('/pesquisar', (req, res) => {
+    const query = req.query.q; // Captura o texto pesquisado da URL
+    res.send(`Você pesquisou por: ${query}`); // Exibe o texto pesquisado no navegador
+});
+
 app.get('/monitoramento', (req, res) => {
     res.render('monitoramento', { currentUrl: '/monitoramento' });
 });
@@ -61,5 +66,7 @@ const PORT = 3000;
 app.listen(PORT, () => {
     console.log(`Servidor rodando em http://localhost:${PORT}`);
 });
+
+
 
 
