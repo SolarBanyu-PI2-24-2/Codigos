@@ -157,13 +157,51 @@ def temperatura_tempo(request, num_serie_dispositivo):
   return json_success_response(data = response_data)
 
 # Amplitude Térmica
-# Área
-# Tempo
-# Temperatura (°C)
-# Dados de temperatura
-# Diferença entre máximo e mínimo diário
-def water_temperature_amplitude_per_day(request):
-  return HttpResponse(1)
+@api_interface
+def amplitude_termica(request, num_serie_dispositivo):
+  """
+  Retorna a temperatura maxima e minima da água de cada dia presente no intervalo de tempo informado.
+  [
+    {
+      "valor_minimo": 99.0,
+      "valor_maximo": 99.0,
+      "unidade": "ºC",
+      "dia": "2020-01-01T00:00:00.0"
+    }
+  ]
+  """
+  before, after = fetch_data_filters(request)
+
+  raw_data = list(
+    DadosSensor.objects.raw(
+      """
+      SELECT 1 as id, MIN(valor) as valor_minimo, MAX(valor) as valor_maximo, 'ºC' as unidade, DATE_TRUNC('day', "app_dadossensor"."criado_em") as dia
+        FROM "app_dadossensor"
+        INNER JOIN "app_sensor"
+          ON ("app_dadossensor"."sensor_id_id" = "app_sensor"."id" AND "app_sensor"."dispositivo_id_id" = %s AND "app_sensor"."tipo" = %s)
+        WHERE ("app_dadossensor"."criado_em" >= %s AND "app_dadossensor"."criado_em" < %s)
+        GROUP BY DATE_TRUNC('day', "app_dadossensor"."criado_em")
+      """,
+      [
+        num_serie_dispositivo,
+        Sensor.TEMPERATURA_AGUA,
+        after,
+        before,
+      ]
+    )
+  )
+
+  response_data = []
+  for item in raw_data:
+    response_data.append(
+      {
+        'valor_minimo': item.valor_minimo,
+        'valor_maximo': item.valor_maximo,
+        'dia': item.dia,
+      }
+    )
+
+  return json_success_response(data = response_data)
 
 # pH ao Longo do Tempo
 # Linha
