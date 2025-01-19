@@ -1,3 +1,5 @@
+import traceback
+
 from django.shortcuts import render
 from django.http import HttpResponse, JsonResponse
 
@@ -18,6 +20,17 @@ from rest_framework.permissions import IsAuthenticated
 from django.shortcuts import get_object_or_404
 
 from .lib.response import json_success_response, json_error_response
+
+def api_interface(func):
+  def handle_errors(*args, **kwargs):
+    try:
+      return func(*args, **kwargs)
+    except:
+      return json_error_response(message = traceback.format_exc())
+  return handle_errors
+
+def fetch_data_filters(request):
+  return (request.GET.get('before', '3000-01-01'), request.GET.get('after', '2000-01-01'))
 
 @api_view(['POST'])
 def login(request):
@@ -51,24 +64,28 @@ def index(request):
   return HttpResponse("SolarBanyu")
 
 # Vazão ao Longo do Tempo
-# Linha
-# Tempo
-# Vazão (L/min)
-# Dados de vazão
-# Média, volume total acumulado
+@api_interface
 def vazao_tempo(request, num_serie_dispositivo):
-  before = request.GET.get('before', None)
-  after = request.GET.get('after', None)
+  """
+  Retorna todas as medições de vazão d'água no range especificado no seguinte formato:
+  [
+    {
+      "valor": 99.0,
+      "unidade": "L/min",
+      "criado_em": "2020-01-01T00:00:00.0"
+    }
+  ]
+  """
+  before, after = fetch_data_filters(request)
+  response_data = list(
+    DadosSensor
+      .objects
+      .filter(sensor_id__dispositivo_id__num_serie=num_serie_dispositivo, sensor_id__tipo=Sensor.VAZAO_AGUA, criado_em__gte=after, criado_em__lt=before)
+      .values('valor', 'unidade', 'criado_em')
+  )
 
-  response_data = {}
+  return json_success_response(data = response_data)
 
-  response_data = {
-    'num_serie_dispositivo': num_serie_dispositivo,
-    'before': before,
-    'after': after,
-  }
-
-  return json_success_response(response_data)
 
 # Volume Acumulado por Dia
 # Barras
