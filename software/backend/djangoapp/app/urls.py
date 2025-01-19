@@ -30,4 +30,5 @@ urlpatterns = [
     path('nivel_agua/<str:num_serie_dispositivo>/', views.nivel_agua, name='nivel_agua'),
     path('voltagem_bateria/<str:num_serie_dispositivo>/', views.voltagem_bateria, name='voltagem_bateria'),
     path('nivel_agua_multiplas_unidades/<str:num_serie_dispositivo>/', views.nivel_agua_multiplas_unidades, name='nivel_agua_multiplas_unidades'),
+    path('histograma_ph/<str:num_serie_dispositivo>/', views.histograma_ph, name='histograma_ph'),
 ]

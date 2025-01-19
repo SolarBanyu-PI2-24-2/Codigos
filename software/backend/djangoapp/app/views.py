@@ -2,6 +2,7 @@ import traceback
 
 from django.shortcuts import render
 from django.http import HttpResponse, JsonResponse
+from django.db.models import Count
 
 from rest_framework import status, generics
 
@@ -397,13 +398,37 @@ def nivel_agua_multiplas_unidades(request, num_serie_dispositivo):
   return json_success_response(data = response_data)
 
 # Histograma de Frequências de pH
-# Histograma
-# Faixas de pH
-# Frequência
-# Dados de pH
-# Distribuição de pH no período analisado
-def histograma_ph(request):
-  return HttpResponse(1)
+@api_interface
+def histograma_ph(request, num_serie_dispositivo):
+  """
+  Retorna os dados de PH da água no intervalo de datas especificado agrupados por valor para serem usados como histograma:
+  [
+    {
+      "valor": "14.27",
+      "unidade": "pH",
+      "criado_em": "2025-01-19T21:35:19.416Z",
+      "dcount": 5
+    },
+    {
+      "valor": "7.0",
+      "unidade": "pH",
+      "criado_em": "2025-01-19T21:35:19.416Z",
+      "dcount": 2
+    }
+  ]
+  """
+  before, after = fetch_data_filters(request)
+
+  response_data = list(
+    DadosSensor
+      .objects
+      .filter(sensor_id__dispositivo_id__num_serie=num_serie_dispositivo, sensor_id__tipo=Sensor.PH_AGUA, criado_em__gte=after, criado_em__lt=before)
+      .values('valor', 'unidade', 'criado_em')
+      .annotate(dcount=Count('valor'))
+      .order_by()
+  )
+
+  return json_success_response(data = response_data)
 
 # Tensão vs. Vazão
 # Dispersão
