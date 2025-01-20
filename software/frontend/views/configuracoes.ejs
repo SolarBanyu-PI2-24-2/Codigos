@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Configurações - SolarBanyu</title>
+    <link rel="stylesheet" href="/css/styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="icon" href="/assets/favicon.png" type="image/png">
+</head>
+<body>
+    <%- include('partials/sidebar') %>
+    <div class="main-content">
+        <%- include('partials/header') %>
+        <div class="dashboard">
+            <h1>Configurações</h1>
+            <p>Ajuste preferências e personalize o sistema.</p>
+
+            <div class="configurations-container">
+                <!-- Seção de Perfil -->
+                <div class="config-section">
+                    <h2>Perfil</h2>
+                    <div class="profile-form">
+                        <div>
+                            <label for="name">Seu nome</label>
+                            <input type="text" id="name" value="Francisca Silva" readonly>
+                        </div>
+                        <div>
+                            <label for="email">Email</label>
+                            <input type="email" id="email" value="francisca.silva@email.com.br" readonly>
+                        </div>
+                        <div>
+                            <label for="address">Endereço</label>
+                            <input type="text" id="address" value="Rua das Águas Claras, 123, Bairro Sustentável, Lisieux, Ceará, Brasil" readonly>
+                        </div>
+                        <div>
+                            <label for="profession">Profissão</label>
+                            <input type="text" id="profession" value="Agricultora familiar" readonly>
+                        </div>
+                        <div>
+                            <label for="notifications">Notificações</label>
+                            <select id="notifications">
+                                <option value="yes">Sim</option>
+                                <option value="no">Não</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Seção SolarBanyu -->
+                <div class="config-section">
+                    <h2>SolarBanyu</h2>
+                    <div class="solar-form">
+                        <div>
+                            <label>Data da instalação</label>
+                            <input type="text" value="20/08/2024" readonly>
+                        </div>
+                        <div>
+                            <label>Número de série</label>
+                            <input type="text" value="SBY-2024-001234" readonly>
+                        </div>
+                        <div>
+                            <label>Modelo do sistema</label>
+                            <input type="text" value="SolarBanyu Plus 3000" readonly>
+                        </div>
+                        <div>
+                            <label>Capacidade</label>
+                            <input type="text" value="20 L/Dia" readonly>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Botões -->
+            <div class="actions">
+                <button class="btn-update">Atualizar</button>
+                <button class="btn-cancel">Cancelar</button>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

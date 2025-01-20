@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home - SolarBanyu</title>
+    <link rel="stylesheet" href="/css/styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="icon" href="/assets/favicon.png" type="image/png">
+</head>
+<body>
+    <%- include('partials/sidebar') %>
+    <div class="main-content">
+        <%- include('partials/header') %>
+        <div class="dashboard">
+            <h1>Seja bem-vinda, Francisca Silva</h1>
+            <p>Aqui você acompanha a produção de água doce.</p>
+            <div class="metrics">
+                <div class="metric-box">
+                    <i class="fas fa-calendar-alt"></i>
+                    <div>
+                        Dias com SolarBanyu <strong>97</strong>
+                    </div>
+                </div>
+                <div class="metric-box">
+                    <i class="fas fa-tint"></i>
+                    <div>
+                        Água dessalinizada <strong>25.000 L</strong>
+                    </div>
+                </div>
+                <div class="metric-box">
+                    <i class="fas fa-bolt"></i>
+                    <div>
+                        Energia economizada <strong>250 kWh</strong>
+                    </div>
+                </div>
+                <div class="metric-box">
+                    <i class="fas fa-sync-alt"></i>
+                    <div>
+                        Próxima troca de filtro <strong>28/12/2026</strong>
+                    </div>
+                </div>
+            </div>
+            <div class="content-split">
+                <!-- Seção de alertas -->
+                <div class="alerts-section">
+                    <h2>Alertas</h2>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Nome</th>
+                                <th>Data</th>
+                                <th>Prioridade</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>00007</td>
+                                <td>Vazamento detectado</td>
+                                <td>25/11/2024</td>
+                                <td class="urgent">Urgente</td>
+                            </tr>
+                            <tr>
+                                <td>00006</td>
+                                <td>Tudo funcionando normal</td>
+                                <td>20/11/2024</td>
+                                <td class="routine">Rotina</td>
+                            </tr>
+                            <tr>
+                                <td>00005</td>
+                                <td>Troca de filtro recomendada</td>
+                                <td>10/10/2024</td>
+                                <td class="medium">Média</td>
+                            </tr>
+                            <tr>
+                                <td>00004</td>
+                                <td>Bateria sem energia</td>
+                                <td>01/10/2024</td>
+                                <td class="low">Baixa</td>
+                            </tr>
+                            <tr>
+                                <td>00003</td>
+                                <td>Tanque de água cheio</td>
+                                <td>23/09/2024</td>
+                                <td class="low">Baixa</td>
+                            </tr>
+                            <tr>
+                                <td>00002</td>
+                                <td>Atualização necessária</td>
+                                <td>15/09/2024</td>
+                                <td class="medium">Média</td>
+                            </tr>
+                            <tr>
+                                <td>00001</td>
+                                <td>Tudo funcionando normal</td>
+                                <td>20/08/2024</td>
+                                <td class="routine">Rotina</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <p>Não há alertas antigos</p>
+                </div>
+        
+                <!-- Seção de instalação -->
+                <div class="installation-section">
+                    <h2>SolarBanyu da Francisca</h2>
+                    <div class="installation-info">
+                        <h3>1 Unidade instalada</h3>
+                        <table>
+                            <tbody>
+                                <tr>
+                                    <td>Endereço de instalação</td>
+                                    <td>Rua das Águas Claras, 123, Bairro Sustentável</td>
+                                </tr>
+                                <tr>
+                                    <td>Estado</td>
+                                    <td>Ceará, Brasil</td>
+                                </tr>
+                                <tr>
+                                    <td>Data da instalação</td>
+                                    <td>20/08/2024</td>
+                                </tr>
+                                <tr>
+                                    <td>Número de série</td>
+                                    <td>SBY-2024-001234</td>
+                                </tr>
+                                <tr>
+                                    <td>Modelo do sistema</td>
+                                    <td>SolarBanyu Plus 3000</td>
+                                </tr>
+                                <tr>
+                                    <td>Capacidade</td>
+                                    <td>20 L/Dia</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="installation-actions">
+                        <!-- Botão Pedir Suporte -->
+                        <button id="supportButton">Pedir suporte</button>                  
+                    
+                        <!-- Botão Adicionar Nova Unidade -->
+                        <button id="addUnitButton">Adicionar nova unidade</button>
+                    </div>
+                    
+                    <!-- Modal Pedir Suporte -->
+                    <div id="supportModal" class="modal">
+                        <div class="modal-content">
+                            <span class="close-modal" id="closeSupportModal">&times;</span>
+                            <h2>Pedir Suporte</h2>
+                            <p>Escolha uma opção de suporte:</p>
+                            <ul>
+                                <li><a href="tel:+551199999999" class="support-option-modal">📞 Ligue para nós</a></li>
+                                <li><a href="mailto:suporte@solarbanyu.com" class="support-option-modal">📧 Enviar um e-mail</a></li>
+                                <li><button class="support-option-modal" id="startChat">💬 Iniciar um chat</button></li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <!-- Modal Adicionar Nova Unidade -->
+                    <div id="addUnitModal" class="modal">
+                        <div class="modal-content">
+                            <span class="close-modal" id="closeAddUnitModal">&times;</span>
+                            <h2>Adicionar uma nova unidade</h2>
+                            <form id="addUnitForm">
+                                <label for="serialNumber" class="modal-label">Número de Série:</label>
+                                <input type="text" id="serialNumber" name="serialNumber" class="modal-input" placeholder="Digite o número de série" required>
+                                <button type="submit" class="btn-submit-modal">Adicionar</button>
+                            </form>
+                        </div>
+                    </div>
+                    
+                                
+                        <script>
+                            document.addEventListener("DOMContentLoaded", () => {
+    // Botões para abrir os modais
+    const supportButton = document.getElementById("supportButton");
+    const addUnitButton = document.getElementById("addUnitButton");
+
+    // Modais
+    const supportModal = document.getElementById("supportModal");
+    const addUnitModal = document.getElementById("addUnitModal");
+
+    // Botões para fechar os modais
+    const closeSupportModal = document.getElementById("closeSupportModal");
+    const closeAddUnitModal = document.getElementById("closeAddUnitModal");
+
+    // Abrir modais
+    supportButton.addEventListener("click", () => {
+        supportModal.style.display = "flex";
+    });
+
+    addUnitButton.addEventListener("click", () => {
+        addUnitModal.style.display = "flex";
+    });
+
+    // Fechar modais
+    closeSupportModal.addEventListener("click", () => {
+        supportModal.style.display = "none";
+    });
+
+    closeAddUnitModal.addEventListener("click", () => {
+        addUnitModal.style.display = "none";
+    });
+
+    // Fechar modais ao clicar fora
+    window.addEventListener("click", (event) => {
+        if (event.target === supportModal) {
+            supportModal.style.display = "none";
+        }
+        if (event.target === addUnitModal) {
+            addUnitModal.style.display = "none";
+        }
+    });
+});
+
+                        </script>
+                        
+
+
+</body>
+</html>
