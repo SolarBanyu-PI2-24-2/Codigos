@@ -1415,3 +1415,94 @@ h2 {
 .header .search-bar button i {
     font-size: 1.2rem; /* Tamanho do ícone */
 }
+
+/* configuracao */
+.configurations-container {
+    display: flex;
+    justify-content: space-between;
+    gap: 2rem;
+    margin-top: 2rem;
+}
+
+.config-section {
+    flex: 1;
+    background-color: #fff;
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.config-section h2 {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+    color: #963CBD;
+    border-bottom: 2px solid #963CBD;
+    padding-bottom: 0.5rem;
+}
+
+.profile-form div,
+.solar-form div {
+    margin-bottom: 1rem;
+}
+
+label {
+    display: block;
+    font-size: 1rem;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+    color: #555;
+}
+
+input,
+select {
+    width: 100%;
+    padding: 0.8rem;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 1rem;
+    background-color: #f9f9f9;
+    color: #333;
+}
+
+input[readonly] {
+    background-color: #f5f5f5;
+    cursor: not-allowed;
+}
+
+.actions {
+    margin-top: 2rem;
+    display: flex;
+    justify-content: flex-start;
+    gap: 1rem;
+}
+
+.actions .btn-update {
+    background-color: #FCEFA6;
+    color: #323232;
+    padding: 1rem 2rem;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.actions .btn-update:hover {
+    background-color: #FFB300;
+}
+
+.actions .btn-cancel {
+    background-color: transparent;
+    color: #555;
+    padding: 1rem 2rem;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.actions .btn-cancel:hover {
+    border-color: #FFB300;
+    color: #FFB300;
+}
