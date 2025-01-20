@@ -47,6 +47,13 @@ class Dispositivo(models.Model):
         return self.modelo
 
 class Sensor(models.Model):
+    VAZAO_AGUA="YF-S201"
+    TEMPERATURA_AGUA="DS18B20"
+    PH_AGUA="PH4502C"
+    NIVEL_AGUA="BOIA_NIVEL"
+    PRESENCA_AGUA="BOIA_PRESENCA"
+    VOLTAGEM="VOLTAGEM"
+
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     tipo = models.CharField(max_length=50, null=False)                           # TODO: talvez transformar em ENUM
     ativo = models.BooleanField(default=True, null=False)
