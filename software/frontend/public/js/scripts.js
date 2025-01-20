@@ -39,6 +39,43 @@ document.querySelectorAll('.faq-question').forEach(button => {
     });
 });
 
+
+// tutoriais
+const carousels = document.querySelectorAll('.carousel-container');
+
+carousels.forEach((carousel) => {
+    const track = carousel.querySelector('.carousel-track');
+    const prevButton = carousel.querySelector('.prev');
+    const nextButton = carousel.querySelector('.next');
+    const items = track.children;
+
+    let currentIndex = 0;
+
+    const updateButtons = () => {
+        prevButton.disabled = currentIndex === 0;
+        nextButton.disabled = currentIndex === items.length - 1;
+    };
+
+    nextButton.addEventListener('click', () => {
+        if (currentIndex < items.length - 1) {
+            currentIndex++;
+            track.style.transform = `translateX(-${currentIndex * 300}px)`;
+        }
+        updateButtons();
+    });
+
+    prevButton.addEventListener('click', () => {
+        if (currentIndex > 0) {
+            currentIndex--;
+            track.style.transform = `translateX(-${currentIndex * 300}px)`;
+        }
+        updateButtons();
+    });
+
+    updateButtons();
+});
+
+
 // Lógica para a barra de pesquisa
 const searchButton = document.getElementById("search-button");
 const searchInput = document.getElementById("search-input");
@@ -102,3 +139,4 @@ if (notificationButton) {
 } else {
     console.error("Botão de notificações não encontrado no DOM!");
 }
+
