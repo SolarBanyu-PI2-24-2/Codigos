@@ -129,7 +129,7 @@ html, body {
 /* Sidebar geral */
 .sidebar {
     width: 10%;
-    height: 100vh;
+    height: 100%;
     background-color: #ffffff;
     padding: 1rem;
     position: fixed;
@@ -152,7 +152,7 @@ html, body {
 }
 
 .menu li {
-    margin-bottom: 1rem;
+    margin-bottom: 0.5rem;
 }
 
 .menu a {
@@ -221,7 +221,7 @@ html, body {
 }
 /* Informações do usuário */
 .user-info {
-    margin-top: 40px; /* Move para o final da barra lateral */
+    margin-top: 10px; /* Move para o final da barra lateral */
     text-align: center;
     font-size: 0.9rem;
     color: #555;
@@ -242,100 +242,98 @@ html, body {
 
 /* Cabeçalho */
 .header {
-    height: 60px; /* Altura fixa */
-    background-color: #fff; /* Fundo branco */
-    display: flex; /* Layout flexível */
-    justify-content: space-between; /* Espaço entre os itens */
-    align-items: center; /* Centraliza verticalmente */
-    padding: 0 1.5rem; /* Espaçamento interno */
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1); /* Sombra */
-    position: fixed; /* Fixa no topo */
+    height: 60px;
+    background-color: #fff;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 1.5rem;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    position: fixed;
     top: 0;
-    left: 12%; /* Ajustado para o tamanho do sidebar */
-    width: 86%; /* Ocupa o restante da largura */
-    z-index: 1000; /* Camada superior */
+    left: 12%; /* Ajusta o espaço do sidebar */
+    width: 86%; /* Corrigido para não ultrapassar a largura */
+    z-index: 1000;
 }
 
-/* Barra de pesquisa */
-
 .header .search-bar {
-    flex: 50%; /* Expande proporcionalmente */
-    margin-right: 30rem; /* Espaço entre pesquisa e notificações */
+    flex: 1;
+    display: flex; /* Alinha input e botão */
+    max-width: 800px; /* Limita a largura da barra */
+    gap: 0.5rem;
 }
 
 .header .search-bar input {
-    width: 100%; /* Ocupa todo o espaço disponível */
-    padding: 0.5rem 1rem; /* Espaçamento interno */
-    border: 1px solid #ddd; /* Borda clara */
-    border-radius: 25px; /* Arredondado */
-    font-size: 1rem; /* Texto legível */
-    background-color: #f9f9f9; /* Fundo claro */
-    outline: none; /* Remove contorno ao focar */
+    width: 100%;
+    padding: 0.5rem 1rem;
+    border: 1px solid #ddd;
+    border-radius: 25px;
+    font-size: 1rem;
+    background-color: #f9f9f9;
+    outline: none;
 }
 
 .header .search-bar input::placeholder {
-    color: #aaa; /* Placeholder cinza */
+    color: #aaa;
 }
 
 .header .search-bar button {
-    display: flex; /* Alinha o ícone no centro */
-    justify-content: center; 
+    display: flex;
+    justify-content: center;
     align-items: center;
-    padding: 0.5rem; /* Espaçamento interno */
-    background-color: #007BFF; /* Cor de fundo do botão */
-    color: #fff; /* Cor do ícone */
-    border: none; /* Remove a borda */
-    border-radius: 50%; /* Botão circular */
+    background-color: #007BFF;
+    color: #fff;
+    border: none;
+    border-radius: 50%;
     cursor: pointer;
-    width: 40px; /* Largura do botão */
-    height: 40px; /* Altura do botão */
+    width: 40px;
+    height: 40px;
+    transition: background-color 0.3s ease;
 }
 
-.header .search-bar button i {
-    font-size: 1.2rem; /* Tamanho do ícone */
+.header .search-bar button:hover {
+    background-color: #0056b3;
 }
 
-/* Ações da header */
 .header-actions {
-    display: flex; /* Alinha ícones e texto */
-    align-items: center; /* Centraliza verticalmente */
-    gap: 1.5rem; /* Espaçamento entre os itens */
+    display: flex;
+    align-items: center;
+    gap: 2rem;
 }
 
-/* Notificação */
 .notification {
-    position: relative; /* Para posicionar o badge */
-    font-size: 1.2rem; /* Tamanho do ícone */
-    color: #555; /* Cor do ícone */
+    position: relative;
+    font-size: 1.2rem;
+    color: #555;
     cursor: pointer;
 }
 
 .notification .badge {
-    position: absolute; /* Posição fixa no ícone */
+    position: absolute;
     top: -5px;
     right: -10px;
-    background-color: #ff0000; /* Fundo vermelho */
-    color: #ffffff; /* Texto branco */
-    font-size: 0.8rem; /* Texto menor */
-    font-weight: bold; /* Texto destacado */
-    border-radius: 50%; /* Formato circular */
-    padding: 0.2rem 0.5rem; /* Tamanho do badge */
+    background-color: #ff0000;
+    color: #ffffff;
+    font-size: 0.8rem;
+    font-weight: bold;
+    border-radius: 50%;
+    padding: 0.2rem 0.5rem;
 }
 
-/* Botão de sair */
 .logout {
-    font-size: 1rem; /* Tamanho do texto */
-    text-decoration: none; /* Remove sublinhado */
-    color: #555; /* Cor inicial */
-    background-color: transparent; /* Sem fundo */
-    border: none; /* Sem borda */
+    font-size: 1rem;
+    text-decoration: none;
+    color: #555;
+    background-color: transparent;
+    border: none;
     cursor: pointer;
-    transition: color 0.3s ease; /* Transição suave */
+    transition: color 0.3s ease;
 }
 
 .logout:hover {
-    color: #007BFF; /* Cor azul no hover */
+    color: #007BFF;
 }
+
 
 /* Layout Principal */
 .main-content {
@@ -1118,7 +1116,7 @@ html, body {
     outline: none;
 }
 
-/* Botão de envio */
+
 .btn-submit-modal {
     background-color: #007BFF;
     color: #fff;
@@ -1134,11 +1132,13 @@ html, body {
     background-color: #0056b3;
 }
 
+/* Monitoramento */
+
 .dropdown {
     position: relative;
     display: inline-block;
     width: 100%;
-    max-width: 400px;
+    max-width: 450px;
 }
 
 .dropdown-button {
@@ -1173,7 +1173,7 @@ html, body {
     border-radius: 8px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     margin-top: 5px;
-    padding: 0;
+    padding: 1rem;
     list-style: none;
     z-index: 10;
     width: 100%;
@@ -1240,10 +1240,13 @@ html, body {
 }
 
 .chart-container {
-    width: 100%; 
-    max-width: 98%;
+    width: 60%; 
+    max-width: 100%;
     margin: 0 auto; 
+    text-align: center; /* Centraliza os elementos textualmente */
 }
+
+/* Relatorio */
 
 .grid-container-report {
     display: grid;
@@ -1398,25 +1401,8 @@ h2 {
 }
 
 
-.header .search-bar button {
-    display: flex; /* Alinha o ícone no centro */
-    justify-content: center; 
-    align-items: center;
-    padding: 0.5rem; /* Espaçamento interno */
-    background-color: #007BFF; /* Cor de fundo do botão */
-    color: #fff; /* Cor do ícone */
-    border: none; /* Remove a borda */
-    border-radius: 50%; /* Botão circular */
-    cursor: pointer;
-    width: 40px; /* Largura do botão */
-    height: 40px; /* Altura do botão */
-}
-
-.header .search-bar button i {
-    font-size: 1.2rem; /* Tamanho do ícone */
-}
-
 /* configuracao */
+
 .configurations-container {
     display: flex;
     justify-content: space-between;
