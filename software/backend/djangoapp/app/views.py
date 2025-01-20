@@ -20,7 +20,7 @@ from rest_framework.permissions import IsAuthenticated
 
 from django.shortcuts import get_object_or_404
 
-from .lib.response import json_success_response, json_error_response
+from .api_lib.response import json_success_response, json_error_response
 
 def api_interface(func):
   def handle_errors(*args, **kwargs):
