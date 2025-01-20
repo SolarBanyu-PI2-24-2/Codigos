@@ -257,6 +257,7 @@ html, body {
 }
 
 /* Barra de pesquisa */
+
 .header .search-bar {
     flex: 50%; /* Expande proporcionalmente */
     margin-right: 30rem; /* Espaço entre pesquisa e notificações */
@@ -274,6 +275,24 @@ html, body {
 
 .header .search-bar input::placeholder {
     color: #aaa; /* Placeholder cinza */
+}
+
+.header .search-bar button {
+    display: flex; /* Alinha o ícone no centro */
+    justify-content: center; 
+    align-items: center;
+    padding: 0.5rem; /* Espaçamento interno */
+    background-color: #007BFF; /* Cor de fundo do botão */
+    color: #fff; /* Cor do ícone */
+    border: none; /* Remove a borda */
+    border-radius: 50%; /* Botão circular */
+    cursor: pointer;
+    width: 40px; /* Largura do botão */
+    height: 40px; /* Altura do botão */
+}
+
+.header .search-bar button i {
+    font-size: 1.2rem; /* Tamanho do ícone */
 }
 
 /* Ações da header */
@@ -748,7 +767,6 @@ html, body {
     text-align: center;
     animation: color-change 1s infinite, blink 0.8s infinite;
     box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2); 
-    position: fixed;
 }
 
 .alert-critical .close-alert {
@@ -819,7 +837,6 @@ html, body {
     display: flex;
     flex-direction: column; 
     justify-content: space-between; 
-    height: 180px;
 }
 
 .carousel-track .tutorial-card h3 {
@@ -1378,4 +1395,23 @@ h2 {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     border-radius: 8px;
     margin-bottom: 10px; /* Adiciona um pequeno espaçamento entre as caixas */
+}
+
+
+.header .search-bar button {
+    display: flex; /* Alinha o ícone no centro */
+    justify-content: center; 
+    align-items: center;
+    padding: 0.5rem; /* Espaçamento interno */
+    background-color: #007BFF; /* Cor de fundo do botão */
+    color: #fff; /* Cor do ícone */
+    border: none; /* Remove a borda */
+    border-radius: 50%; /* Botão circular */
+    cursor: pointer;
+    width: 40px; /* Largura do botão */
+    height: 40px; /* Altura do botão */
+}
+
+.header .search-bar button i {
+    font-size: 1.2rem; /* Tamanho do ícone */
 }
