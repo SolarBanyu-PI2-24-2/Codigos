@@ -137,14 +137,89 @@
                             </tbody>
                         </table>
                     </div>
+
                     <div class="installation-actions">
-                        <button class="support-btn">Pedir suporte</button>
-                        <button class="add-unit-btn">Adicionar nova unidade</button>
+                        <!-- Botão Pedir Suporte -->
+                        <button id="supportButton">Pedir suporte</button>                  
+                    
+                        <!-- Botão Adicionar Nova Unidade -->
+                        <button id="addUnitButton">Adicionar nova unidade</button>
                     </div>
-                </div>
-            </div>
-        </div>
-        
-    </div>
+                    
+                    <!-- Modal Pedir Suporte -->
+                    <div id="supportModal" class="modal">
+                        <div class="modal-content">
+                            <span class="close-modal" id="closeSupportModal">&times;</span>
+                            <h2>Pedir Suporte</h2>
+                            <p>Escolha uma opção de suporte:</p>
+                            <ul>
+                                <li><a href="tel:+551199999999" class="support-option-modal">📞 Ligue para nós</a></li>
+                                <li><a href="mailto:suporte@solarbanyu.com" class="support-option-modal">📧 Enviar um e-mail</a></li>
+                                <li><button class="support-option-modal" id="startChat">💬 Iniciar um chat</button></li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <!-- Modal Adicionar Nova Unidade -->
+                    <div id="addUnitModal" class="modal">
+                        <div class="modal-content">
+                            <span class="close-modal" id="closeAddUnitModal">&times;</span>
+                            <h2>Adicionar uma nova unidade</h2>
+                            <form id="addUnitForm">
+                                <label for="serialNumber" class="modal-label">Número de Série:</label>
+                                <input type="text" id="serialNumber" name="serialNumber" class="modal-input" placeholder="Digite o número de série" required>
+                                <button type="submit" class="btn-submit-modal">Adicionar</button>
+                            </form>
+                        </div>
+                    </div>
+                    
+                                
+                        <script>
+                            document.addEventListener("DOMContentLoaded", () => {
+    // Botões para abrir os modais
+    const supportButton = document.getElementById("supportButton");
+    const addUnitButton = document.getElementById("addUnitButton");
+
+    // Modais
+    const supportModal = document.getElementById("supportModal");
+    const addUnitModal = document.getElementById("addUnitModal");
+
+    // Botões para fechar os modais
+    const closeSupportModal = document.getElementById("closeSupportModal");
+    const closeAddUnitModal = document.getElementById("closeAddUnitModal");
+
+    // Abrir modais
+    supportButton.addEventListener("click", () => {
+        supportModal.style.display = "flex";
+    });
+
+    addUnitButton.addEventListener("click", () => {
+        addUnitModal.style.display = "flex";
+    });
+
+    // Fechar modais
+    closeSupportModal.addEventListener("click", () => {
+        supportModal.style.display = "none";
+    });
+
+    closeAddUnitModal.addEventListener("click", () => {
+        addUnitModal.style.display = "none";
+    });
+
+    // Fechar modais ao clicar fora
+    window.addEventListener("click", (event) => {
+        if (event.target === supportModal) {
+            supportModal.style.display = "none";
+        }
+        if (event.target === addUnitModal) {
+            addUnitModal.style.display = "none";
+        }
+    });
+});
+
+                        </script>
+                        
+
+
 </body>
 </html>
