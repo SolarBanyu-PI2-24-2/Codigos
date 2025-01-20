@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sobre-SolarBanyu</title>
+    <link rel="stylesheet" href="/css/styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="icon" href="/assets/favicon.png" type="image/png">
+</head>
+<body>
+    <%- include('partials/sidebar') %>
+    <div class="main-content">
+        <%- include('partials/header') %>
+        <div class="dashboard">
+            <h1>SolarBanyu</h1>
+            <p>Saiba mais sobre o SolarBanyu.</p>            
+        </div>
+        <div class="about-section">
+            <div class="about-card">
+                <img src="/assets/solarbanyu-prototipo.png" alt="Desalinizador SolarBanyu">
+                <div class="about-content">
+                    <h2>SolarBanyu</h2>
+                    <p>
+                        O <strong>SolarBanyu</strong> é um dessalinizador que utiliza energia solar. Ele se destaca como uma alternativa prática, viável e escalável, alinhada aos Objetivos de Desenvolvimento Sustentável (ODS).
+                    </p>
+                    <p>
+                        Utilizando tecnologia de <strong>osmose reversa</strong> alimentada por <strong>energia solar</strong>, o projeto oferece uma solução sustentável e acessível para mitigar a escassez hídrica, beneficiando comunidades vulneráveis.
+                    </p>
+                </div>
+            </div>
+
+            <h2>Top 5 benefícios</h2>
+            <div class="benefits">
+                <div class="benefit">
+                    <i class="fas fa-dollar-sign benefit-icon economic"></i>
+                    <p>Econômico</p>
+                </div>
+                <div class="benefit">
+                    <i class="fas fa-leaf benefit-icon sustainable"></i>
+                    <p>Sustentável</p>
+                </div>
+                <div class="benefit">
+                    <i class="fas fa-brain benefit-icon intelligent"></i>
+                    <p>Inteligente</p>
+                </div>
+                <div class="benefit">
+                    <i class="fas fa-sync-alt benefit-icon adaptable"></i>
+                    <p>Adaptável</p>
+                </div>
+                <div class="benefit">
+                    <i class="fas fa-hand-holding-water benefit-icon easy"></i>
+                    <p>Fácil</p>
+                </div>
+            </div>
+
+            <div class="documentation">
+                <p>Para saber mais, acesse nossa documentação oficial</p>
+                <a href="https://gitlab.com/unb-esw/fga-pi2/semestre-2024-3/squad04/documentacao-relatorio" class="btn">Acesse aqui</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

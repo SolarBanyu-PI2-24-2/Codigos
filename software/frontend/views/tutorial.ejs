@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tutoriais - SolarBanyu</title>
+    <link rel="stylesheet" href="/css/styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="icon" href="/assets/favicon.png" type="image/png">
+</head>
+<body>
+    <%- include('partials/sidebar') %>
+    <div class="main-content">
+        <%- include('partials/header') %>
+        <div class="dashboard">
+            <h1>Tutoriais</h1>
+            <p>Veja como usar o sistema com tutoriais práticos e rápidos.</p>
+            
+            <!-- Carrossel de Vídeos -->
+            <div class="carousel">
+                <h2>Tutoriais em vídeo</h2>
+                <div class="carousel-container">
+                    <button class="carousel-btn prev"><i class="fas fa-chevron-left"></i></button>
+                    <div class="carousel-track">
+                        <iframe src="//www.youtube.com/embed/93O0MD2ZzUs?si=iP1eZbuOPd8iu3qB" frameborder="0" allowfullscreen></iframe>
+                        <iframe src="//www.youtube.com/embed/93O0MD2ZzUs?si=iP1eZbuOPd8iu3qB" frameborder="0" allowfullscreen></iframe>
+                        <iframe src="//www.youtube.com/embed/93O0MD2ZzUs?si=iP1eZbuOPd8iu3qB" frameborder="0" allowfullscreen></iframe>
+                        <iframe src="//www.youtube.com/embed/93O0MD2ZzUs?si=iP1eZbuOPd8iu3qB" frameborder="0" allowfullscreen></iframe>
+                        <iframe src="//www.youtube.com/embed/93O0MD2ZzUs?si=iP1eZbuOPd8iu3qB" frameborder="0" allowfullscreen></iframe>
+                        <iframe src="//www.youtube.com/embed/93O0MD2ZzUs?si=iP1eZbuOPd8iu3qB" frameborder="0" allowfullscreen></iframe>
+                        <iframe src="//www.youtube.com/embed/93O0MD2ZzUs?si=iP1eZbuOPd8iu3qB" frameborder="0" allowfullscreen></iframe>
+                        <iframe src="//www.youtube.com/embed/93O0MD2ZzUs?si=iP1eZbuOPd8iu3qB" frameborder="0" allowfullscreen></iframe>
+                    </div>
+                    <button class="carousel-btn next"><i class="fas fa-chevron-right"></i></button>
+                </div>
+            </div>
+
+            <!-- Carrossel de Tutoriais Escritos -->
+            <div class="carousel">
+                <h2>Tutoriais escritos</h2>
+                <div class="carousel-container">
+                    <button class="carousel-btn prev"><i class="fas fa-chevron-left"></i></button>
+                    <div class="carousel-track">
+                        <div class="tutorial-card">
+                            <h3>Trocando o filtro</h3>
+                            <a href="#" class="view-btn">Visualizar</a>
+                        </div>
+                        <div class="tutorial-card">
+                            <h3>Adicionando uma nova unidade</h3>
+                            <a href="#" class="view-btn">Visualizar</a>
+                        </div>
+                        <div class="tutorial-card">
+                            <h3>Compartilhando um relatório</h3>
+                            <a href="#" class="view-btn">Visualizar</a>
+                        </div>
+                        <div class="tutorial-card">
+                            <h3>Utilizando a energia solar</h3>
+                            <a href="#" class="view-btn">Visualizar</a>
+                        </div>
+                        <div class="tutorial-card">
+                            <h3>Pedindo suporte</h3>
+                            <a href="#" class="view-btn">Visualizar</a>
+                        </div>
+                        <div class="tutorial-card">
+                            <h3>Ajudas extras</h3>
+                            <a href="#" class="view-btn">Visualizar</a>
+                        </div>
+                    </div>
+                    <button class="carousel-btn next"><i class="fas fa-chevron-right"></i></button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="/js/scripts.js"></script>
+</body>
+</html>
