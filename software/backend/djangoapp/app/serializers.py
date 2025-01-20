@@ -3,9 +3,16 @@ from .models import Usuario, Endereco, Dispositivo, Sensor, DadosSensor, Alerta,
 from django.contrib.auth.models import User
 
 class UsuarioSerializer(serializers.ModelSerializer):
-  class Meta:
-    model = Usuario
-    fields = '__all__'
+    class Meta:
+        model = Usuario
+        fields = ['id', 'nome', 'email', 'senha', 'ativo', 'tipo_usuario', 'profissao', 'criado_em', 'atualizado_em']
+        extra_kwargs = {'senha': {'write_only': True}}
+
+    def create(self, validated_data):
+        usuario = Usuario(**validated_data)
+        usuario.set_password(validated_data['senha'])
+        usuario.save()
+        return usuario
 
 class EnderecoSerializer(serializers.ModelSerializer):
   class Meta:

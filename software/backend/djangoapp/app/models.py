@@ -3,6 +3,10 @@ from django.db import models
 from django.db import models
 import uuid
 
+from django.contrib.auth.hashers import make_password, check_password
+
+from rest_framework.authtoken.models import Token
+
 class Usuario(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     nome = models.CharField(max_length=255, null=False)
@@ -16,6 +20,17 @@ class Usuario(models.Model):
 
     def __str__(self):
         return self.nome
+
+    def set_password(self, raw_password):
+        self.senha = make_password(raw_password)
+
+    def check_password(self, raw_password):
+        return check_password(raw_password, self.senha)
+
+class UsuarioToken(Token):
+    user = models.OneToOneField(
+        Usuario, related_name='auth_token', on_delete=models.CASCADE
+    )
 
 class Endereco(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
