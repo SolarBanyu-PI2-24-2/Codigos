@@ -41,6 +41,19 @@ services:
     depends_on:
       - psql
 
+  frontend:
+    container_name: frontend
+    build:
+      context: ../frontend
+    ports:
+      - 3000:3000
+    volumes:
+      - ../frontend:/app
+    depends_on:
+      - djangoapp
+    networks:
+      - app-network
+
 networks:
   app-network:
     external: true
