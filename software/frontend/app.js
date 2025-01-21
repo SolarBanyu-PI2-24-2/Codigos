@@ -67,6 +67,25 @@ app.listen(PORT, () => {
     console.log(`Servidor rodando em http://localhost:${PORT}`);
 });
 
+// teste backend
+
+// Exemplo de chamada ao backend
+async function fetchData() {
+    try {
+        const response = await fetch('http://localhost:8000/app/api/data'); // Rota do backend
+        if (response.ok) {
+            const data = await response.json();
+            console.log('Dados recebidos do backend:', data);
+        } else {
+            console.error('Erro ao buscar dados:', response.status);
+        }
+    } catch (error) {
+        console.error('Erro na requisição ao backend:', error);
+    }
+}
+
+// Chame essa função onde necessário
+fetchData();
 
 
 

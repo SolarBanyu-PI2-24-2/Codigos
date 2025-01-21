@@ -1,16 +1,32 @@
 // Função de validação de login
-function validateLogin() {
+async function validateLogin() {
     const username = document.getElementById('username').value;
     const password = document.getElementById('password').value;
 
-    if (username === "francisca" && password === "1234") {
-        console.log("Login bem-sucedido! Redirecionando para /home."); // Log para depuração
-        window.location.href = "/home"; // Redireciona para a Home
-    } else {
-        console.log("Usuário ou senha incorretos."); // Log para depuração
-        alert("Usuário ou senha incorretos.");
+    try {
+        const response = await fetch('http://localhost:8000/app/login/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ username, password }),
+        });
+
+        const data = await response.json();
+        if (response.ok) {
+            console.log(data); // Exibe a resposta
+            alert('Login bem-sucedido!');
+            localStorage.setItem('token', data.token); // Armazenar token no localStorage
+            window.location.href = "/home"; // Redirecionar para home
+        } else {
+            alert('Credenciais inválidas.');
+        }
+    } catch (error) {
+        console.error('Erro ao conectar ao backend:', error);
+        alert('Erro ao conectar ao servidor.');
     }
 }
+
 
 // Configuração do evento de clique para o botão de login
 const loginButton = document.getElementById("login-button");
@@ -140,3 +156,24 @@ if (notificationButton) {
     console.error("Botão de notificações não encontrado no DOM!");
 }
 
+async function testBackendCommunication() {
+    try {
+        const response = await fetch('http://localhost:8000/app/api/data'); // Ajuste para a rota real do backend
+        if (response.ok) {
+            const data = await response.json();
+            console.log('Dados do backend:', data); // Exibe no console do navegador
+            alert(`Backend respondeu: ${JSON.stringify(data)}`); // Exibe um alerta com os dados
+        } else {
+            console.error(`Erro ao acessar o backend: ${response.status}`);
+            alert(`Erro ao acessar o backend: ${response.status}`);
+        }
+    } catch (error) {
+        console.error('Erro ao conectar ao backend:', error);
+        alert('Erro ao conectar ao backend. Verifique os logs.');
+    }
+}
+
+// Testa a função quando a página carrega
+document.addEventListener("DOMContentLoaded", () => {
+    testBackendCommunication();
+});

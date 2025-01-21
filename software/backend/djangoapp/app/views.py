@@ -22,6 +22,11 @@ from django.shortcuts import get_object_or_404
 
 from .api_lib.response import json_success_response, json_error_response
 
+from django.http import JsonResponse
+def api_data(request):
+    data = {"message": "Olá do backend!", "status": "success"}
+    return JsonResponse(data)
+
 def api_interface(func):
   def handle_errors(*args, **kwargs):
     try:
