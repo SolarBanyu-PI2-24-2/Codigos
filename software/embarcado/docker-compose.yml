@@ -11,3 +11,8 @@ services:
       - .:/app
     env_file:
       - .env
+
+networks:
+  app-network:
+    external: true
+    driver: bridge
