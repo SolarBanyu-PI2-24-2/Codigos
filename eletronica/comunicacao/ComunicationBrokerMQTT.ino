@@ -76,30 +76,28 @@ void loop() {
   if ((now - previous_time) > mqtt_pub_interval) {
     previous_time = now;
 
-    // Sensor values
-    const char* type1 = "temperatura";
-    float value1 = 22.5;
-    const char* unit1 = "°C";
+    struct Sensor {
+      const char* tipo;
+      float valor;
+    };
 
-    const char* type2 = "umidade";
-    float value2 = 45.7;
-    const char* unit2 = "%";
+    Sensor sensores[] = {
+      {"TEMPERATURA_AGUA", 22.5},
+      {"PH_AGUA", 15.7},
+      {"NIVEL_AGUA", 43.7},
+      {"TENSAO", 25.7},
+      {"FLUXO_AGUA", 11.3}
+    };
 
-    // Json builder
+    // Criar JSON
     StaticJsonDocument<256> sensorValuesJson;
-
-    // Temp sensor
     JsonArray array = sensorValuesJson.to<JsonArray>();
-    JsonObject obj1 = array.createNestedObject();
-    obj1["tipo"] = type1;
-    obj1["valor"] = value1;
-    obj1["unidade"] = unit1;
 
-    // Humidity sensor
-    JsonObject obj2 = array.createNestedObject();
-    obj2["tipo"] = type2;
-    obj2["valor"] = value2;
-    obj2["unidade"] = unit2;
+    for (const auto& sensor : sensores) {
+      JsonObject obj = array.createNestedObject();
+      obj["tipo"] = sensor.tipo;
+      obj["valor"] = sensor.valor;
+    }
 
     char jsonBuffer[256];
     serializeJson(sensorValuesJson, jsonBuffer);
