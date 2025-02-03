@@ -97,12 +97,26 @@
             </div>
 
         </div>
-        <div class="faq-actions">
-            <button class="support-btn">Pedir suporte</button>
-       
-        </div>
+<!-- Botão de Pedir Suporte -->
+<div class="faq-actions">
+    <button class="support-btn" id="supportButton">Pedir suporte</button>
+</div>
+
+<!-- Modal de Suporte -->
+<div id="supportModal" class="modal">
+    <div class="modal-content">
+        <span class="close-modal" id="closeSupportModal">&times;</span>
+        <h2>Pedir Suporte</h2>
+        <p>Escolha uma opção de suporte:</p>
+        <ul>
+            <li><a href="tel:+551199999999" class="support-option-modal">📞 Ligue para nós</a></li>
+            <li><a href="mailto:suporte@solarbanyu.com" class="support-option-modal">📧 Enviar um e-mail</a></li>
+            <li><button class="support-option-modal" id="startChat">💬 Iniciar um chat</button></li>
+        </ul>
     </div>
-    <script src="/js/scripts.js"></script>
+</div>
+    </div>
+    <script src="/js/botoes.js"></script>
     <script src="/js/alert-critical.js"></script>
 </body>
 </html>

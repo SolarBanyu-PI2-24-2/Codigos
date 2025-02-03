@@ -21,22 +21,18 @@
 
         <!-- 2x2 Grid -->
         <div class="grid-container-report">
-            <!-- First column, first row -->
             <div class="box alerts">
                 <span class="small-text">Alertas do SolarBanyu</span>
                 <h2>3 alertas não resolvidos</h2>
             </div>
 
-            <!-- Second column, first row -->
             <div class="box button">
                 <a href="alertas" class="btn-yellow">Ir para alertas</a>
             </div>
 
-            <!-- First column, second row -->
             <div class="box chart">
                 <h3>Resumo dos últimos 6 meses</h3>
                 <div id="chart">
-                    <!-- Canvas for the chart -->
                     <canvas id="solarChart"></canvas>
                 </div>
                 <div class="legend">
@@ -55,7 +51,6 @@
                 </div>
             </div>
 
-            <!-- Second column, second row -->
             <div class="box last-update">
                 <div class="update-info">
                     <span>Última atualização</span>
@@ -63,26 +58,42 @@
                 </div>
                 <div class="buttons">
                     <button class="btn-yellow" id="downloadButton">Salvar em PDF</button>
-                    <button class="btn-yellow">Compartilhar</button>
+                    <button class="btn-yellow" id="shareButton">Compartilhar</button>
                     <button class="btn-yellow" id="supportButton">Pedir suporte</button>
-                    <div id="supportModal" class="modal">
-                        <div class="modal-content">
-                            <span class="close-modal" id="closeSupportModal">&times;</span>
-                            <h2>Pedir Suporte</h2>
-                            <p>Escolha uma opção de suporte:</p>
-                            <ul>
-                                <li><a href="tel:+551199999999" class="support-option-modal">📞 Ligue para nós</a></li>
-                                <li><a href="mailto:suporte@solarbanyu.com" class="support-option-modal">📧 Enviar um e-mail</a></li>
-                                <li><button class="support-option-modal" id="startChat">💬 Iniciar um chat</button></li>
-                            </ul>
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Chart.js script -->
+ <!-- Modal de Compartilhamento -->
+<div id="shareModal" class="modal">
+    <div class="modal-content">
+        <span class="close-modal" id="closeShareModal">&times;</span>
+        <h2>Compartilhar Relatório</h2>
+        <button id="shareWhatsApp">📲 Compartilhar no WhatsApp</button>
+        <button id="shareEmail">✉️ Enviar por E-mail</button>
+        <button id="copyLink">📋 Copiar Link</button>
+    </div>
+</div>
+
+
+    <!-- Modal de Suporte -->
+    <div id="supportModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" id="closeSupportModal">&times;</span>
+            <h2>Pedir Suporte</h2>
+            <p>Escolha uma opção de suporte:</p>
+            <ul>
+                <li><a href="tel:+551199999999" class="support-option-modal">📞 Ligue para nós</a></li>
+                <li><a href="mailto:suporte@solarbanyu.com" class="support-option-modal">📧 Enviar um e-mail</a></li>
+                <li><button class="support-option-modal" id="startChat">💬 Iniciar um chat</button></li>
+            </ul>
+        </div>
+    </div>
+
+
+
+    <script src="/js/botoes.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
         var ctx = document.getElementById('solarChart').getContext('2d');
@@ -115,43 +126,6 @@
         });
     </script>
 
-    <script>
-        document.getElementById('downloadButton').addEventListener('click', function() {
-            const chartCanvas = document.getElementById('solarChart');
-            
-            const options = {
-                margin: 10,
-                filename: 'relatorio_solarbanyu.pdf',
-                image: { type: 'jpeg', quality: 0.98 },
-                html2canvas: { scale: 2 },
-                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
-            };
 
-            // Criando a imagem a partir do canvas e gerando o PDF
-            html2pdf().from(chartCanvas).set(options).save();
-        });
-    </script>
-
-    <script>
-        document.addEventListener("DOMContentLoaded", () => {
-            const supportButton = document.getElementById("supportButton");
-            const supportModal = document.getElementById("supportModal");
-            const closeSupportModal = document.getElementById("closeSupportModal");
-
-            supportButton.addEventListener("click", () => {
-                supportModal.style.display = "flex";
-            });
-
-            closeSupportModal.addEventListener("click", () => {
-                supportModal.style.display = "none";
-            });
-
-            window.addEventListener("click", (event) => {
-                if (event.target === supportModal) {
-                    supportModal.style.display = "none";
-                }
-            });
-        });
-    </script>
 </body>
 </html>
