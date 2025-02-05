@@ -252,12 +252,15 @@ float real_voltage;
 float fluxo;
 float volume;
 
-while (sensor_tensao()<= 11.50 || digitalRead(pinSensor_nivel) == HIGH ){
+if (sensor_tensao()<= 11.50 || digitalRead(pinSensor_nivel) == HIGH ){
   digitalWrite(RelePin, HIGH); //bomba ligada
   Serial.print("Tensao: ");
   Serial.println(sensor_tensao(), 2);
   Serial.println("Bomba desligada");
 
+}
+else{
+    digitalWrite(RelePin, LOW); //bomba ligada
 }
 
 unsigned long tempoAtual = millis(); // Tempo atual em milissegundos
@@ -268,10 +271,9 @@ if (intervalo >= 500) { // Atualiza a cada 500 ms
     fluxo = (pulsos / fatorCalibracao); // Calcula a taxa de fluxo
     volume += (fluxo / 110.0); // Calcula o volume total
 }
-digitalWrite(RelePin, LOW); //bomba desligada
+//digitalWrite(RelePin, LOW); //bomba desligada
 Serial.println("Bomba ligada");
 //bomba ligada leitura dos sensores <-------------------->
-if(digitalRead(RelePin) == LOW){
 Leitura_PH(real_php);
 Serial.print("Temperatura: ");
 Serial.println(Leitura_temperatura(), 2);
@@ -282,7 +284,7 @@ Serial.println(fluxo, 2);
 Serial.print("Volume: ");
 Serial.println(volume, 2);
 Serial.print("Tensao: ");
-Serial.println(sensor_tensao(), 2);}
+Serial.println(sensor_tensao(), 2);
 
  // Envio dos dados via MQTT
   if (!mqttClient.connected())
@@ -306,10 +308,10 @@ Serial.println(sensor_tensao(), 2);}
     };
 
     Sensor sensores[] = {
-        {"TEMPERATURA_AGUA", real_temp},
+        {"TEMPERATURA_AGUA", Leitura_temperatura()},
         {"PH_AGUA", real_php},
-        {"NIVEL_AGUA", real_state_nivel},
-        {"TENSAO", real_voltage},
+        {"NIVEL_AGUA", digitalRead(pinSensor_nivel)},
+        {"TENSAO", sensor_tensao()},
         {"FLUXO_AGUA", volume}};
 
     // Cria o JSON
