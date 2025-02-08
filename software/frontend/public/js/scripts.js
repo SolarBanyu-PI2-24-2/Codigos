@@ -1,42 +1,54 @@
+document.addEventListener("DOMContentLoaded", function () {
+    const loginButton = document.getElementById("login-button");
+
+    if (loginButton) {
+        loginButton.addEventListener("click", async function () {
+            console.log("Botão de login clicado!");
+            await validateLogin();
+        });
+    } else {
+        console.error("Botão de login não encontrado no DOM!");
+    }
+});
+
 // Função de validação de login
 async function validateLogin() {
-    const username = document.getElementById('username').value;
-    const password = document.getElementById('password').value;
+    const email = document.getElementById("email")?.value;
+    const password = document.getElementById("password")?.value;
+
+    if (!email || !password) {
+        alert("Por favor, preencha todos os campos.");
+        return;
+    }
 
     try {
-        const response = await fetch('http://localhost:8000/app/login/', {
-            method: 'POST',
+        const response = await fetch("http://localhost:8000/api/login/", {
+            method: "POST",
             headers: {
-                'Content-Type': 'application/json',
+                "Content-Type": "application/json",
             },
-            body: JSON.stringify({ username, password }),
+            body: JSON.stringify({ email, password }),
         });
 
         const data = await response.json();
+        
         if (response.ok) {
-            console.log(data); // Exibe a resposta
-            alert('Login bem-sucedido!');
-            localStorage.setItem('token', data.token); // Armazenar token no localStorage
-            window.location.href = "/home"; // Redirecionar para home
+            console.log("Login bem-sucedido:", data);
+            alert("Login bem-sucedido!");
+            localStorage.setItem("token", data.token); // Armazena o token
+
+            // Redirecionamento seguro após 1 segundo
+            setTimeout(() => {
+                window.location.href = "/home";
+            }, 1000);
         } else {
-            alert('Credenciais inválidas.');
+            console.warn("Erro no login:", data);
+            alert(data.error || "Credenciais inválidas.");
         }
     } catch (error) {
-        console.error('Erro ao conectar ao backend:', error);
-        alert('Erro ao conectar ao servidor.');
+        console.error("Erro ao conectar ao backend:", error);
+        alert("Erro ao conectar ao servidor. Verifique sua conexão.");
     }
-}
-
-
-// Configuração do evento de clique para o botão de login
-const loginButton = document.getElementById("login-button");
-if (loginButton) {
-    loginButton.addEventListener("click", function () {
-        console.log("Botão de login clicado!"); // Log para depuração
-        validateLogin(); // Chama a função de validação de login
-    });
-} else {
-    console.error("Botão de login não encontrado no DOM!");
 }
 
 // Lógica para alternar as respostas do FAQ
