@@ -1,3 +1,5 @@
+/// Login
+
 document.addEventListener("DOMContentLoaded", function () {
     const loginButton = document.getElementById("login-button");
 
@@ -11,7 +13,6 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 });
 
-// Função de validação de login
 async function validateLogin() {
     const email = document.getElementById("email")?.value;
     const password = document.getElementById("password")?.value;
@@ -50,6 +51,53 @@ async function validateLogin() {
         alert("Erro ao conectar ao servidor. Verifique sua conexão.");
     }
 }
+
+// Logout
+document.addEventListener("DOMContentLoaded", function () {
+    const logoutLink = document.getElementById("logout-link");
+
+    if (logoutLink) {
+        logoutLink.addEventListener("click", async function (event) {
+            event.preventDefault(); // Impede o redirecionamento padrão do link
+
+            const token = localStorage.getItem("token");
+            if (!token) {
+                alert("Você já está deslogado.");
+                window.location.href = "/index"; // Redireciona para login
+                return;
+            }
+
+            try {
+                const response = await fetch("http://localhost:8000/api/logout/", {
+                    method: "POST",
+                    headers: {
+                        "Authorization": `Token ${token}`
+                    },
+                });
+
+                if (response.ok) {
+                    console.log("Logout bem-sucedido.");
+                    alert("Logout realizado com sucesso!");
+
+                    // Remover o token do armazenamento local
+                    localStorage.removeItem("token");
+
+                    // Redirecionar para a página de login
+                    window.location.href = "/index";
+                } else {
+                    console.warn("Erro ao tentar deslogar:", response.statusText);
+                    alert("Erro ao tentar deslogar. Tente novamente.");
+                }
+            } catch (error) {
+                console.error("Erro ao conectar ao backend:", error);
+                alert("Erro ao conectar ao servidor.");
+            }
+        });
+    } else {
+        console.error("Elemento de logout não encontrado no DOM!");
+    }
+});
+
 
 // Lógica para alternar as respostas do FAQ
 document.querySelectorAll('.faq-question').forEach(button => {
