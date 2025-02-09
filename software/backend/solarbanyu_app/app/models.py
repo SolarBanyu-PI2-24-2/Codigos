@@ -54,11 +54,18 @@ class DadoSensor(models.Model):
 
 # Modelo de Alerta
 class Alerta(models.Model):
-    dispositivo = models.ForeignKey(Dispositivo, on_delete=models.CASCADE, related_name="alertas")
-    tipo = models.CharField(max_length=100)
+    PRIORIDADE_CHOICES = [
+        (1, "Baixa"),
+        (2, "Média"),
+        (3, "Alta"),
+        (4, "Urgente"),
+    ]
+    
+    dispositivo = models.ForeignKey("Dispositivo", on_delete=models.CASCADE)
+    tipo = models.CharField(max_length=255)
     descricao = models.TextField()
+    prioridade = models.IntegerField(choices=PRIORIDADE_CHOICES)
     resolvido = models.BooleanField(default=False)
-    prioridade = models.IntegerField()
     criado_em = models.DateTimeField(auto_now_add=True)
 
 # Modelo de Consumo

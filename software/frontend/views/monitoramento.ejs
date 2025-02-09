@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Monitoramento-SolarBanyu</title>
+    <title>Monitoramento - SolarBanyu</title>
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/css/styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
@@ -21,17 +21,11 @@
             <!-- Dropdown para escolher o gráfico -->
             <div class="chart-container">
                 <div class="dropdown">
-                    <button id="dropdownButton" class="dropdown-button">Volume de água dessalinizada <i class="fas fa-chevron-down"></i></button>
-                    <ul id="dropdownMenu" class="dropdown-menu">
-                        <li onclick="changeChart('Volume de água dessalinizada', [10, 20, 30, 82, 50, 25, 15, 60, 45, 70, 55, 40], 'Meses')">Volume de água dessalinizada</li>
-                        <li onclick="changeChart('Energia consumida', [100, 200, 150, 300, 250, 400, 350, 450, 500, 550, 600, 650], 'Meses')">Energia consumida</li>
-                        <li onclick="changeChart('Ph da água', [7, 7.2, 7.4, 7.1, 7.3, 7.5, 7.2, 7.1, 7.3, 7.4, 7.5, 7.2], 'Meses')">Ph da água</li>
-                        <li onclick="changeChart('Temperatura da água', [20, 22, 21, 23, 24, 25, 26, 24, 23, 22, 21, 20], 'Meses')">Temperatura da água</li>
-                        <li onclick="changeChart('Alertas', [2, 4, 3, 5, 6, 4, 3, 7, 5, 6, 4, 3], 'Meses')">Alertas</li>
-                    </ul>
+                    <button id="dropdownButton" class="dropdown-button">Carregando... <i class="fas fa-chevron-down"></i></button>
+                    <ul id="dropdownMenu" class="dropdown-menu"></ul>
                 </div>
 
-                <!-- Dropdown para escolher o período (semana ou mês) -->
+                <!-- Dropdown para escolher o período -->
                 <div class="dropdown" id="periodDropdown">
                     <button id="periodDropdownButton" class="dropdown-button">Período: Mensal <i class="fas fa-chevron-down"></i></button>
                     <ul id="periodDropdownMenu" class="dropdown-menu">
@@ -48,117 +42,36 @@
                 <div class="card">
                     <i class="fas fa-tint"></i>                    
                     <h3>Total de água produzida</h3>
-                    <p>25.000 L</p> 
-
+                    <p id="total-agua">Carregando...</p> 
                 </div>
                 <div class="card">
                     <i class="fas fa-calendar-alt"></i>
                     <h3>Dias em funcionamento</h3>
-                    <p>260 dias</p>
+                    <p id="dias-funcionamento">Carregando...</p>
                 </div>
                 <div class="card">
                     <i class="fas fa-exclamation-triangle"></i>
                     <h3>Total de alertas</h3>
-                    <p>7 alertas</p>
+                    <p id="total-alertas">Carregando...</p>
                 </div>
                 <div class="card">
                     <i class="fas fa-sync-alt"></i>
                     <h3>Última atualização</h3>
-                    <p>20/11/2024</p>
+                    <p id="ultima-atualizacao">Carregando...</p>
                 </div>
             </div>
         </div>
     </div>
 
-    <script>
-        const ctx = document.getElementById('waterChart').getContext('2d');
-        const waterChart = new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: ["Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"],
-                datasets: [{
-                    label: 'Volume de água dessalinizada',
-                    data: [10, 20, 30, 82, 50, 25, 15, 60, 45, 70, 55, 40],
-                    borderColor: 'rgba(54, 162, 235, 1)',
-                    backgroundColor: 'rgba(54, 162, 235, 0.2)',
-                    borderWidth: 2,
-                    pointRadius: 5,
-                    pointBackgroundColor: 'rgba(54, 162, 235, 1)'
-                }]
-            },
-            options: {
-                responsive: true,
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        title: {
-                            display: true,
-                            text: 'Litros'
-                        }
-                    },
-                    x: {
-                        title: {
-                            display: true,
-                            text: 'Meses'
-                        }
-                    }
-                },
-                plugins: {
-                    tooltip: {
-                        callbacks: {
-                            label: function(context) {
-                                return `${context.raw} litros`;
-                            }
-                        }
-                    }
-                }
-            }
-        });
-
-        document.getElementById('dropdownButton').addEventListener('click', () => {
-            const menu = document.getElementById('dropdownMenu');
-            menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
-        });
-
-        // Função para atualizar o título e dados do gráfico
-        function changeChart(title, data, xAxisLabel) {
-            waterChart.data.datasets[0].label = title;
-            waterChart.data.datasets[0].data = data;
-            waterChart.options.scales.x.title.text = xAxisLabel;
-            waterChart.update();
-            document.getElementById('dropdownButton').innerHTML = `${title} <i class='fas fa-chevron-down'></i>`;
-            document.getElementById('dropdownMenu').style.display = 'none';
-        }
-
-        // Função para mudar o período (mensal ou semanal)
-        function changePeriod(period) {
-            let newLabels = [];
-            let newData = [];
-
-            if (period === 'Mensal') {
-                newLabels = ["Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"];
-                newData = [10, 20, 30, 82, 50, 25, 15, 60, 45, 70, 55, 40]; // Exemplo de dados mensais
-            } else if (period === 'Semanal') {
-                newLabels = ["Semana 1", "Semana 2", "Semana 3", "Semana 4"];
-                newData = [15, 30, 45, 60]; // Exemplo de dados semanais
-            }
-
-            waterChart.data.labels = newLabels;
-            waterChart.data.datasets[0].data = newData;
-            waterChart.options.scales.x.title.text = `Período: ${period}`;
-            waterChart.update();
-            document.getElementById('periodDropdownButton').innerHTML = `Período: ${period} <i class='fas fa-chevron-down'></i>`;
-            document.getElementById('periodDropdownMenu').style.display = 'none';
-        }
-
-        // Esconde o dropdown quando clicar fora dele
-        window.addEventListener('click', (e) => {
-            const dropdown = document.querySelector('.dropdown');
-            if (!dropdown.contains(e.target)) {
-                document.getElementById('dropdownMenu').style.display = 'none';
-                document.getElementById('periodDropdownMenu').style.display = 'none';
-            }
-        });
+    <!-- Passar os dados do Express para o JavaScript -->
+    <script type="application/json" id="dados-sensores">
+        <%- JSON.stringify(dadosSensores || []) %>
     </script>
+
+    <script type="application/json" id="dados-alertas">
+        <%- JSON.stringify(alertas || []) %>
+    </script>
+
+    <script src="/js/monitoramento.js"></script>
 </body>
 </html>

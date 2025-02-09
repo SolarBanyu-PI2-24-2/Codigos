@@ -31,8 +31,8 @@ class UserSerializer(serializers.ModelSerializer):
 class EnderecoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Endereco
-        fields = '__all__'
-
+        fields = "__all__"
+        
 class DispositivoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Dispositivo
