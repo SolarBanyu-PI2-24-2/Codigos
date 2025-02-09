@@ -1492,3 +1492,32 @@ input[readonly] {
     border-color: #FFB300;
     color: #FFB300;
 }
+
+.dropdown-menu {
+    display: none;
+    position: absolute;
+    background: white;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    border-radius: 5px;
+    width: 150px;
+    z-index: 1000;
+}
+
+.dropdown-menu li {
+    padding: 10px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.dropdown-menu li:hover {
+    background: #007bff;
+    color: white;
+}
+
+/* Quando o dropdown estiver visível */
+.dropdown-menu.show {
+    display: block;
+}

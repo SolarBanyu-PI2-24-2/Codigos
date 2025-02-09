@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Monitoramento - SolarBanyu</title>
+    <title>Monitoramento-SolarBanyu</title>
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/css/styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
@@ -20,17 +20,26 @@
 
             <!-- Dropdown para escolher o gráfico -->
             <div class="chart-container">
+                <!-- Dropdown para escolher o tipo de gráfico -->
                 <div class="dropdown">
-                    <button id="dropdownButton" class="dropdown-button">Carregando... <i class="fas fa-chevron-down"></i></button>
-                    <ul id="dropdownMenu" class="dropdown-menu"></ul>
+                    <button id="dropdownButton" class="dropdown-button">Volume de água dessalinizada <i class="fas fa-chevron-down"></i></button>
+                    <ul id="dropdownMenu" class="dropdown-menu">
+                        <li onclick="changeChart('Volume de água dessalinizada')">Volume de água dessalinizada</li>
+                        <li onclick="changeChart('Energia consumida')">Energia consumida</li>
+                        <li onclick="changeChart('Ph da água')">Ph da água</li>
+                        <li onclick="changeChart('Temperatura da água')">Temperatura da água</li>
+                    </ul>
                 </div>
 
-                <!-- Dropdown para escolher o período -->
+
+                <!-- Dropdown para escolher o período (semana ou mês) -->
                 <div class="dropdown" id="periodDropdown">
-                    <button id="periodDropdownButton" class="dropdown-button">Período: Mensal <i class="fas fa-chevron-down"></i></button>
+                    <button id="periodDropdownButton" class="dropdown-button">Última hora <i class="fas fa-chevron-down"></i></button>
                     <ul id="periodDropdownMenu" class="dropdown-menu">
-                        <li onclick="changePeriod('Mensal')">Mensal</li>
+                        <li onclick="changePeriod('Última Hora')">Última Hora</li>
+                        <li onclick="changePeriod('Últimas 24h')">Últimas 24h</li>
                         <li onclick="changePeriod('Semanal')">Semanal</li>
+                        <li onclick="changePeriod('Mensal')">Mensal</li>
                     </ul>
                 </div>
 
@@ -42,36 +51,27 @@
                 <div class="card">
                     <i class="fas fa-tint"></i>                    
                     <h3>Total de água produzida</h3>
-                    <p id="total-agua">Carregando...</p> 
+                    <p id="total-water"></p> 
+
                 </div>
                 <div class="card">
                     <i class="fas fa-calendar-alt"></i>
                     <h3>Dias em funcionamento</h3>
-                    <p id="dias-funcionamento">Carregando...</p>
+                    <p id="current-days"></p>
                 </div>
                 <div class="card">
                     <i class="fas fa-exclamation-triangle"></i>
                     <h3>Total de alertas</h3>
-                    <p id="total-alertas">Carregando...</p>
+                    <p id="total-alertas"></p>
                 </div>
                 <div class="card">
                     <i class="fas fa-sync-alt"></i>
                     <h3>Última atualização</h3>
-                    <p id="ultima-atualizacao">Carregando...</p>
+                    <p id="last-update"></p>
                 </div>
             </div>
         </div>
     </div>
-
-    <!-- Passar os dados do Express para o JavaScript -->
-    <script type="application/json" id="dados-sensores">
-        <%- JSON.stringify(dadosSensores || []) %>
-    </script>
-
-    <script type="application/json" id="dados-alertas">
-        <%- JSON.stringify(alertas || []) %>
-    </script>
-
-    <script src="/js/monitoramento.js"></script>
+<script src="/js/Monitoramento.js"></script>
 </body>
 </html>
