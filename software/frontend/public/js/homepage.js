@@ -62,7 +62,133 @@ async function loadHomePageData() {
     }
 }
 
-// Chamar a função quando a página carregar
+async function loadAlert() {
+    const token = localStorage.getItem("token");
+
+    if (!token) {
+        console.warn("Usuário não autenticado.");
+        return;
+    }
+
+    try {
+        const response = await fetch("http://localhost:8000/api/alertas/", {
+            method: "GET",
+            headers: {
+                "Authorization": `Token ${token}`
+            }
+        });
+
+        if (!response.ok) {
+            throw new Error("Erro ao buscar alertas.");
+        }
+
+        const data = await response.json();
+        
+        // Referência ao corpo da tabela
+        const tbody = document.querySelector(".alerts-section table tbody");
+        tbody.innerHTML = ""; // Limpa as linhas antigas
+
+        // Mapeia os níveis de prioridade
+        const prioridadeMap = {
+            1: { texto: "Baixa", classe: "low" },
+            2: { texto: "Média", classe: "medium" },
+            3: { texto: "Alta", classe: "high" },
+            4: { texto: "Urgente", classe: "urgent" }
+        };
+
+        // Adiciona os alertas à tabela
+        data.forEach(alerta => {
+            const row = document.createElement("tr");
+
+            // Formata a data para DD/MM/YYYY
+            const dataFormatada = new Date(alerta.criado_em).toLocaleDateString("pt-BR");
+
+            row.innerHTML = `
+                <td>${alerta.id.toString().padStart(5, "0")}</td>
+                <td>${alerta.tipo}</td>
+                <td>${dataFormatada}</td>
+                <td class="${prioridadeMap[alerta.prioridade].classe}">${prioridadeMap[alerta.prioridade].texto}</td>
+            `;
+
+            tbody.appendChild(row);
+        });
+
+        // Mensagem caso não haja alertas
+        const msgSemAlertas = document.querySelector(".alerts-section p");
+        msgSemAlertas.style.display = data.length > 0 ? "none" : "block";
+
+    } catch (error) {
+        console.error("Erro ao carregar informações dos alertas:", error);
+    }
+}
+
+async function loadGeneralInfo() {
+    const token = localStorage.getItem("token");
+    if (!token) {
+        console.warn("Usuário não autenticado.");
+        return;
+    }
+
+    try {
+        const response = await fetch("http://localhost:8000/api/dados-sensores/", {
+            method: "GET",
+            headers: {
+                "Authorization": `Token ${token}`
+            }
+        });
+
+        if (!response.ok) {
+            throw new Error("Erro ao buscar informações gerais dos sensores.");
+        }
+        const data = await response.json();
+
+        const sum_litros = Math.round(data
+            .filter(item => item.sensor === 2)
+            .reduce((acumulador, item) => acumulador + item.valor, 0));
+
+        first_upadate = new Date(data[0]["criado_em"]);
+        last_update = new Date(data[data.length - 1]["criado_em"]);
+        current_days = Math.floor((last_update - first_upadate) / (1000 * 60 * 60 * 24));
+
+        document.getElementById("current-days-home").innerText = `${current_days} dia(s)`;
+        document.getElementById("total-water-home").innerText = `${sum_litros} L`;
+
+    } catch (error) {
+        console.error("Erro ao carregar informações gerais dos sensores:", error);
+    }
+}
+
+async function loadSensorData() {
+    const token = localStorage.getItem("token");
+
+    if (!token) {
+        console.warn("Usuário não autenticado.");
+        return;
+    }
+
+    try {
+        const response = await fetch("http://localhost:8000/api/alertas/", {
+            method: "GET",
+            headers: {
+                "Authorization": `Token ${token}`
+            }
+        });
+
+        if (!response.ok) {
+            throw new Error("Erro ao buscar alertas.");
+        }
+
+        const data = await response.json();
+        document.getElementById("total-alertas").innerText = `${data.length} alerta(s)`;
+        //data.length
+    } catch (error) {
+    console.error("Erro ao carregar informações dos alertas:", error);
+    } 
+}
+
+
 document.addEventListener("DOMContentLoaded", () => {
+    loadGeneralInfo();
     loadHomePageData();
+    loadAlert();
 });
