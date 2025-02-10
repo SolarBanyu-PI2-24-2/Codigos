@@ -56,6 +56,33 @@
             </div>
         </div>
     </div>
+
+<!-- Modal de Reporte de Alerta -->
+<div id="reportModal" class="modal">
+    <div class="modal-content">
+        <span class="close-modal" id="closeReportModal">&times;</span>
+        <h2>Reportar Alerta</h2>
+        <form id="reportForm">
+            <label for="reason">Motivo do reporte:</label>
+            <select id="reason" required>
+                <option value="">Selecione um motivo</option>
+                <option value="outros">Outros</option>
+                <option value="alerta_errado">Alerta errado</option>
+                <option value="ja_arrumei">Já arrumei</option>
+                <option value="nao_relevante">Não é relevante</option>
+            </select>
+
+            <label for="phone">Telefone para contato (opcional):</label>
+            <input type="tel" id="phone" class="modal-input" placeholder="(XX) XXXXX-XXXX">
+
+            <div class="modal-actions">
+                <button type="button" id="cancelReport" class="cancel-btn">Cancelar</button>
+                <button type="submit" id="submitReport" class="btn-submit-modal">Enviar</button>
+            </div>
+        </form>
+    </div>
+</div>
+
     <script src="/js/alertas.js"></script>
 </body>
 </html>
