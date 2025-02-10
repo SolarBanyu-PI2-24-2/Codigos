@@ -407,20 +407,25 @@ html, body {
 }
 
 .alerts-section td.urgent {
-    color: #FF0000;
+    background-color: #ff2400;
     font-weight: bold;
+    color: white;
+
 }
 
-.alerts-section td.routine {
+.alerts-section td.high {
     color: #963CBD;
+    font-weight: bold;
 }
 
 .alerts-section td.medium {
     color: #FFA500;
+    font-weight: bold;
 }
 
 .alerts-section td.low {
     color: #28A745;
+    font-weight: bold;
 }
 
 .alerts-section p {
@@ -943,6 +948,8 @@ html, body {
     padding: 0.5rem;
     border-radius: 5px;
     border: 1px solid #ddd;
+    margin-left: 2rem;
+    margin-right: 1.5rem;
 }
 
 .alerts-table {
@@ -982,7 +989,7 @@ html, body {
   
 }
 
-.badge.routine {
+.badge.low {
     background-color:rgba(150, 60, 189, 0.6);
     font-weight: 600;
     color: #323232;
@@ -1013,14 +1020,28 @@ html, body {
     font-weight: bold;
 }
 
-.btn.visualizer {
-    background-color: #007BFF;
+.btn.resolver-btn {
+    background-color: #007BFF; /* Azul padrão */
     color: white;
+    
+}
+
+/* Botão de Resolvido (apenas estilização visual, sem hover) */
+.btn.resolver-btn.resolved {
+    background-color: #b5d2ec;
+    color: #323232; 
+    cursor: default;
 }
 
 .btn.report {
     background-color: rgba(50, 50, 50, 0.6);
     color: white;
+}
+
+.btn.reported {
+    background-color: #ffe787; /* Amarelo para indicar que foi reportado */
+    color: #333;
+    font-weight: bold;
 }
 
 /* Estilo para o modal */
@@ -1086,8 +1107,26 @@ html, body {
     background-color: transparent; /* Sem fundo inicialmente */
     transition: background-color 0.3s ease, color 0.3s ease;
 }
+.support-option-modal#startChat {
+    display: flex;
+    margin: 10px 0;
+    text-decoration: none;
+    color: #007BFF;
+    font-weight: bold;
+    font-size: 1rem;
+    cursor: pointer;
+    padding: 8px 12px; /* Ajusta o espaço interno */
+    border-radius: 4px;
+    background-color: #FCEFA6; /* Sem fundo inicialmente */
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
 
 .support-option-modal:hover {
+    color: #fff;
+    background-color: #007BFF;
+}
+
+.support-option-modal#startChat:hover {
     color: #fff;
     background-color: #007BFF;
 }
@@ -1269,6 +1308,13 @@ select, input {
     border-bottom: 1px solid #eee;
 }
 
+.fas.fa-chevron-down{
+    transition:transform 0.3s ease;
+}
+
+.dropdown-button.rotate .fas.fa-chevron-down{
+    transform: rotate(180deg);
+}
 
 .info-cards {
     display: flex;
@@ -1423,6 +1469,29 @@ h2 {
     background-color: #e6b800;
 }
 
+.botao {
+    display: flex;
+    justify-content: center;
+}
+
+.botao button {
+    width: 500px;
+    background-color: #FCEFA6;
+    border: none;
+    padding: 1rem;
+    border-radius: 8px;
+    color: #323232;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: bold;    
+    margin-top: 1.5rem;
+
+}
+
+.botao button:hover {
+    background-color: #e6b800;
+}
+
 .legend {
     display: flex;
     justify-content: center;
@@ -1560,3 +1629,33 @@ input[readonly] {
     border-color: #FFB300;
     color: #FFB300;
 }
+
+.dropdown-menu {
+    display: none;
+    position: absolute;
+    background: white;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    border-radius: 5px;
+    width: 150px;
+    z-index: 1000;
+}
+
+.dropdown-menu li {
+    padding: 10px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.dropdown-menu li:hover {
+    background: #007bff;
+    color: white;
+}
+
+/* Quando o dropdown estiver visível */
+.dropdown-menu.show {
+    display: block;
+}
+

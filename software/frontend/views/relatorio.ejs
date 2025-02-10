@@ -127,5 +127,32 @@
     </script>
 
 
+            // Criando a imagem a partir do canvas e gerando o PDF
+            html2pdf().from(chartCanvas).set(options).save();
+        });
+    </script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const supportButton = document.getElementById("supportButton");
+            const supportModal = document.getElementById("supportModal");
+            const closeSupportModal = document.getElementById("closeSupportModal");
+
+            supportButton.addEventListener("click", () => {
+                supportModal.style.display = "flex";
+            });
+
+            closeSupportModal.addEventListener("click", () => {
+                supportModal.style.display = "none";
+            });
+
+            window.addEventListener("click", (event) => {
+                if (event.target === supportModal) {
+                    supportModal.style.display = "none";
+                }
+            });
+        });
+    </script>
+    <script src="/js/relatorio.js"></script>
 </body>
 </html>
