@@ -170,3 +170,45 @@ document.addEventListener("DOMContentLoaded", function () {
         console.error("Botão de logout não encontrado no DOM!");
     }
 });
+
+async function updateNotificationCount() {
+    const token = localStorage.getItem("token");
+
+    if (!token) {
+        console.warn("Usuário não autenticado.");
+        return;
+    }
+
+    try {
+        const response = await fetch("http://localhost:8000/api/alertas/", {
+            method: "GET",
+            headers: { "Authorization": `Token ${token}` }
+        });
+
+        if (!response.ok) throw new Error("Erro ao buscar alertas.");
+
+        const alertas = await response.json();
+
+        // Conta quantos alertas têm `resolvido: false`
+        const unresolvedCount = alertas.filter(alerta => !alerta.resolvido).length;
+
+        // Atualiza a contagem no badge da notificação
+        const badge = document.getElementById("notification-count");
+        
+        if (unresolvedCount > 0) {
+            badge.textContent = unresolvedCount;
+            badge.style.display = "inline-block"; // Exibe a badge se houver alertas
+        } else {
+            badge.style.display = "none"; // Oculta a badge se não houver alertas
+        }
+
+    } catch (error) {
+        console.error("Erro ao carregar alertas não resolvidos:", error);
+    }
+}
+
+// Executa a função ao carregar a página
+document.addEventListener("DOMContentLoaded", () => {
+    updateNotificationCount();
+});
+
