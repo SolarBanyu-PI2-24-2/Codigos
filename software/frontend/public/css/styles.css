@@ -1171,6 +1171,74 @@ html, body {
     background-color: #0056b3;
 }
 
+/* Botão de WhatsApp */
+#shareWhatsApp {
+    background-color: #25D366;
+    color: white;
+}
+
+#shareWhatsApp:hover {
+    background-color: #1EBE5D;
+    transform: scale(1.05);
+}
+
+/* Botão de E-mail */
+#shareEmail {
+    background-color: #007BFF;
+    color: white;
+}
+
+#shareEmail:hover {
+    background-color: #0056b3;
+    transform: scale(1.05);
+}
+
+/* Botão de Copiar Link */
+#copyLink {
+    background-color: #F2CD00;
+    color: #323232;
+}
+
+#copyLink:hover {
+    background-color: #D4B000;
+    transform: scale(1.05);
+}
+/* Dropdown e Input */
+label {
+    display: block;
+    font-weight: bold;
+    margin-top: 10px;
+    text-align: left;
+}
+
+select, input {
+    width: 100%;
+    padding: 8px;
+    margin-top: 5px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+/* Botões */
+.modal-actions {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+.cancel-btn {
+    background-color: #ccc;
+    color: black;
+}
+
+/* Quando o alerta for reportado */
+.reported {
+    background-color: #28a745 !important;
+    color: white !important;
+    cursor: default;
+    pointer-events: none;
+}
+
 /* Monitoramento */
 
 .dropdown {
