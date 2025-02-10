@@ -239,3 +239,21 @@ class AlertaCreateListView(APIView):
         alertas = Alerta.objects.filter(dispositivo__usuario=request.user)
         serializer = AlertaSerializer(alertas, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+class AlertaUpdateView(APIView):
+    """Atualiza um alerta específico"""
+    permission_classes = [IsAuthenticated]
+
+    def patch(self, request, id):
+        try:
+            alerta = Alerta.objects.get(id=id, dispositivo__usuario=request.user)
+        except Alerta.DoesNotExist:
+            return Response({"error": "Alerta não encontrado"}, status=status.HTTP_404_NOT_FOUND)
+
+        serializer = AlertaSerializer(alerta, data=request.data, partial=True)
+
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

@@ -15,6 +15,7 @@ from .views import DadoSensorCreateListView
 from .views import ConsumoCreateListView
 from .views import AlertaCreateListView
 from .views import DadoSensorListBySensorView
+from .views import AlertaUpdateView
 
 urlpatterns = [
     path('login/', LoginView.as_view(), name='login'),
@@ -33,4 +34,6 @@ urlpatterns = [
     path("consumo/", ConsumoCreateListView.as_view(), name="create-list-consumo"),
     path("alertas/", AlertaCreateListView.as_view(), name="create-list-alertas"),
     path("dados-sensores/<int:sensor_id>/", DadoSensorListBySensorView.as_view(), name="list-dados-sensor"),
+    path("alertas/<int:id>/", AlertaUpdateView.as_view(), name="update-alerta"),
+
 ]
