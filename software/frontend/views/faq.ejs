@@ -97,11 +97,44 @@
             </div>
 
         </div>
-        <div class="faq-actions">
-            <button class="support-btn">Pedir suporte</button>
-       
+        <div class="botao">
+            <button class="btn-yellow" id="supportButton">Pedir suporte</button> </div>
+            <div id="supportModal" class="modal">
+                <div class="modal-content">
+                    <span class="close-modal" id="closeSupportModal">&times;</span>
+                    <h2>Pedir Suporte</h2>
+                    <p>Escolha uma opção de suporte:</p>
+                    <ul>
+                        <li><a href="tel:+551199999999" class="support-option-modal">📞 Ligue para nós</a></li>
+                        <li><a href="mailto:suporte@solarbanyu.com" class="support-option-modal">📧 Enviar um e-mail</a></li>
+                        <li><button class="support-option-modal" id="startChat">💬 Iniciar um chat</button></li>
+                    </ul>
+                </div>
+            </div>
         </div>
+
     </div>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const supportButton = document.getElementById("supportButton");
+            const supportModal = document.getElementById("supportModal");
+            const closeSupportModals= document.getElementById("closeSupportModal");
+
+            supportButton.addEventListener("click", () => {
+                supportModal.style.display = "flex";
+            });
+
+            closeSupportModal.addEventListener("click", () => {
+                supportModal.style.display = "none";
+            });
+
+            window.addEventListener("click", (event) => {
+                if (event.target === supportModal) {
+                    supportModal.style.display = "none";
+                }
+            });
+        });
+    </script>
     <script src="/js/scripts.js"></script>
     <script src="/js/alert-critical.js"></script>
 </body>

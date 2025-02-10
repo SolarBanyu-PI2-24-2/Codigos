@@ -34,14 +34,16 @@
 
                 <!-- Dropdown para escolher o período (semana ou mês) -->
                 <div class="dropdown" id="periodDropdown">
-                    <button id="periodDropdownButton" class="dropdown-button">Última hora <i class="fas fa-chevron-down"></i></button>
+                    <button id="periodDropdownButton" class="dropdown-button">Por minutos<i class="fas fa-chevron-down"></i></button>
                     <ul id="periodDropdownMenu" class="dropdown-menu">
+                        <li onclick="changePeriod('Por minutos')">Minutos</li>
                         <li onclick="changePeriod('Última Hora')">Última Hora</li>
                         <li onclick="changePeriod('Últimas 24h')">Últimas 24h</li>
                         <li onclick="changePeriod('Semanal')">Semanal</li>
                         <li onclick="changePeriod('Mensal')">Mensal</li>
                     </ul>
                 </div>
+
 
                 <canvas id="waterChart"></canvas>
             </div>
@@ -72,6 +74,6 @@
             </div>
         </div>
     </div>
-<script src="/js/Monitoramento.js"></script>
+<script src="/js/monitoramento.js"></script>
 </body>
 </html>

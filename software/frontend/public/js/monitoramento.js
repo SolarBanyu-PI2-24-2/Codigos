@@ -34,31 +34,78 @@ async function loadGeneralInfo() {
     }
 
     try {
+        const token = localStorage.getItem("token");
         const response = await fetch("http://localhost:8000/api/dados-sensores/", {
             method: "GET",
             headers: {
                 "Authorization": `Token ${token}`
             }
+        }); console.log("Dados carregados do sensor:", sensor_data);
+
+        const deviceResponse = await fetch("http://localhost:8000/api/dispositivos/", {
+            method: "GET",
+            headers: { "Authorization": `Token ${token}` }
         });
 
         if (!response.ok) {
             throw new Error("Erro ao buscar informações gerais dos sensores.");
         }
+        const deviceData = await deviceResponse.json();
         const data = await response.json();
         sensor_data.push(data);
 
         const sum_litros = Math.round(sensor_data[0]
-            .filter(item => item.sensor === 2)
+            .filter(item => item.sensor === 6)
             .reduce((acumulador, item) => acumulador + item.valor, 0));
+        document.getElementById("total-water").innerText = `${sum_litros} L`;
 
         
-        first_upadate = new Date(data[0]["criado_em"]);
-        last_update = new Date(data[data.length - 1]["criado_em"]);
-        current_days = Math.floor((last_update - first_upadate) / (1000 * 60 * 60 * 24));
+        if (deviceData.length > 0) {
+            const device = deviceData[0];  
+            const installationDate = new Date(device.data_instalacao + "T00:00:00"); // Data de instalação do dispositivo
+            const currentDate = new Date();
+            const currentDays = Math.floor((currentDate - installationDate) / (1000 * 60 * 60 * 24));
+    
+            console.log("Data de instalação:", installationDate);
+            console.log("Dias em funcionamento:", currentDays);
+            console.log("Último item de sensor_data:", sensor_data[sensor_data.length - 1]); 
+            console.log("Última leitura do sensor:", sensor_data[sensor_data.length - 1][sensor_data[sensor_data.length - 1].length - 1]);
+            console.log("Valor de criado_em:", sensor_data[sensor_data.length - 1][sensor_data[sensor_data.length - 1].length - 1]["criado_em"]);
+            
+
+
+    
+            document.getElementById("current-days").innerText = `${currentDays} dia(s)`;
+        } else {
+            console.warn("Nenhum dispositivo encontrado.");
+        }
+    
+        // Garantir que há dados do sensor antes de calcular a última atualização
+        // Garantir que há dados do sensor antes de calcular a última atualização
+if (sensor_data.length > 0 && sensor_data[sensor_data.length - 1].length > 0) {
+    let sensorRecords = sensor_data[sensor_data.length - 1]; // Pegar a lista real dos registros
+
+    // Ordenar os registros corretamente
+    sensorRecords.sort((a, b) => new Date(a.criado_em) - new Date(b.criado_em));
+
+    // Pegar o último item correto
+    let lastRecord = sensorRecords[sensorRecords.length - 1];
+
+    if (lastRecord && lastRecord.criado_em) {
+        last_update = new Date(lastRecord.criado_em);
+        console.log("Última atualização do sensor:", last_update);
 
         document.getElementById("last-update").innerText = `${last_update.toLocaleString()}`;
-        document.getElementById("current-days").innerText = `${current_days} dia(s)`;
-        document.getElementById("total-water").innerText = `${sum_litros} L`;
+    } else {
+        console.warn("Nenhuma leitura válida de sensor encontrada.");
+        document.getElementById("last-update").innerText = "Sem dados recentes";
+    }
+} else {
+    console.warn("Nenhuma leitura recente de sensor encontrada.");
+    document.getElementById("last-update").innerText = "Sem dados recentes";
+}
+
+    
 
     } catch (error) {
         console.error("Erro ao carregar informações gerais dos sensores:", error);
@@ -95,10 +142,10 @@ async function loadSensorData() {
 
 let sensor_data = []
 const sensorMapping = { // Sensores correspondentes a cada tipo de dado
-    "Ph da água": 1,
-    "Volume de água dessalinizada": 2,
-    "Energia consumida": 3,
-    "Temperatura da água": 4
+    "Ph da água": 5,
+    "Volume de água dessalinizada": 6,
+    "Energia consumida": 7,
+    "Temperatura da água": 8
 };
 document.addEventListener("DOMContentLoaded", loadAlertQtd);
 document.addEventListener("DOMContentLoaded", loadGeneralInfo);
@@ -135,15 +182,18 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     });
 
-    // Inicializa o gráfico com "Última Hora"
-    updateChart("Última Hora");
+    // Inicializa o gráfico com "Por minutos"
+    updateChart("Por minutos");
 });
 
 function formatDate(timestamp, period) {
     const date = new Date(timestamp);
 
-    if (period === "Última Hora") {
+    
+    if (period === "Por minutos") {
         return `${date.getHours()}:${String(date.getMinutes()).padStart(2, "0")}`; // Ex: "18:32"
+    } else if (period === "Última Hora") {
+        return `${date.getHours()}:${String(date.getMinutes()).padStart(2, "0")}`; // Ex: "18:32"   
     } else if (period === "Últimas 24h") {
         return `${date.getHours()}:${String(date.getMinutes()).padStart(2, "0")}`; // Ex: "18:32"
     } else if (period === "Semanal") {
@@ -171,16 +221,22 @@ function generateData(period) {
     let sensorId = sensorMapping[currentDataType];
 
     // Filtra os dados pelo sensor correspondente
-    let sensorValues = sensor_data[0].filter(item => item.sensor === sensorId);
+    let sensorValues = sensor_data[0].filter(item => item.id === sensorId);
+  
 
     // Ordena os dados pela data de criação
     sensorValues.sort((a, b) => new Date(a.criado_em) - new Date(b.criado_em));
+   
 
     // Define a unidade
     let unidade = sensorValues.length > 0 ? sensorValues[0].unidade : "";
-
+   
+    console.log(`Labels gerados para ${period}:`, labels);
+    console.log(`Dados gerados para ${period}:`, data);
+    
     let now = new Date();
     let timeFrame = {
+        "Por minuto": 60 * 1000, // 1 minuto
         "Última Hora": 60 * 60 * 1000, // 1 hora
         "Últimas 24h": 24 * 60 * 60 * 1000, // 24 horas
         "Semanal": 7 * 24 * 60 * 60 * 1000, // 7 dias
@@ -190,9 +246,27 @@ function generateData(period) {
     let filteredData = sensorValues.filter(item => {
         let itemDate = new Date(item.criado_em);
         return now - itemDate <= timeFrame[period];
+        console.log(`Dados filtrados para ${period}:`, filteredData);
+
     });
 
-    if (period === "Última Hora") {
+    if (period === "Por minutos") {
+        // Exibe os valores EXATAMENTE por minuto (se houver)
+        let timeMap = new Map();
+        filteredData.forEach(item => {
+            let key = `${item.criado_em.substring(11, 16)}`; // Formato "HH:mm"
+            timeMap.set(key, item.valor);
+        });
+
+        for (let i = 59; i >= 0; i--) {
+            let pastTime = new Date(now - i * 60000);
+            let key = `${pastTime.getHours()}:${String(pastTime.getMinutes()).padStart(2, "0")}`;
+            labels.push(key);
+            data.push(timeMap.get(key) || null); // Apenas adiciona se houver dado real
+        }
+
+    } 
+    else if (period === "Última Hora") {
         // Exibe os valores EXATAMENTE por minuto (se houver)
         let timeMap = new Map();
         filteredData.forEach(item => {
@@ -241,6 +315,7 @@ function generateData(period) {
 
     return { labels, data, unidade };
 }
+
 
 
 // Atualiza o gráfico com os dados reais
@@ -336,3 +411,4 @@ document.addEventListener("DOMContentLoaded", function () {
         console.error("Erro: Dropdown do tipo de gráfico não encontrado.");
     }
 });
+

@@ -1,3 +1,11 @@
+function formatDate(date) {
+    const day = String(date.getDate()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, '0'); // Meses começam do 0
+    const year = date.getFullYear();
+
+    return `${day}-${month}-${year}`;
+}
+
 async function loadHomePageData() {
     console.log("Carregando dados da página Home...");
 
@@ -40,6 +48,8 @@ async function loadHomePageData() {
         if (!deviceResponse.ok) throw new Error("Erro ao buscar dispositivo.");
         const deviceData = await deviceResponse.json();
 
+        console.log("Dispositivos:", deviceData);
+
         if (deviceData.length === 0) {
             document.getElementById("unit-count").textContent = "Nenhuma unidade instalada";
             document.getElementById("installation-date").textContent = "Não cadastrado";
@@ -51,8 +61,13 @@ async function loadHomePageData() {
 
         const device = deviceData[0];
 
+       
+
         document.getElementById("unit-count").textContent = `${deviceData.length} Unidade(s) instalada(s)`;
-        document.getElementById("installation-date").textContent = device.data_instalacao;
+        const installationDate = new Date(device.data_instalacao + "T00:00:00");
+        const currentDate = new Date();
+        const currentDays = Math.floor((currentDate - installationDate) / (1000 * 60 * 60 * 24));
+        document.getElementById("installation-date").textContent = formatDate(installationDate);
         document.getElementById("serial-number").textContent = device.num_serie;
         document.getElementById("system-model").textContent = device.modelo;
         document.getElementById("system-capacity").textContent = device.capacidade;
@@ -93,7 +108,7 @@ async function loadAlert() {
             1: { texto: "Baixa", classe: "low" },
             2: { texto: "Média", classe: "medium" },
             3: { texto: "Alta", classe: "high" },
-            4: { texto: "Urgente", classe: "urgent" }
+            4: { texto: "Crítica", classe: "urgent" }
         };
 
         // Adiciona os alertas à tabela
@@ -130,7 +145,7 @@ async function loadGeneralInfo() {
     }
 
     try {
-        const response = await fetch("http://localhost:8000/api/dados-sensores/", {
+        const response = await fetch("http://localhost:8000/api/dispositivos/", {
             method: "GET",
             headers: {
                 "Authorization": `Token ${token}`
@@ -138,24 +153,55 @@ async function loadGeneralInfo() {
         });
 
         if (!response.ok) {
+            throw new Error("Erro ao buscar dispositivo.");
+        }
+        const deviceData = await response.json();
+
+        if (deviceData.length === 0) {
+            console.warn("Nenhum dispositivo encontrado.");
+            return;
+        }
+
+        // Pega a data de instalação do primeiro dispositivo
+        const installationDate = new Date(deviceData[0].data_instalacao);
+        const currentDate = new Date();
+        const currentDays = Math.floor((currentDate - installationDate) / (1000 * 60 * 60 * 24)); // Calcula os dias de operação
+
+        // Atualiza o contador de dias
+        document.getElementById("current-days-home").innerText = `${currentDays} dia(s)`;
+
+        // Agora busca os dados do sensor
+        const sensorDataResponse = await fetch("http://localhost:8000/api/dados-sensores/", {
+            method: "GET",
+            headers: {
+                "Authorization": `Token ${token}`
+            }
+        });
+
+        if (!sensorDataResponse.ok) {
             throw new Error("Erro ao buscar informações gerais dos sensores.");
         }
-        const data = await response.json();
+        const sensorData = await sensorDataResponse.json();
 
-        const sum_litros = Math.round(data
-            .filter(item => item.sensor === 2)
+        // Filtra os dados do sensor de volume de água (verifique o ID correto)
+        const sum_litros = Math.round(sensorData
+            .filter(item => item.sensor === 6)  // Verifique se '6' é o ID correto
             .reduce((acumulador, item) => acumulador + item.valor, 0));
 
-        first_upadate = new Date(data[0]["criado_em"]);
-        last_update = new Date(data[data.length - 1]["criado_em"]);
-        current_days = Math.floor((last_update - first_upadate) / (1000 * 60 * 60 * 24));
-
-        document.getElementById("current-days-home").innerText = `${current_days} dia(s)`;
+        // Atualiza a quantidade de água dessalinizada
         document.getElementById("total-water-home").innerText = `${sum_litros} L`;
+
+        const sum_energia = Math.round(sensorData
+            .filter(item => item.sensor === 7)  // Verifique se '6' é o ID correto
+            .reduce((acumulador, item) => acumulador + item.valor, 0));
+
+        // Atualiza a quantidade de água dessalinizada
+        document.getElementById("total-energy-home").innerText = `${sum_energia} kWh`;
 
     } catch (error) {
         console.error("Erro ao carregar informações gerais dos sensores:", error);
     }
+
 }
 
 async function loadSensorData() {
@@ -185,6 +231,7 @@ async function loadSensorData() {
     console.error("Erro ao carregar informações dos alertas:", error);
     } 
 }
+
 
 
 document.addEventListener("DOMContentLoaded", () => {

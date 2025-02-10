@@ -54,30 +54,62 @@
                     <div class="solar-form">
                         <div>
                             <label>Data da instalação</label>
-                            <input type="text" value="20/08/2024" readonly>
+                            <input type="text" id="installation-date" value="Carregando..." readonly>
                         </div>
                         <div>
                             <label>Número de série</label>
-                            <input type="text" value="SBY-2024-001234" readonly>
+                            <input type="text" id="serial-number" value="Carregando..." readonly>
                         </div>
                         <div>
                             <label>Modelo do sistema</label>
-                            <input type="text" value="SolarBanyu Plus 3000" readonly>
+                            <input type="text" id="system-model" value="Carregando..." readonly>
                         </div>
                         <div>
                             <label>Capacidade</label>
-                            <input type="text" value="20 L/Dia" readonly>
+                            <input type="text"  id="system-capacity" value="Carregando...">
                         </div>
                     </div>
                 </div>
             </div>
-
-            <!-- Botões -->
-            <div class="actions">
-                <button class="btn-update">Atualizar</button>
-                <button class="btn-cancel">Cancelar</button>
+            <div class="botao">
+                <button class="btn-yellow" id="supportButton">Pedir suporte</button> </div>
+                <div id="supportModal" class="modal">
+                    <div class="modal-content">
+                        <span class="close-modal" id="closeSupportModal">&times;</span>
+                        <h2>Pedir Suporte</h2>
+                        <p>Escolha uma opção de suporte:</p>
+                        <ul>
+                            <li><a href="tel:+551199999999" class="support-option-modal">📞 Ligue para nós</a></li>
+                            <li><a href="mailto:suporte@solarbanyu.com" class="support-option-modal">📧 Enviar um e-mail</a></li>
+                            <li><button class="support-option-modal" id="startChat">💬 Iniciar um chat</button></li>
+                        </ul>
+                    </div>
+                </div>
             </div>
+
         </div>
     </div>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const supportButton = document.getElementById("supportButton");
+            const supportModal = document.getElementById("supportModal");
+            const closeSupportModals= document.getElementById("closeSupportModal");
+
+            supportButton.addEventListener("click", () => {
+                supportModal.style.display = "flex";
+            });
+
+            closeSupportModal.addEventListener("click", () => {
+                supportModal.style.display = "none";
+            });
+
+            window.addEventListener("click", (event) => {
+                if (event.target === supportModal) {
+                    supportModal.style.display = "none";
+                }
+            });
+        });
+    </script>
+    <script src="/js/configuracoes.js"></script>
 </body>
 </html>
