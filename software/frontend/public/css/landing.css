@@ -1,0 +1,119 @@
+/* Reset e Fonte */
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #f9f9f9;
+    color: #323232;
+    margin: 0;
+    display: flex;
+}
+
+/* Sidebar */
+.sidebar {
+    width: 250px;
+    height: 100vh;
+    background-color: #fff;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.logo img {
+    width: 80%;
+}
+
+.menu {
+    list-style: none;
+    padding: 0;
+    margin: 20px 0;
+}
+
+.menu li {
+    margin-bottom: 15px;
+}
+
+.menu a {
+    text-decoration: none;
+    color: #555;
+    font-weight: bold;
+    padding: 10px 15px;
+    display: block;
+    border-radius: 8px;
+}
+
+.menu a.active, .menu a:hover {
+    background-color: #007BFF;
+    color: white;
+}
+
+.cta-button {
+    background-color: #FFD700;
+    color: black;
+    padding: 10px 15px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: bold;
+    text-align: center;
+    margin-top: auto;
+}
+
+/* Conteúdo Principal */
+.content {
+    flex: 1;
+    padding: 50px;
+}
+
+.hero {
+    background-color: #E1E8FF;
+    padding: 40px;
+    text-align: center;
+    border-radius: 10px;
+    margin-bottom: 30px;
+}
+
+.hero h1 {
+    font-size: 2rem;
+}
+
+.hero p {
+    font-size: 1.2rem;
+}
+
+.hero .cta-button {
+    display: inline-block;
+    margin-top: 15px;
+}
+
+section {
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    background-color: white;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+h2 {
+    font-size: 1.5rem;
+    color: #007BFF;
+}
+
+ul {
+    list-style: none;
+    padding: 0;
+}
+
+ul li {
+    font-size: 1.1rem;
+    margin-bottom: 10px;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+    .sidebar {
+        width: 200px;
+    }
+    .content {
+        padding: 30px;
+    }
+}

@@ -60,6 +60,11 @@ app.get('/configuracoes', (req, res) => {
     res.render('configuracoes', { currentUrl: '/configuracoes' });
 });
 
+app.get('/landing', (req, res) => {
+    res.render('landing');
+});
+
+
 
 // Iniciar o servidor
 const PORT = 3000;
