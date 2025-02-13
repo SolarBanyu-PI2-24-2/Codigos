@@ -24,13 +24,21 @@
                     <button class="carousel-btn prev"><i class="fas fa-chevron-left"></i></button>
                     <div class="carousel-track">
                         <iframe src="//www.youtube.com/embed/93O0MD2ZzUs?si=iP1eZbuOPd8iu3qB" frameborder="0" allowfullscreen></iframe>
-                        <iframe src="//www.youtube.com/embed/93O0MD2ZzUs?si=iP1eZbuOPd8iu3qB" frameborder="0" allowfullscreen></iframe>
-                        <iframe src="//www.youtube.com/embed/93O0MD2ZzUs?si=iP1eZbuOPd8iu3qB" frameborder="0" allowfullscreen></iframe>
-                        <iframe src="//www.youtube.com/embed/93O0MD2ZzUs?si=iP1eZbuOPd8iu3qB" frameborder="0" allowfullscreen></iframe>
-                        <iframe src="//www.youtube.com/embed/93O0MD2ZzUs?si=iP1eZbuOPd8iu3qB" frameborder="0" allowfullscreen></iframe>
-                        <iframe src="//www.youtube.com/embed/93O0MD2ZzUs?si=iP1eZbuOPd8iu3qB" frameborder="0" allowfullscreen></iframe>
-                        <iframe src="//www.youtube.com/embed/93O0MD2ZzUs?si=iP1eZbuOPd8iu3qB" frameborder="0" allowfullscreen></iframe>
-                        <iframe src="//www.youtube.com/embed/93O0MD2ZzUs?si=iP1eZbuOPd8iu3qB" frameborder="0" allowfullscreen></iframe>
+                        <iframe src="//www.youtube.com/embed/Zb34oDghd-0?si=TDNy7KQBzzfV26JE" frameborder="0" allowfullscreen></iframe>
+                        <iframe src="//www.youtube.com/embed/T-TaL3TdKrE?si=veUx_iaiBDqi4hrO" frameborder="0" allowfullscreen></iframe>
+                        <iframe src="//www.youtube.com/embed/L1f6YG9eYAw?si=QQFK38ko7N7NP47Z" frameborder="0" allowfullscreen></iframe>
+                        <iframe src="//www.youtube.com/embed/-3D-6G2aCc4?si=xbRAEWdefRTX7caJ" frameborder="0" allowfullscreen></iframe>
+                        <iframe src="//www.youtube.com/embed/bv5a9B-qj4o?si=nLQjim1LsShC0pUG" frameborder="0" allowfullscreen></iframe>
+                        <iframe src="//www.youtube.com/embed/VaI6dCQpZHY?si=1ZFqC0R7K0Xl7nsj" frameborder="0" allowfullscreen></iframe>
+                        <iframe src="//www.youtube.com/embed/1tExjwKfZjY?si=XxZJM162G6_-aQ1j" frameborder="0" allowfullscreen></iframe>
+                        <iframe src="//www.youtube.com/embed/J-4llrbQJcQ?si=tQCb4vggZVGMKdrK" frameborder="0" allowfullscreen></iframe>
+                        <iframe src="//www.youtube.com/embed/MIOwuPxTX8g?si=TE0sHU9gKgFn2BBS" frameborder="0" allowfullscreen></iframe>
+                        <iframe src="//www.youtube.com/embed/iluZA1ufUK4?si=664gOYBePHl7sext" frameborder="0" allowfullscreen></iframe>
+                        <iframe src="//www.youtube.com/embed/93O0MD2ZzUs?si=RlU3Ykd3SanLAbFZ" frameborder="0" allowfullscreen></iframe>
+                        <iframe src="//www.youtube.com/embed/qJpGlE45AoA?si=XsPuLAZS185K013r" frameborder="0" allowfullscreen></iframe>
+                        <iframe src="//www.youtube.com/embed/TxfCkU_7BXE?si=PYgGcrB1vEAkMHTT" frameborder="0" allowfullscreen></iframe>
+                        <iframe src="//www.youtube.com/embed/UJxtqCucVc4?si=iVInXv67zo4zRVN_" frameborder="0" allowfullscreen></iframe>
+                       
                     </div>
                     <button class="carousel-btn next"><i class="fas fa-chevron-right"></i></button>
                 </div>
@@ -72,6 +80,45 @@
             </div>
         </div>
     </div>
-    <script src="/js/scripts.js"></script>
+    <script> 
+const carousels = document.querySelectorAll('.carousel-container');
+
+carousels.forEach((carousel, index) => {
+    const track = carousel.querySelector('.carousel-track');
+    const prevButton = carousel.querySelector('.prev');
+    const nextButton = carousel.querySelector('.next');
+    const items = track.children;
+
+    let currentIndex = 0;
+
+    const updateButtons = () => {
+        console.log(`Atualizando os botões: currentIndex = ${currentIndex}, total de itens = ${items.length}`);
+        prevButton.disabled = currentIndex === 0;
+        nextButton.disabled = currentIndex === items.length - 1;
+    };
+
+    nextButton.addEventListener('click', () => {
+        console.log(`Botão "Próximo" clicado. currentIndex antes: ${currentIndex}`);
+        if (currentIndex < items.length - 1) {
+            currentIndex++;
+            track.style.transform = `translateX(-${currentIndex * 300}px)`;  // A quantidade de deslocamento
+            console.log(`Novo currentIndex após "Próximo": ${currentIndex}`);
+        }
+        updateButtons();
+    });
+
+    prevButton.addEventListener('click', () => {
+        console.log(`Botão "Anterior" clicado. currentIndex antes: ${currentIndex}`);
+        if (currentIndex > 0) {
+            currentIndex--;
+            track.style.transform = `translateX(-${currentIndex * 300}px)`;  // A quantidade de deslocamento
+            console.log(`Novo currentIndex após "Anterior": ${currentIndex}`);
+        }
+        updateButtons();
+    });
+
+    updateButtons();  // Inicializa o estado dos botões
+});
+   </script>
 </body>
 </html>

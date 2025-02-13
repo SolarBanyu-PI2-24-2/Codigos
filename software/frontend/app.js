@@ -28,9 +28,46 @@ app.get('/pesquisar', (req, res) => {
     res.send(`Você pesquisou por: ${query}`); // Exibe o texto pesquisado no navegador
 });
 
-app.get('/monitoramento', (req, res) => {
-    res.render('monitoramento', { currentUrl: '/monitoramento' });
+
+app.get("/monitoramento", async (req, res) => {
+    try {
+        const token = "cbea691eab6b1acecc5fea9557f64e66f4904d9a"// Ajuste para pegar dinamicamente do usuário autenticado.
+
+        // ✅ Agora usamos `await` para buscar os dados da API
+        const responseSensores = await fetch("http://localhost:8000/api/dados-sensores/", {
+            method: "GET",
+            headers: { "Authorization": `Token ${token}` }
+        });
+
+        const responseAlertas = await fetch("http://localhost:8000/api/alertas/", {
+            method: "GET",
+            headers: { "Authorization": `Token ${token}` }
+        });
+
+        const dadosSensores = await responseSensores.json();
+        const alertas = await responseAlertas.json();
+
+        console.log("📡 Dados Recebidos da API - Sensores:", JSON.stringify(dadosSensores, null, 2));
+        console.log("⚠️ Dados Recebidos da API - Alertas:", JSON.stringify(alertas, null, 2));
+
+        res.render("monitoramento", {
+            currentUrl: '/monitoramento',
+            dadosSensores: dadosSensores || [],
+            alertas: alertas || []
+        });
+
+    } catch (error) {
+        console.error("❌ Erro ao buscar dados da API:", error);
+        res.render("monitoramento", {
+            currentUrl: '/monitoramento',
+            dadosSensores: [],
+            alertas: [],
+            error: "Erro ao carregar os dados."
+        });
+    }
 });
+
+
 
 app.get('/relatorio', (req, res) => {
     res.render('relatorio', { currentUrl: '/relatorio' });
@@ -66,6 +103,7 @@ const PORT = 3000;
 app.listen(PORT, () => {
     console.log(`Servidor rodando em http://localhost:${PORT}`);
 });
+
 
 
 

@@ -1,12 +1,12 @@
 services:
   djangoapp:
-    container_name: djangoapp
+    container_name: solarbanyu_back
     build:
       context: .
     ports:
       - 8000:8000
     volumes:
-      - ./djangoapp:/djangoapp
+      - ./solarbanyu_app:/solarbanyu_app
       - ./data/web/static:/data/web/static/
       - ./data/web/media:/data/web/media/
     env_file:
@@ -42,7 +42,7 @@ services:
       - psql
 
   frontend:
-    container_name: frontend
+    container_name: solarbanyu_front
     build:
       context: ../frontend
     ports:
