@@ -93,7 +93,6 @@ class Consumo(models.Model):
     atualizado_em = models.DateTimeField(auto_now=True)
     dispositivo_id = models.ForeignKey(Dispositivo, on_delete=models.CASCADE)
 
-
     def __str__(self):
         return str(self.valor)
 

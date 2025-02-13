@@ -31,4 +31,7 @@ urlpatterns = [
     path('voltagem_bateria/<str:num_serie_dispositivo>/', views.voltagem_bateria, name='voltagem_bateria'),
     path('nivel_agua_multiplas_unidades/<str:num_serie_dispositivo>/', views.nivel_agua_multiplas_unidades, name='nivel_agua_multiplas_unidades'),
     path('histograma_ph/<str:num_serie_dispositivo>/', views.histograma_ph, name='histograma_ph'),
+    path('alertas_por_tipo/<str:num_serie_dispositivo>/', views.alertas_por_tipo, name='alertas_por_tipo'),
+    path('tensao_x_vazao/<str:num_serie_dispositivo>/', views.tensao_x_vazao, name='tensao_x_vazao'),
+    path('eventos_criticos_urgentes/<str:num_serie_dispositivo>/', views.eventos_criticos_urgentes, name='eventos_criticos_urgentes'),
 ]
