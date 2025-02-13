@@ -425,11 +425,52 @@ def alertas_por_tipo(request, num_serie_dispositivo):
   return json_success_response(data = response_data)
 
 @api_interface
-def tensao_x_vazao(request):
-  pass
+def tensao_x_vazao(request, num_serie_dispositivo):
+  """
+  Retorna os dados de tensão e vazão para o range de datas especificado da seguinte forma:
+  {
+    "dados_tensao": [
+      {
+        "valor": "12.00",
+        "unidade": "V",
+        "criado_em": "2025-01-19T22:06:58.146Z"
+      }
+    ],
+    "dados_vazao": [
+      {
+        "valor": "2.00",
+        "unidade": "L/min",
+        "criado_em": "2025-01-19T22:07:47.550Z"
+      }
+    ]
+  }
+  """
+  before, after = fetch_data_filters(request)
+
+  tensao_data = list(
+    DadosSensor
+      .objects
+      .filter(sensor_id__tipo=Sensor.VOLTAGEM, sensor_id__dispositivo_id__num_serie=num_serie_dispositivo, criado_em__gte=after, criado_em__lt=before)
+      .values('valor', 'unidade', 'criado_em')
+  )
+
+  vazao_data = list(
+    DadosSensor
+      .objects
+      .filter(sensor_id__tipo=Sensor.VAZAO_AGUA, sensor_id__dispositivo_id__num_serie=num_serie_dispositivo, criado_em__gte=after, criado_em__lt=before)
+      .values('valor', 'unidade', 'criado_em')
+  )
+
+  response_data = {
+    'dados_tensao': tensao_data,
+    'dados_vazao': vazao_data
+  }
+
+  return json_success_response(data = response_data)
 
 @api_interface
-def energia_por_volume(request):
+def energia_por_volume(request, num_serie_dispositivo):
+  # TODO: é necessario receber os dados de corrente da bateria
   pass
 
 @api_interface
