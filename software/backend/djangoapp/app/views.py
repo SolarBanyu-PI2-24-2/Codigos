@@ -233,15 +233,6 @@ def ph_tempo(request, num_serie_dispositivo):
 
   return json_success_response(data = response_data)
 
-# pH x Temperatura
-# Dispersão
-# Temperatura (°C)
-# pH
-# Dados de pH e temperatura
-# Classificação ácido/base (0–6 ácido, 7 neutro, 8–14 base)
-def water_ph_x_temperature(request):
-  return HttpResponse(1)
-
 # Estado de Nível de Água (Boia)
 @api_interface
 def presenca_agua(request, num_serie_dispositivo):
@@ -407,8 +398,31 @@ def histograma_ph(request, num_serie_dispositivo):
   return json_success_response(data = response_data)
 
 @api_interface
-def alertas_por_tipo(request):
-  pass
+def alertas_por_tipo(request, num_serie_dispositivo):
+  """
+  Retorna os dados de alertas agrupados pelo tipo da seguinte forma:
+  [
+    {
+      "tipo": "AGUA",
+      "quantidade": 3
+    },
+    {
+      "tipo": "BATERIA",
+      "quantidade": 2
+    }
+  ]
+  """
+  before, after = fetch_data_filters(request)
+
+  response_data = list(
+    Alerta
+      .objects
+      .filter(dispositivo_id__num_serie=num_serie_dispositivo, criado_em__gte=after, criado_em__lt=before)
+      .values('tipo')
+      .annotate(quantidade=Count('id'))
+  )
+
+  return json_success_response(data = response_data)
 
 @api_interface
 def tensao_x_vazao(request):
