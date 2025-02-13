@@ -233,15 +233,6 @@ def ph_tempo(request, num_serie_dispositivo):
 
   return json_success_response(data = response_data)
 
-# pH x Temperatura
-# Dispersão
-# Temperatura (°C)
-# pH
-# Dados de pH e temperatura
-# Classificação ácido/base (0–6 ácido, 7 neutro, 8–14 base)
-def water_ph_x_temperature(request):
-  return HttpResponse(1)
-
 # Estado de Nível de Água (Boia)
 @api_interface
 def presenca_agua(request, num_serie_dispositivo):
@@ -313,30 +304,6 @@ def voltagem_bateria(request, num_serie_dispositivo):
   )
 
   return json_success_response(data = response_data)
-
-# Consumo Total de Água e Energia
-# Linha Dupla
-# Tempo
-# Volume (L), Energia (kWh)
-# Dados de volume e energia
-# Tendência acumulativa
-def consumo_agua_x_energia(request):
-  return HttpResponse(1)
-
-def vazao_x_temperatura(request):
-  return HttpResponse(1)
-
-# Eficiência de Dessalinização
-# Linha
-# Tempo
-# Razão (água/energia)
-# Dados de água dessalinizada e energia
-# Média da eficiência por dia
-def eficiencia_sistema(request):
-  return HttpResponse(1)
-
-def consumo_energia_estado(request):
-  return HttpResponse(1)
 
 # Comparação de Níveis de Água entre Unidades
 # Barras Comparativas
@@ -430,67 +397,130 @@ def histograma_ph(request, num_serie_dispositivo):
 
   return json_success_response(data = response_data)
 
-# Tensão vs. Vazão
-# Dispersão
-# Vazão (L/min)
-# Tensão (V)
-# Dados de vazão e tensão
-# Correlação entre tensão e vazão
-def tensao_x_vazao(request):
-  return HttpResponse(1)
+@api_interface
+def alertas_por_tipo(request, num_serie_dispositivo):
+  """
+  Retorna os dados de alertas agrupados pelo tipo da seguinte forma:
+  [
+    {
+      "tipo": "AGUA",
+      "quantidade": 3
+    },
+    {
+      "tipo": "BATERIA",
+      "quantidade": 2
+    }
+  ]
+  """
+  before, after = fetch_data_filters(request)
 
-# Eventos Críticos ao Longo do Tempo
-# Linha com Marcadores
-# Tempo
-# Eventos (picos críticos)
-# Dados de vazão, temperatura
-# Identificação de picos simultâneos
-def eventos_criticos(request):
-  return HttpResponse(1)
+  response_data = list(
+    Alerta
+      .objects
+      .filter(dispositivo_id__num_serie=num_serie_dispositivo, criado_em__gte=after, criado_em__lt=before)
+      .values('tipo')
+      .annotate(quantidade=Count('id'))
+  )
 
-# Vazão e Volume Acumulado
-# Barras e Linha
-# Tempo
-# Vazão (L/min), Volume (L)
-# Dados de vazão
-# Média diária, volume acumulado semanal
-# # Aqui da pra fazer chamando o endpoint de vazão e o de volume
+  return json_success_response(data = response_data)
 
+@api_interface
+def tensao_x_vazao(request, num_serie_dispositivo):
+  """
+  Retorna os dados de tensão e vazão para o range de datas especificado da seguinte forma:
+  {
+    "dados_tensao": [
+      {
+        "valor": "12.00",
+        "unidade": "V",
+        "criado_em": "2025-01-19T22:06:58.146Z"
+      }
+    ],
+    "dados_vazao": [
+      {
+        "valor": "2.00",
+        "unidade": "L/min",
+        "criado_em": "2025-01-19T22:07:47.550Z"
+      }
+    ]
+  }
+  """
+  before, after = fetch_data_filters(request)
 
-# Temperatura e pH Combinados
-# Dispersão
-# Temperatura (°C)
-# pH
-# Dados de temperatura e pH
-# Identificação de faixas críticas de qualidade da água
-# # Aqui da pra fazer chamando o endpoint de temperatura e o de PH
+  tensao_data = list(
+    DadosSensor
+      .objects
+      .filter(sensor_id__tipo=Sensor.VOLTAGEM, sensor_id__dispositivo_id__num_serie=num_serie_dispositivo, criado_em__gte=after, criado_em__lt=before)
+      .values('valor', 'unidade', 'criado_em')
+  )
 
-# Bateria e Estado do Sistema
-# Pizza
-# Estado
-# Porcentagem
-# Dados de tensão e estado
-# Tempo em carga/descarga e estado inativo
-def bateria_x_estado_sistema(request):
-  return HttpResponse(1)
+  vazao_data = list(
+    DadosSensor
+      .objects
+      .filter(sensor_id__tipo=Sensor.VAZAO_AGUA, sensor_id__dispositivo_id__num_serie=num_serie_dispositivo, criado_em__gte=after, criado_em__lt=before)
+      .values('valor', 'unidade', 'criado_em')
+  )
 
-# Histórico de Consumo de Energia
-# Linha
-# Tempo
-# Energia (kWh)
-# Dados de tensão
-# Tendência de consumo médio por dia
-def consumo_energia(request):
-  return HttpResponse(1)
+  response_data = {
+    'dados_tensao': tensao_data,
+    'dados_vazao': vazao_data
+  }
 
-# Projeção de Consumo de Água
-# Linha com Projeção
-# Dias
-# Volume Estimado (L)
-# Dados de volume acumulado
-# Previsão baseada em médias históricas
-def projecao_consumo_agua(request):
-  return HttpResponse(1)
+  return json_success_response(data = response_data)
+
+@api_interface
+def energia_por_volume(request, num_serie_dispositivo):
+  # TODO: é necessario receber os dados de corrente da bateria
+  pass
+
+@api_interface
+def eventos_criticos_urgentes(request, num_serie_dispositivo):
+  """
+  Retorna os dados de vazão e alertas criticos (urgentes) para o range de datas especificado da seguinte forma:
+  {
+    "dados_vazao": [
+      {
+        "valor": "2.00",
+        "unidade": "L/min",
+        "criado_em": "2025-01-18T03:36:13.829Z"
+      }
+    ],
+    "dados_alerta": [
+      {
+        "valor": "2.00",
+        "unidade": "L/min",
+        "criado_em": "2025-01-19T22:07:47.550Z"
+      }
+    ]
+  }
+  """
+  before, after = fetch_data_filters(request)
+
+  vazao_data = list(
+    DadosSensor
+      .objects
+      .filter(sensor_id__tipo=Sensor.VAZAO_AGUA, sensor_id__dispositivo_id__num_serie=num_serie_dispositivo, criado_em__gte=after, criado_em__lt=before)
+      .values('valor', 'unidade', 'criado_em')
+  )
+
+  alertas_criticos_data = list(
+    Alerta
+      .objects
+      .filter(prioridade='Urgente', dispositivo_id__num_serie=num_serie_dispositivo, criado_em__gte=after, criado_em__lt=before)
+      .values('tipo', 'descricao', 'criado_em')
+  )
+
+  response_data = {
+    'dados_vazao': vazao_data,
+    'dados_alerta': alertas_criticos_data
+  }
+
+  return json_success_response(data = response_data)
+
+@api_interface
+def consumo_agua_x_energia(request):
+  # TODO: é necessario receber os dados de corrente da bateria
+  pass
 
 class UsuariosView(generics.ListCreateAPIView):
   queryset = Usuario.objects.all()
