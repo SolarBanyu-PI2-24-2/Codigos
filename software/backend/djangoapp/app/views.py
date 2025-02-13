@@ -314,30 +314,6 @@ def voltagem_bateria(request, num_serie_dispositivo):
 
   return json_success_response(data = response_data)
 
-# Consumo Total de Água e Energia
-# Linha Dupla
-# Tempo
-# Volume (L), Energia (kWh)
-# Dados de volume e energia
-# Tendência acumulativa
-def consumo_agua_x_energia(request):
-  return HttpResponse(1)
-
-def vazao_x_temperatura(request):
-  return HttpResponse(1)
-
-# Eficiência de Dessalinização
-# Linha
-# Tempo
-# Razão (água/energia)
-# Dados de água dessalinizada e energia
-# Média da eficiência por dia
-def eficiencia_sistema(request):
-  return HttpResponse(1)
-
-def consumo_energia_estado(request):
-  return HttpResponse(1)
-
 # Comparação de Níveis de Água entre Unidades
 # Barras Comparativas
 # Unidades
@@ -430,67 +406,25 @@ def histograma_ph(request, num_serie_dispositivo):
 
   return json_success_response(data = response_data)
 
-# Tensão vs. Vazão
-# Dispersão
-# Vazão (L/min)
-# Tensão (V)
-# Dados de vazão e tensão
-# Correlação entre tensão e vazão
+@api_interface
+def alertas_por_tipo(request):
+  pass
+
+@api_interface
 def tensao_x_vazao(request):
-  return HttpResponse(1)
+  pass
 
-# Eventos Críticos ao Longo do Tempo
-# Linha com Marcadores
-# Tempo
-# Eventos (picos críticos)
-# Dados de vazão, temperatura
-# Identificação de picos simultâneos
-def eventos_criticos(request):
-  return HttpResponse(1)
+@api_interface
+def energia_por_volume(request):
+  pass
 
-# Vazão e Volume Acumulado
-# Barras e Linha
-# Tempo
-# Vazão (L/min), Volume (L)
-# Dados de vazão
-# Média diária, volume acumulado semanal
-# # Aqui da pra fazer chamando o endpoint de vazão e o de volume
+@api_interface
+def eventos_criticos_urgentes(request):
+  pass
 
-
-# Temperatura e pH Combinados
-# Dispersão
-# Temperatura (°C)
-# pH
-# Dados de temperatura e pH
-# Identificação de faixas críticas de qualidade da água
-# # Aqui da pra fazer chamando o endpoint de temperatura e o de PH
-
-# Bateria e Estado do Sistema
-# Pizza
-# Estado
-# Porcentagem
-# Dados de tensão e estado
-# Tempo em carga/descarga e estado inativo
-def bateria_x_estado_sistema(request):
-  return HttpResponse(1)
-
-# Histórico de Consumo de Energia
-# Linha
-# Tempo
-# Energia (kWh)
-# Dados de tensão
-# Tendência de consumo médio por dia
-def consumo_energia(request):
-  return HttpResponse(1)
-
-# Projeção de Consumo de Água
-# Linha com Projeção
-# Dias
-# Volume Estimado (L)
-# Dados de volume acumulado
-# Previsão baseada em médias históricas
-def projecao_consumo_agua(request):
-  return HttpResponse(1)
+@api_interface
+def consumo_agua_x_energia(request):
+  pass
 
 class UsuariosView(generics.ListCreateAPIView):
   queryset = Usuario.objects.all()
