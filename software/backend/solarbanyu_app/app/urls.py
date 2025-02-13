@@ -16,6 +16,8 @@ from .views import ConsumoCreateListView
 from .views import AlertaCreateListView
 from .views import DadoSensorListBySensorView
 from .views import AlertaUpdateView
+from .views import get_dados_sensores
+from .views import dados_ultimo_ano
 
 urlpatterns = [
     path('login/', LoginView.as_view(), name='login'),
@@ -35,5 +37,7 @@ urlpatterns = [
     path("alertas/", AlertaCreateListView.as_view(), name="create-list-alertas"),
     path("dados-sensores/<int:sensor_id>/", DadoSensorListBySensorView.as_view(), name="list-dados-sensor"),
     path("alertas/<int:id>/", AlertaUpdateView.as_view(), name="update-alerta"),
+    path('dados-sensores/', get_dados_sensores, name='get-dados-sensores'),
+    path('dados-ultimo-ano/', dados_ultimo_ano, name='dados_ultimo_ano'),
 
 ]

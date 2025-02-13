@@ -10,9 +10,9 @@ django.setup()
 from app.models import User, Dispositivo, Sensor, DadoSensor, Alerta
 
 # ✅ CONFIGURAÇÕES
-USER_EMAIL = "jasmine@email.com"  
+USER_EMAIL = "auroragama@email.com"  
 NUM_DADOS_POR_SENSOR = 10  
-NUM_ALERTAS = 8  
+NUM_ALERTAS = 10  
 PERIODO_DIAS = 7  
 
 # ✅ BUSCAR USUÁRIO

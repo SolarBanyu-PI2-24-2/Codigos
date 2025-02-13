@@ -257,3 +257,62 @@ class AlertaUpdateView(APIView):
             return Response(serializer.data, status=status.HTTP_200_OK)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+from django.http import JsonResponse
+from .models import DadoSensor
+from django.utils import timezone
+from datetime import timedelta
+
+# Função para filtrar os dados de sensores com base no período
+def get_dados_sensores(request):
+    """TESTES GRAFICOS"""  # Alinhe corretamente o comentário
+
+    sensor_id = request.GET.get('sensor_id')
+    period = request.GET.get('period')
+
+    # Filtrar os dados por sensor
+    dados = DadoSensor.objects.filter(sensor_id=sensor_id)
+
+    # Filtrar os dados de acordo com o período
+    if period == "Últimos minutos":
+        dados = dados.filter(criado_em__gte=timezone.now() - timedelta(minutes=5))
+    elif period == "Últimas Horas":
+        dados = dados.filter(criado_em__gte=timezone.now() - timedelta(hours=1))    
+    elif period == "Semanal":
+        dados = dados.filter(criado_em__gte=timezone.now() - timedelta(weeks=1)) 
+
+
+    # Preparar os dados para o gráfico
+    labels = [dado.criado_em.strftime('%H:%M') for dado in dados]  # Usando o horário como label
+    values = [dado.valor for dado in dados]  # Os valores do sensor
+
+    return JsonResponse({'labels': labels, 'values': values})
+
+# views.py
+from django.shortcuts import render
+from django.http import JsonResponse
+from .models import DadoSensor
+from datetime import datetime, timedelta
+
+# Função para buscar dados do último ano
+def dados_ultimo_ano(request):
+    try:
+        # Obtém o sensor_id e o período da URL
+        sensor_id = request.GET.get('sensor_id')
+        
+        # Calcula o primeiro dia do ano passado
+        hoje = datetime.now()
+        ano_passado = hoje - timedelta(days=365)  # Um ano atrás
+
+        # Busca os dados do último ano
+        dados = DadoSensor.objects.filter(
+            sensor_id=sensor_id,
+            criado_em__gte=ano_passado
+        ).values('criado_em', 'valor')  # Aqui você escolhe os campos que precisa
+
+        # Retorna os dados no formato desejado (como uma lista)
+        return JsonResponse(list(dados), safe=False)
+
+    except Exception as e:
+        return JsonResponse({'error': str(e)}, status=400)
