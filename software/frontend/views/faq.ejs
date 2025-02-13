@@ -115,6 +115,23 @@
 
     </div>
     <script>
+
+document.querySelectorAll('.faq-question').forEach(button => {
+    button.addEventListener('click', () => {
+        const faqAnswer = button.nextElementSibling;
+        const icon = button.querySelector('i');
+
+        if (faqAnswer.style.display === 'block') {
+            faqAnswer.style.display = 'none';
+            icon.classList.remove('active');
+        } else {
+            faqAnswer.style.display = 'block';
+            icon.classList.add('active');
+        }
+    });
+});
+
+
         document.addEventListener("DOMContentLoaded", () => {
             const supportButton = document.getElementById("supportButton");
             const supportModal = document.getElementById("supportModal");
@@ -135,7 +152,6 @@
             });
         });
     </script>
-    <script src="/js/scripts.js"></script>
-    <script src="/js/alert-critical.js"></script>
+
 </body>
 </html>

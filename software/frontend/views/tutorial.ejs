@@ -80,6 +80,45 @@
             </div>
         </div>
     </div>
-    <script src="/js/scripts.js"></script>
+    <script> 
+const carousels = document.querySelectorAll('.carousel-container');
+
+carousels.forEach((carousel, index) => {
+    const track = carousel.querySelector('.carousel-track');
+    const prevButton = carousel.querySelector('.prev');
+    const nextButton = carousel.querySelector('.next');
+    const items = track.children;
+
+    let currentIndex = 0;
+
+    const updateButtons = () => {
+        console.log(`Atualizando os botões: currentIndex = ${currentIndex}, total de itens = ${items.length}`);
+        prevButton.disabled = currentIndex === 0;
+        nextButton.disabled = currentIndex === items.length - 1;
+    };
+
+    nextButton.addEventListener('click', () => {
+        console.log(`Botão "Próximo" clicado. currentIndex antes: ${currentIndex}`);
+        if (currentIndex < items.length - 1) {
+            currentIndex++;
+            track.style.transform = `translateX(-${currentIndex * 300}px)`;  // A quantidade de deslocamento
+            console.log(`Novo currentIndex após "Próximo": ${currentIndex}`);
+        }
+        updateButtons();
+    });
+
+    prevButton.addEventListener('click', () => {
+        console.log(`Botão "Anterior" clicado. currentIndex antes: ${currentIndex}`);
+        if (currentIndex > 0) {
+            currentIndex--;
+            track.style.transform = `translateX(-${currentIndex * 300}px)`;  // A quantidade de deslocamento
+            console.log(`Novo currentIndex após "Anterior": ${currentIndex}`);
+        }
+        updateButtons();
+    });
+
+    updateButtons();  // Inicializa o estado dos botões
+});
+   </script>
 </body>
 </html>

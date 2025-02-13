@@ -31,7 +31,7 @@
             </div>
 
             <div class="box chart">
-                <h3>Resumo dos últimos 6 meses</h3>
+                <h3>Resumo do último ano</h3> 
                 <div id="chart">
                     <canvas id="solarChart"></canvas>
                 </div>
@@ -95,42 +95,8 @@
 
     <script src="/js/botoes.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script>
-        var ctx = document.getElementById('solarChart').getContext('2d');
-        var solarChart = new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: ['1 mês', '2 meses', '3 meses', '4 meses', '5 meses', '6 meses'],
-                datasets: [{
-                    label: 'Temperatura',
-                    data: [20, 21, 22, 19, 23, 24],
-                    borderColor: 'red',
-                    fill: false
-                }, {
-                    label: 'pH da água',
-                    data: [7, 6.9, 7.1, 7, 7.2, 7],
-                    borderColor: 'lightblue',
-                    fill: false
-                }, {
-                    label: 'Volume de água dessalinizada',
-                    data: [100, 150, 200, 170, 180, 210],
-                    borderColor: 'blue',
-                    fill: false
-                }, {
-                    label: 'Consumo de energia',
-                    data: [50, 55, 60, 45, 50, 70],
-                    borderColor: 'yellow',
-                    fill: false
-                }]
-            }
-        });
-    </script>
 
-
-            // Criando a imagem a partir do canvas e gerando o PDF
-            html2pdf().from(chartCanvas).set(options).save();
-        });
-    </script>
+   
 
     <script>
         document.addEventListener("DOMContentLoaded", () => {

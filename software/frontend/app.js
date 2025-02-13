@@ -31,7 +31,7 @@ app.get('/pesquisar', (req, res) => {
 
 app.get("/monitoramento", async (req, res) => {
     try {
-        const token = "970e94b8a15b765a425fe8456af5e82ffbadcc13"// Ajuste para pegar dinamicamente do usuário autenticado.
+        const token = "cbea691eab6b1acecc5fea9557f64e66f4904d9a"// Ajuste para pegar dinamicamente do usuário autenticado.
 
         // ✅ Agora usamos `await` para buscar os dados da API
         const responseSensores = await fetch("http://localhost:8000/api/dados-sensores/", {

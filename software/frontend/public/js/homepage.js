@@ -185,14 +185,14 @@ async function loadGeneralInfo() {
 
         // Filtra os dados do sensor de volume de água (verifique o ID correto)
         const sum_litros = Math.round(sensorData
-            .filter(item => item.sensor === 6)  // Verifique se '6' é o ID correto
+            .filter(item => item.sensor === 2)  // Verifique se '6' é o ID correto
             .reduce((acumulador, item) => acumulador + item.valor, 0));
 
         // Atualiza a quantidade de água dessalinizada
         document.getElementById("total-water-home").innerText = `${sum_litros} L`;
 
         const sum_energia = Math.round(sensorData
-            .filter(item => item.sensor === 7)  // Verifique se '6' é o ID correto
+            .filter(item => item.sensor === 3)  // Verifique se '6' é o ID correto
             .reduce((acumulador, item) => acumulador + item.valor, 0));
 
         // Atualiza a quantidade de água dessalinizada

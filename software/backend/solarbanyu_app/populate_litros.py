@@ -11,7 +11,7 @@ from app.models import User, Dispositivo, Sensor, DadoSensor, Alerta
 
 # ✅ CONFIGURAÇÕES
 USER_EMAIL = "auroragama@email.com"  # Email do usuário para o qual adicionar dados
-NUM_DADOS_POR_SENSOR = 20  # O número de dados a serem adicionados
+NUM_DADOS_POR_SENSOR = 8  # O número de dados a serem adicionados
 PERIODO_DIAS = 7  # O intervalo de tempo (em dias) para os dados a serem criados
 
 # ✅ BUSCAR USUÁRIO

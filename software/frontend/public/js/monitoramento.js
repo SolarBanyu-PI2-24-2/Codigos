@@ -1,4 +1,3 @@
-
 async function loadAlertQtd() {
     const token = localStorage.getItem("token");
 
@@ -55,7 +54,7 @@ async function loadGeneralInfo() {
         sensor_data.push(data);
 
         const sum_litros = Math.round(sensor_data[0]
-            .filter(item => item.sensor === 6)
+            .filter(item => item.sensor === 2)
             .reduce((acumulador, item) => acumulador + item.valor, 0));
         document.getElementById("total-water").innerText = `${sum_litros} L`;
 
@@ -183,16 +182,14 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
     // Inicializa o gráfico com "Por minutos"
-    updateChart("Por minutos");
+    updateChart("Mensal");
 });
 
 function formatDate(timestamp, period) {
     const date = new Date(timestamp);
 
     
-    if (period === "Por minutos") {
-        return `${date.getHours()}:${String(date.getMinutes()).padStart(2, "0")}`; // Ex: "18:32"
-    } else if (period === "Última Hora") {
+    if (period === "Última Hora") {
         return `${date.getHours()}:${String(date.getMinutes()).padStart(2, "0")}`; // Ex: "18:32"   
     } else if (period === "Últimas 24h") {
         return `${date.getHours()}:${String(date.getMinutes()).padStart(2, "0")}`; // Ex: "18:32"
@@ -217,6 +214,8 @@ function generateData(period) {
         return { labels, data, unidade: "" };
     }
 
+    console.log("Período selecionado:", period);
+    console.log("Dados antes de serem filtrados:", sensor_data);
     // Obtém o sensor correto para o tipo de dado atual
     let sensorId = sensorMapping[currentDataType];
 
@@ -226,6 +225,8 @@ function generateData(period) {
 
     // Ordena os dados pela data de criação
     sensorValues.sort((a, b) => new Date(a.criado_em) - new Date(b.criado_em));
+    console.log("Labels gerados:", labels);
+    console.log("Dados gerados:", data);
    
 
     // Define a unidade
@@ -236,7 +237,6 @@ function generateData(period) {
     
     let now = new Date();
     let timeFrame = {
-        "Por minuto": 60 * 1000, // 1 minuto
         "Última Hora": 60 * 60 * 1000, // 1 hora
         "Últimas 24h": 24 * 60 * 60 * 1000, // 24 horas
         "Semanal": 7 * 24 * 60 * 60 * 1000, // 7 dias
@@ -245,28 +245,13 @@ function generateData(period) {
 
     let filteredData = sensorValues.filter(item => {
         let itemDate = new Date(item.criado_em);
+        console.log("Data convertida:", itemDate);
         return now - itemDate <= timeFrame[period];
-        console.log(`Dados filtrados para ${period}:`, filteredData);
+      
 
-    });
+    }); console.log("Dados filtrados para o período:", filteredData);
 
-    if (period === "Por minutos") {
-        // Exibe os valores EXATAMENTE por minuto (se houver)
-        let timeMap = new Map();
-        filteredData.forEach(item => {
-            let key = `${item.criado_em.substring(11, 16)}`; // Formato "HH:mm"
-            timeMap.set(key, item.valor);
-        });
-
-        for (let i = 59; i >= 0; i--) {
-            let pastTime = new Date(now - i * 60000);
-            let key = `${pastTime.getHours()}:${String(pastTime.getMinutes()).padStart(2, "0")}`;
-            labels.push(key);
-            data.push(timeMap.get(key) || null); // Apenas adiciona se houver dado real
-        }
-
-    } 
-    else if (period === "Última Hora") {
+ if (period === "Última Hora") {
         // Exibe os valores EXATAMENTE por minuto (se houver)
         let timeMap = new Map();
         filteredData.forEach(item => {
@@ -320,6 +305,7 @@ function generateData(period) {
 
 // Atualiza o gráfico com os dados reais
 function updateChart(period) {
+    console.log("Atualizando gráfico para o período:", period);
     let { labels, data, unidade } = generateData(period);
 
     if (labels.length === 0 || data.length === 0) {
@@ -411,4 +397,5 @@ document.addEventListener("DOMContentLoaded", function () {
         console.error("Erro: Dropdown do tipo de gráfico não encontrado.");
     }
 });
+
 

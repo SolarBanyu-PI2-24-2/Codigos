@@ -27,16 +27,15 @@
                         <li onclick="changeChart('Volume de água dessalinizada')">Volume de água dessalinizada</li>
                         <li onclick="changeChart('Energia consumida')">Energia consumida</li>
                         <li onclick="changeChart('Ph da água')">Ph da água</li>
-                        <li onclick="changeChart('Temperatura da água')">Temperatura da água</li>
+                        <li onclick="changeChart('Temperatura da água')">Temperatura da água</li>                       
                     </ul>
                 </div>
 
 
                 <!-- Dropdown para escolher o período (semana ou mês) -->
                 <div class="dropdown" id="periodDropdown">
-                    <button id="periodDropdownButton" class="dropdown-button">Por minutos<i class="fas fa-chevron-down"></i></button>
+                    <button id="periodDropdownButton" class="dropdown-button">Semanal<i class="fas fa-chevron-down"></i></button>
                     <ul id="periodDropdownMenu" class="dropdown-menu">
-                        <li onclick="changePeriod('Por minutos')">Minutos</li>
                         <li onclick="changePeriod('Última Hora')">Última Hora</li>
                         <li onclick="changePeriod('Últimas 24h')">Últimas 24h</li>
                         <li onclick="changePeriod('Semanal')">Semanal</li>
@@ -45,7 +44,8 @@
                 </div>
 
 
-                <canvas id="waterChart"></canvas>
+    <canvas id="waterChart" ></canvas>
+                
             </div>
 
             <!-- Cartões de informações -->
@@ -75,5 +75,6 @@
         </div>
     </div>
 <script src="/js/monitoramento.js"></script>
+
 </body>
 </html>

@@ -264,12 +264,21 @@ from .models import DadoSensor
 from django.utils import timezone
 from datetime import timedelta
 
-# Função para filtrar os dados de sensores com base no período
-def get_dados_sensores(request):
-    """TESTES GRAFICOS"""  # Alinhe corretamente o comentário
+from django.utils import timezone
+from datetime import timedelta
+from django.http import JsonResponse
+from .models import DadoSensor
 
+def get_dados_sensores(request):
+    """Obtém dados dos sensores filtrados por tipo de sensor e período."""  
+
+    # Obtendo os parâmetros da URL
     sensor_id = request.GET.get('sensor_id')
-    period = request.GET.get('period')
+    period = request.GET.get('period', 'Últimos minutos')  # Define um valor default para o período
+
+    # Validação do sensor_id
+    if not sensor_id:
+        return JsonResponse({'error': 'sensor_id é obrigatório'}, status=400)
 
     # Filtrar os dados por sensor
     dados = DadoSensor.objects.filter(sensor_id=sensor_id)
@@ -281,13 +290,16 @@ def get_dados_sensores(request):
         dados = dados.filter(criado_em__gte=timezone.now() - timedelta(hours=1))    
     elif period == "Semanal":
         dados = dados.filter(criado_em__gte=timezone.now() - timedelta(weeks=1)) 
-
+    else:
+        return JsonResponse({'error': 'Período inválido'}, status=400)
 
     # Preparar os dados para o gráfico
     labels = [dado.criado_em.strftime('%H:%M') for dado in dados]  # Usando o horário como label
     values = [dado.valor for dado in dados]  # Os valores do sensor
 
+    # Retornando os dados no formato esperado pelo gráfico
     return JsonResponse({'labels': labels, 'values': values})
+
 
 # views.py
 from django.shortcuts import render
@@ -316,3 +328,113 @@ def dados_ultimo_ano(request):
 
     except Exception as e:
         return JsonResponse({'error': str(e)}, status=400)
+
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
+from .models import DadoSensor
+from django.utils import timezone
+from datetime import timedelta
+
+class VolumeAguaView(APIView):
+    def get(self, request, format=None):
+        sensor_id = 2  # ID do sensor para "Volume de água dessalinizada"
+        period = request.GET.get('period', 'Últimos minutos')  # Pega o período da query string, padrão "Últimos minutos"
+
+        # Filtrando dados com base no período
+        if period == "Últimos minutos":
+            dados = DadoSensor.objects.filter(sensor_id=sensor_id, criado_em__gte=timezone.now() - timedelta(minutes=5))
+        elif period == "Últimas Horas":
+            dados = DadoSensor.objects.filter(sensor_id=sensor_id, criado_em__gte=timezone.now() - timedelta(hours=1))
+        elif period == "Semanal":
+            dados = DadoSensor.objects.filter(sensor_id=sensor_id, criado_em__gte=timezone.now() - timedelta(weeks=1))
+        else:
+            return Response({"error": "Período inválido"}, status=status.HTTP_400_BAD_REQUEST)
+
+        # Processar os dados para retornar labels e valores
+        labels = [dado.criado_em.strftime('%H:%M') for dado in dados]
+        values = [dado.valor for dado in dados]
+
+        return Response({'labels': labels, 'values': values}, status=status.HTTP_200_OK)
+
+class EnergiaConsumidaView(APIView):
+    def get(self, request, format=None):
+        sensor_id = 3  # ID do sensor para "Energia consumida"
+        period = request.GET.get('period', 'Últimos minutos')
+
+        # Filtrando dados com base no período
+        if period == "Últimos minutos":
+            dados = DadoSensor.objects.filter(sensor_id=sensor_id, criado_em__gte=timezone.now() - timedelta(minutes=5))
+        elif period == "Últimas Horas":
+            dados = DadoSensor.objects.filter(sensor_id=sensor_id, criado_em__gte=timezone.now() - timedelta(hours=1))
+        elif period == "Semanal":
+            dados = DadoSensor.objects.filter(sensor_id=sensor_id, criado_em__gte=timezone.now() - timedelta(weeks=1))
+        else:
+            return Response({"error": "Período inválido"}, status=status.HTTP_400_BAD_REQUEST)
+
+        # Processar os dados para retornar labels e valores
+        labels = [dado.criado_em.strftime('%H:%M') for dado in dados]
+        values = [dado.valor for dado in dados]
+
+        return Response({'labels': labels, 'values': values}, status=status.HTTP_200_OK)
+
+class PhAguaView(APIView):
+    def get(self, request, format=None):
+        sensor_id = 1  # ID do sensor para "Ph da água"
+        period = request.GET.get('period', 'Últimos minutos')
+
+        # Filtrando dados com base no período
+        if period == "Últimos minutos":
+            dados = DadoSensor.objects.filter(sensor_id=sensor_id, criado_em__gte=timezone.now() - timedelta(minutes=5))
+        elif period == "Últimas Horas":
+            dados = DadoSensor.objects.filter(sensor_id=sensor_id, criado_em__gte=timezone.now() - timedelta(hours=1))
+        elif period == "Semanal":
+            dados = DadoSensor.objects.filter(sensor_id=sensor_id, criado_em__gte=timezone.now() - timedelta(weeks=1))
+        else:
+            return Response({"error": "Período inválido"}, status=status.HTTP_400_BAD_REQUEST)
+
+        # Processar os dados para retornar labels e valores
+        labels = [dado.criado_em.strftime('%H:%M') for dado in dados]
+        values = [dado.valor for dado in dados]
+
+        return Response({'labels': labels, 'values': values}, status=status.HTTP_200_OK)
+class PhAguaView(APIView):
+    def get(self, request, format=None):
+        sensor_id = 1  # ID do sensor para "Ph da água"
+        period = request.GET.get('period', 'Últimos minutos')
+
+        # Filtrando dados com base no período
+        if period == "Últimos minutos":
+            dados = DadoSensor.objects.filter(sensor_id=sensor_id, criado_em__gte=timezone.now() - timedelta(minutes=5))
+        elif period == "Últimas Horas":
+            dados = DadoSensor.objects.filter(sensor_id=sensor_id, criado_em__gte=timezone.now() - timedelta(hours=1))
+        elif period == "Semanal":
+            dados = DadoSensor.objects.filter(sensor_id=sensor_id, criado_em__gte=timezone.now() - timedelta(weeks=1))
+        else:
+            return Response({"error": "Período inválido"}, status=status.HTTP_400_BAD_REQUEST)
+
+        # Processar os dados para retornar labels e valores
+        labels = [dado.criado_em.strftime('%H:%M') for dado in dados]
+        values = [dado.valor for dado in dados]
+
+        return Response({'labels': labels, 'values': values}, status=status.HTTP_200_OK)
+class TemperaturaAguaView(APIView):
+    def get(self, request, format=None):
+        sensor_id = 4  # ID do sensor para "Temperatura da água"
+        period = request.GET.get('period', 'Últimos minutos')
+
+        # Filtrando dados com base no período
+        if period == "Últimos minutos":
+            dados = DadoSensor.objects.filter(sensor_id=sensor_id, criado_em__gte=timezone.now() - timedelta(minutes=5))
+        elif period == "Últimas Horas":
+            dados = DadoSensor.objects.filter(sensor_id=sensor_id, criado_em__gte=timezone.now() - timedelta(hours=1))
+        elif period == "Semanal":
+            dados = DadoSensor.objects.filter(sensor_id=sensor_id, criado_em__gte=timezone.now() - timedelta(weeks=1))
+        else:
+            return Response({"error": "Período inválido"}, status=status.HTTP_400_BAD_REQUEST)
+
+        # Processar os dados para retornar labels e valores
+        labels = [dado.criado_em.strftime('%H:%M') for dado in dados]
+        values = [dado.valor for dado in dados]
+
+        return Response({'labels': labels, 'values': values}, status=status.HTTP_200_OK)

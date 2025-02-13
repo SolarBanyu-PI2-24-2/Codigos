@@ -18,6 +18,10 @@ from .views import DadoSensorListBySensorView
 from .views import AlertaUpdateView
 from .views import get_dados_sensores
 from .views import dados_ultimo_ano
+from .views import VolumeAguaView
+from .views import EnergiaConsumidaView
+from .views import PhAguaView
+from .views import TemperaturaAguaView
 
 urlpatterns = [
     path('login/', LoginView.as_view(), name='login'),
@@ -39,5 +43,9 @@ urlpatterns = [
     path("alertas/<int:id>/", AlertaUpdateView.as_view(), name="update-alerta"),
     path('dados-sensores/', get_dados_sensores, name='get-dados-sensores'),
     path('dados-ultimo-ano/', dados_ultimo_ano, name='dados_ultimo_ano'),
+    path('volume-agua/', VolumeAguaView.as_view(), name='volume-agua'),
+    path('energia-consumida/', EnergiaConsumidaView.as_view(), name='energia-consumida'),
+    path('ph-agua/', PhAguaView.as_view(), name='ph-agua'),
+    path('temperatura-agua/', TemperaturaAguaView.as_view(), name='temperatura-agua'),
 
 ]
