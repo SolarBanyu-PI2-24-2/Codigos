@@ -474,11 +474,52 @@ def energia_por_volume(request, num_serie_dispositivo):
   pass
 
 @api_interface
-def eventos_criticos_urgentes(request):
-  pass
+def eventos_criticos_urgentes(request, num_serie_dispositivo):
+  """
+  Retorna os dados de vazão e alertas criticos (urgentes) para o range de datas especificado da seguinte forma:
+  {
+    "dados_vazao": [
+      {
+        "valor": "2.00",
+        "unidade": "L/min",
+        "criado_em": "2025-01-18T03:36:13.829Z"
+      }
+    ],
+    "dados_alerta": [
+      {
+        "valor": "2.00",
+        "unidade": "L/min",
+        "criado_em": "2025-01-19T22:07:47.550Z"
+      }
+    ]
+  }
+  """
+  before, after = fetch_data_filters(request)
+
+  vazao_data = list(
+    DadosSensor
+      .objects
+      .filter(sensor_id__tipo=Sensor.VAZAO_AGUA, sensor_id__dispositivo_id__num_serie=num_serie_dispositivo, criado_em__gte=after, criado_em__lt=before)
+      .values('valor', 'unidade', 'criado_em')
+  )
+
+  alertas_criticos_data = list(
+    Alerta
+      .objects
+      .filter(prioridade='Urgente', dispositivo_id__num_serie=num_serie_dispositivo, criado_em__gte=after, criado_em__lt=before)
+      .values('tipo', 'descricao', 'criado_em')
+  )
+
+  response_data = {
+    'dados_vazao': vazao_data,
+    'dados_alerta': alertas_criticos_data
+  }
+
+  return json_success_response(data = response_data)
 
 @api_interface
 def consumo_agua_x_energia(request):
+  # TODO: é necessario receber os dados de corrente da bateria
   pass
 
 class UsuariosView(generics.ListCreateAPIView):
