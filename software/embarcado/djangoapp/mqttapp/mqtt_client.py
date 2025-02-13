@@ -25,27 +25,45 @@ API_HOST = env('API_HOST')
 
 sensors = []
 
+unidades = {
+    "TEMPERATURA_AGUA": "°C",
+    "PH_AGUA": "pH",
+    "NIVEL_AGUA": "cm",
+    "TENSAO": "V",
+    "FLUXO_AGUA": "L/min"
+}
+
 def on_message(client, userdata, msg):
     print(f"Mensagem recebida no tópico {msg.topic}: {msg.payload.decode()}")
     
-    sensors_values = json.loads(msg.payload.decode())
+    sensors_data_updated = json.loads(msg.payload.decode())
     
     headers = {"Content-Type": "application/json"}
-    
-    for sensor_value in sensors_values:
-        sensor_type = sensor_value["tipo"]
+
+    for sensor_data in sensors_data_updated:
+        sensor_type = sensor_data["tipo"]
+        sensor_value = sensor_data["valor"]
+        sensor_value_unit = unidades[sensor_type]
+        
         sensor = next((item for item in sensors if item["tipo"] == sensor_type), None)
         
-        req_json = {
-            "valor": sensor_value["valor"],
-            "unidade": "%",
-            "sensor_id": sensor["id"]
-        }
-
         if sensor is not None:
-            print(f"Enviando: {sensor_value}")
-            response = requests.post(f"{API_HOST}/dados_sensores/", headers=headers, json=req_json)
-            print("Status Code:", response.status_code)
+            req_json = {
+                "valor": round(sensor_value, 2),
+                "unidade": sensor_value_unit,
+                "sensor_id": sensor["id"]
+            }
+
+            if sensor is not None:
+                print(f"Enviando: {req_json}")
+                response = requests.post(f"{API_HOST}/dados_sensores/", headers=headers, json=req_json)
+                
+                if response.status_code == 201:
+                    print(f"Dado enviado com sucesso.")
+                else:
+                    print(f"Falha ao enviar dados: {response.status_code} - {response.text}")
+        else:
+            print(f"Sensor {sensor_type} não encontrado.")
 
 def start_mqtt():
     global sensors
