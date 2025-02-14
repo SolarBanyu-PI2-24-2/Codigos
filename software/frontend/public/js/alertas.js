@@ -18,7 +18,8 @@ async function loadHomePageData() {
 
     try {
         // Fazer as chamadas da API separadamente
-        const userResponse = await fetch("http://localhost:8000/app/user/profile/", {
+        const userId = localStorage.getItem("userId");
+        const userResponse = await fetch(`http://localhost:8000/app/usuario/${userId}`, {
             method: "GET",
             headers: { "Authorization": `Token ${token}` }
         });
@@ -75,14 +76,14 @@ async function loadAlert() {
 
         // Mapeia os níveis de prioridade
         const prioridadeMap = {
-            1: { texto: "Baixa", classe: "low" },
-            2: { texto: "Média", classe: "medium" },
-            3: { texto: "Alta", classe: "high" },
-            4: { texto: "Crítica", classe: "urgent" }
+            "Baixa": { texto: "Baixa", classe: "low" },
+            "Média": { texto: "Média", classe: "medium" },
+            "Alta": { texto: "Alta", classe: "high" },
+            "Crítica": { texto: "Crítica", classe: "urgent" }
         };
 
         // Adiciona os alertas à tabela
-        data.forEach(alerta => {
+        data.forEach((alerta, index) => {
             const row = document.createElement("tr");
         
         // **Adiciona o atributo data-prioridade corretamente**
@@ -92,7 +93,7 @@ async function loadAlert() {
             const dataFormatada = new Date(alerta.criado_em).toLocaleDateString("pt-BR");
 
             row.innerHTML = `
-                <td>${alerta.id.toString().padStart(5, "0")}</td>
+                <td>${(index + 1).toString().padStart(5, "0")}</td>
                 <td class="${prioridadeMap[alerta.prioridade].classe}">${prioridadeMap[alerta.prioridade].texto}</td>
                 <td>${alerta.tipo}</td>
                 <td>${dataFormatada}</td>

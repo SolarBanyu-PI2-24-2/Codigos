@@ -24,16 +24,17 @@
                 <div class="dropdown">
                     <button id="dropdownButton" class="dropdown-button">Volume de água dessalinizada <i class="fas fa-chevron-down"></i></button>
                     <ul id="dropdownMenu" class="dropdown-menu">
-                        <li onclick="changeChart('Volume de água dessalinizada')">Volume de água dessalinizada</li>
-                        <li onclick="changeChart('Energia consumida')">Energia consumida</li>
-                        <li onclick="changeChart('Ph da água')">Ph da água</li>
-                        <li onclick="changeChart('Temperatura da água')">Temperatura da água</li>                       
+                        <li onclick="updateChartData('NIVEL_AGUA')">Volume de água dessalinizada</li>
+                        <li onclick="updateChartData('TENSAO')">Energia consumida</li>
+                        <li onclick="updateChartData('PH_AGUA')">Ph da água</li>
+                        <li onclick="updateChartData('TEMPERATURA_AGUA')">Temperatura da água</li>
+                        <li onclick="updateChartData('')">Todos</li>                       
                     </ul>
                 </div>
 
 
                 <!-- Dropdown para escolher o período (semana ou mês) -->
-                <div class="dropdown" id="periodDropdown">
+                <!-- <div class="dropdown" id="periodDropdown">
                     <button id="periodDropdownButton" class="dropdown-button">Semanal<i class="fas fa-chevron-down"></i></button>
                     <ul id="periodDropdownMenu" class="dropdown-menu">
                         <li onclick="changePeriod('Última Hora')">Última Hora</li>
@@ -41,7 +42,7 @@
                         <li onclick="changePeriod('Semanal')">Semanal</li>
                         <li onclick="changePeriod('Mensal')">Mensal</li>
                     </ul>
-                </div>
+                </div> -->
 
 
     <canvas id="waterChart" ></canvas>

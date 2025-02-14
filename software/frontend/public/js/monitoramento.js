@@ -21,8 +21,8 @@ async function loadAlertQtd() {
         const data = await response.json();
         document.getElementById("total-alertas").innerText = `${data.length} alerta(s)`;
     } catch (error) {
-    console.error("Erro ao carregar informações dos alertas:", error);
-    } 
+        console.error("Erro ao carregar informações dos alertas:", error);
+    }
 }
 
 async function loadGeneralInfo() {
@@ -58,53 +58,53 @@ async function loadGeneralInfo() {
             .reduce((acumulador, item) => acumulador + item.valor, 0));
         document.getElementById("total-water").innerText = `${sum_litros} L`;
 
-        
+
         if (deviceData.length > 0) {
-            const device = deviceData[0];  
+            const device = deviceData[0];
             const installationDate = new Date(device.data_instalacao + "T00:00:00"); // Data de instalação do dispositivo
             const currentDate = new Date();
             const currentDays = Math.floor((currentDate - installationDate) / (1000 * 60 * 60 * 24));
-    
+
             console.log("Data de instalação:", installationDate);
             console.log("Dias em funcionamento:", currentDays);
-            console.log("Último item de sensor_data:", sensor_data[sensor_data.length - 1]); 
+            console.log("Último item de sensor_data:", sensor_data[sensor_data.length - 1]);
             console.log("Última leitura do sensor:", sensor_data[sensor_data.length - 1][sensor_data[sensor_data.length - 1].length - 1]);
             console.log("Valor de criado_em:", sensor_data[sensor_data.length - 1][sensor_data[sensor_data.length - 1].length - 1]["criado_em"]);
-            
 
 
-    
+
+
             document.getElementById("current-days").innerText = `${currentDays} dia(s)`;
         } else {
             console.warn("Nenhum dispositivo encontrado.");
         }
-    
+
         // Garantir que há dados do sensor antes de calcular a última atualização
         // Garantir que há dados do sensor antes de calcular a última atualização
-if (sensor_data.length > 0 && sensor_data[sensor_data.length - 1].length > 0) {
-    let sensorRecords = sensor_data[sensor_data.length - 1]; // Pegar a lista real dos registros
+        if (sensor_data.length > 0 && sensor_data[sensor_data.length - 1].length > 0) {
+            let sensorRecords = sensor_data[sensor_data.length - 1]; // Pegar a lista real dos registros
 
-    // Ordenar os registros corretamente
-    sensorRecords.sort((a, b) => new Date(a.criado_em) - new Date(b.criado_em));
+            // Ordenar os registros corretamente
+            sensorRecords.sort((a, b) => new Date(a.criado_em) - new Date(b.criado_em));
 
-    // Pegar o último item correto
-    let lastRecord = sensorRecords[sensorRecords.length - 1];
+            // Pegar o último item correto
+            let lastRecord = sensorRecords[sensorRecords.length - 1];
 
-    if (lastRecord && lastRecord.criado_em) {
-        last_update = new Date(lastRecord.criado_em);
-        console.log("Última atualização do sensor:", last_update);
+            if (lastRecord && lastRecord.criado_em) {
+                last_update = new Date(lastRecord.criado_em);
+                console.log("Última atualização do sensor:", last_update);
 
-        document.getElementById("last-update").innerText = `${last_update.toLocaleString()}`;
-    } else {
-        console.warn("Nenhuma leitura válida de sensor encontrada.");
-        document.getElementById("last-update").innerText = "Sem dados recentes";
-    }
-} else {
-    console.warn("Nenhuma leitura recente de sensor encontrada.");
-    document.getElementById("last-update").innerText = "Sem dados recentes";
-}
+                document.getElementById("last-update").innerText = `${last_update.toLocaleString()}`;
+            } else {
+                console.warn("Nenhuma leitura válida de sensor encontrada.");
+                document.getElementById("last-update").innerText = "Sem dados recentes";
+            }
+        } else {
+            console.warn("Nenhuma leitura recente de sensor encontrada.");
+            document.getElementById("last-update").innerText = "Sem dados recentes";
+        }
 
-    
+
 
     } catch (error) {
         console.error("Erro ao carregar informações gerais dos sensores:", error);
@@ -135,8 +135,8 @@ async function loadSensorData() {
         document.getElementById("total-alertas").innerText = `${data.length} alerta(s)`;
         //data.length
     } catch (error) {
-    console.error("Erro ao carregar informações dos alertas:", error);
-    } 
+        console.error("Erro ao carregar informações dos alertas:", error);
+    }
 }
 
 let sensor_data = []
@@ -149,10 +149,111 @@ const sensorMapping = { // Sensores correspondentes a cada tipo de dado
 document.addEventListener("DOMContentLoaded", loadAlertQtd);
 document.addEventListener("DOMContentLoaded", loadGeneralInfo);
 
+function agruparPorTipo(lista) {
+    return lista.reduce((acc, item) => {
+        if (!acc[item.tipo]) {
+            acc[item.tipo] = []; // Cria um array para esse tipo se ainda não existir
+        }
+        acc[item.tipo].push(item);
+        return acc;
+    }, {});
+}
 
-document.addEventListener("DOMContentLoaded", function () {
+var typeSelected = null;
+
+window.updateChartData = (type) => {
+    typeSelected = type;
+}
+
+async function buildSensorsGraph(myChart, sensores, token) {
+    const responseDataSensores = await fetch("http://localhost:8000/app/dados_sensores/", {
+        method: "GET",
+        headers: {
+            "Authorization": `Token ${token}`
+        }
+    });
+
+    if (!responseDataSensores.ok) {
+        throw new Error("Erro ao buscar informações do dispositivo.");
+    }
+
+    const dadosSensores = await responseDataSensores.json();
+
+    const dadosSensoresSorted = dadosSensores
+        .sort((a, b) => new Date(b.criado_em) - new Date(a.criado_em))
+        .slice(0, 100)
+
+    console.log("dadosSensoresSorted");
+    console.log(dadosSensoresSorted);
+
+    // Inicializa o gráfico com "Por minutos"
+    // updateChart("Mensal");
+
+    const labelsGraph = [...new Set(dadosSensoresSorted.map(it => {
+        const time = new Date(it.criado_em);
+
+        const day = time.getDate().toString().padStart(2, '0');
+        const month = (time.getMonth() + 1).toString().padStart(2, "0");
+        const hours = time.getHours().toString().padStart(2, "0");
+        const minutes = time.getMinutes().toString().padStart(2, "0");
+        const seconds = time.getSeconds().toString().padStart(2, "0");
+
+        return `${day}/${month} ${hours}:${minutes}:${seconds}`;
+    }))];
+
+    myChart.data.labels = labelsGraph
+        .sort();
+
+    const dadosAgrupados = agruparPorTipo(dadosSensoresSorted
+        .map(it => {
+            const sensor = sensores.find(sensor => sensor.id == it.sensor_id);
+            return {
+                ...it,
+                ...sensor,
+            }
+        }))
+
+    console.log("dadosAgrupados");
+    console.log(dadosAgrupados);
+
+    const database = [];
+
+    Object.entries(dadosAgrupados).forEach(([tipo, itens]) => {
+        if (typeSelected == '' || typeSelected == null) {
+            database.push({
+                label: tipo,
+                data: itens.map(it => it.valor),
+                borderWidth: 2,
+                tension: 0.3
+            });
+            myChart.options.scales.x.title.text = "tempo";
+            myChart.options.scales.y.title.text = "valor";
+        } else {
+            if (tipo == typeSelected) {
+                database.push({
+                    label: tipo,
+                    data: itens.map(it => it.valor),
+                    borderWidth: 2,
+                    tension: 0.3
+                });
+                myChart.options.scales.x.title.text = "tempo";
+                myChart.options.scales.y.title.text = itens[0].unidade;
+            }
+        }
+    });
+
+    console.log("database");
+    console.log(database);
+
+    myChart.data.datasets = database;
+    myChart.options.animation = false;
+
+    myChart.update();
+}
+
+document.addEventListener("DOMContentLoaded", async function () {
     const ctx = document.getElementById("waterChart")?.getContext("2d");
-    
+
     if (!ctx) {
         console.error("Erro: Elemento 'waterChart' não encontrado.");
         return;
@@ -163,14 +264,7 @@ document.addEventListener("DOMContentLoaded", function () {
         type: "line",
         data: {
             labels: [],
-            datasets: [{
-                label: "Volume de água dessalinizada",
-                data: [],
-                borderWidth: 2,
-                borderColor: "#007bff",
-                backgroundColor: "rgba(0, 123, 255, 0.2)",
-                tension: 0.3
-            }]
+            datasets: []
         },
         options: {
             responsive: true,
@@ -181,14 +275,34 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     });
 
-    // Inicializa o gráfico com "Por minutos"
-    updateChart("Mensal");
+    // data
+
+    const token = localStorage.getItem("token");
+
+    const response = await fetch("http://localhost:8000/app/sensores/", {
+        method: "GET",
+        headers: {
+            "Authorization": `Token ${token}`
+        }
+    });
+
+    if (!response.ok) {
+        throw new Error("Erro ao buscar informações do dispositivo.");
+    }
+
+    const sensores = await response.json();
+
+    buildSensorsGraph(myChart, sensores, token);
+
+    setInterval(async () => {
+        buildSensorsGraph(myChart, sensores, token);
+    }, 5000);
 });
 
 function formatDate(timestamp, period) {
     const date = new Date(timestamp);
 
-    
+
     if (period === "Última Hora") {
         return `${date.getHours()}:${String(date.getMinutes()).padStart(2, "0")}`; // Ex: "18:32"   
     } else if (period === "Últimas 24h") {
@@ -221,20 +335,20 @@ function generateData(period) {
 
     // Filtra os dados pelo sensor correspondente
     let sensorValues = sensor_data[0].filter(item => item.id === sensorId);
-  
+
 
     // Ordena os dados pela data de criação
     sensorValues.sort((a, b) => new Date(a.criado_em) - new Date(b.criado_em));
     console.log("Labels gerados:", labels);
     console.log("Dados gerados:", data);
-   
+
 
     // Define a unidade
     let unidade = sensorValues.length > 0 ? sensorValues[0].unidade : "";
-   
+
     console.log(`Labels gerados para ${period}:`, labels);
     console.log(`Dados gerados para ${period}:`, data);
-    
+
     let now = new Date();
     let timeFrame = {
         "Última Hora": 60 * 60 * 1000, // 1 hora
@@ -247,11 +361,11 @@ function generateData(period) {
         let itemDate = new Date(item.criado_em);
         console.log("Data convertida:", itemDate);
         return now - itemDate <= timeFrame[period];
-      
+
 
     }); console.log("Dados filtrados para o período:", filteredData);
 
- if (period === "Última Hora") {
+    if (period === "Última Hora") {
         // Exibe os valores EXATAMENTE por minuto (se houver)
         let timeMap = new Map();
         filteredData.forEach(item => {
@@ -265,7 +379,7 @@ function generateData(period) {
             labels.push(key);
             data.push(timeMap.get(key) || null); // Apenas adiciona se houver dado real
         }
-    } 
+    }
     else if (period === "Últimas 24h") {
         // Exibe os valores por HORA (se houver)
         let timeMap = new Map();
@@ -280,7 +394,7 @@ function generateData(period) {
             labels.push(key);
             data.push(timeMap.get(key) || null);
         }
-    } 
+    }
     else if (period === "Semanal" || period === "Mensal") {
         // Exibe os valores por DIA (se houver)
         let timeMap = new Map();

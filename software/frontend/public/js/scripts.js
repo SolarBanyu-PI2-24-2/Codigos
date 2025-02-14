@@ -32,41 +32,15 @@ async function validateLogin() {
         });
 
         const data = await response.json();
-
+        
         if (response.ok) {
             console.log("Login bem-sucedido:", data);
             localStorage.setItem("token", data.token); // Armazena o token
 
-            const usersResponse = await fetch("http://localhost:8000/app/usuarios/", {
-                method: "GET",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-            });
-
-            console.log(usersResponse);
-
-
-            if (usersResponse.ok) {
-                const usersData = await usersResponse.json();
-
-
-                console.error(usersData);
-                console.error(data.user.username);
-                const user = usersData.find((user) => user.nome === data.user.username);
-                
-                if (user) {
-                    localStorage.setItem("userId", user.id);
-                    // Redirecionamento seguro após 1 segundo
-                    setTimeout(() => {
-                        window.location.href = "/home";
-                    }, 1000);
-                } else {
-                    console.error("Usuário não encontrado:", data.user.username);
-                }
-            }
-
-
+            // Redirecionamento seguro após 1 segundo
+            setTimeout(() => {
+                window.location.href = "/home";
+            }, 1000);
         } else {
             console.warn("Erro no login:", data);
             alert(data.error || "Credenciais inválidas.");
@@ -129,17 +103,15 @@ document.addEventListener("DOMContentLoaded", function () {
 // Dados do usuário
 async function loadUserInfo() {
     const token = localStorage.getItem("token");
-
+    const userId = localStorage.getItem("userId");
+    
     if (!token) {
         console.warn("Usuário não autenticado.");
         return;
     }
 
-
-
     try {
-        const id = localStorage.getItem("userId");
-        const response = await fetch(`http://localhost:8000/app/usuario/${id}`, {
+        const response = await fetch(`http://localhost:8000/app/usuario/${userId}`, {
             method: "GET",
             headers: {
                 "Authorization": `Token ${token}`
@@ -153,7 +125,7 @@ async function loadUserInfo() {
         const data = await response.json();
 
         // Atualiza os elementos HTML com os dados do usuário
-        document.getElementById("user-name").textContent = data.first_name + " " + data.last_name;
+        document.getElementById("user-name").textContent = data.nome;
         document.getElementById("user-profession").innerHTML = `${data.profissao}<br>1 Unidade SolarBanyu`;
 
     } catch (error) {
@@ -166,6 +138,8 @@ document.addEventListener("DOMContentLoaded", loadUserInfo);
 
 // Configurações: Endereço e Informações do Usuário
 async function loadUserAddress() {
+    // usuario não possui endereço
+    return;
     const token = localStorage.getItem("token");
 
     if (!token) {
@@ -198,6 +172,7 @@ async function loadUserAddress() {
 
 async function loadUserInfoConfig() {
     const token = localStorage.getItem("token");
+    const userId = localStorage.getItem("userId");
 
     if (!token) {
         console.warn("Usuário não autenticado.");
@@ -206,7 +181,7 @@ async function loadUserInfoConfig() {
 
     try {
         // Buscar informações do usuário
-        const userResponse = await fetch("http://localhost:8000/app/user/profile/", {
+        const userResponse = await fetch(`http://localhost:8000/app/usuario/${userId}`, {
             method: "GET",
             headers: {
                 "Authorization": `Token ${token}`
@@ -220,26 +195,27 @@ async function loadUserInfoConfig() {
         const userData = await userResponse.json();
 
         // Atualiza os dados do usuário no HTML
-        document.getElementById("name").value = `${userData.first_name} ${userData.last_name}`;
+        document.getElementById("name").value = `${userData.nome}`;
         document.getElementById("email").value = userData.email;
         document.getElementById("profession").value = userData.profissao || "Não informado";
 
+        // TODO: usuario não possui endereco
         // Buscar informações do endereço
-        const addressResponse = await fetch("http://localhost:8000/app/address/user/", {
-            method: "GET",
-            headers: {
-                "Authorization": `Token ${token}`
-            }
-        });
+        // const addressResponse = await fetch("http://localhost:8000/app/address/user/", {
+        //     method: "GET",
+        //     headers: {
+        //         "Authorization": `Token ${token}`
+        //     }
+        // });
 
-        if (!addressResponse.ok) {
-            throw new Error("Erro ao buscar informações do endereço.");
-        }
+        // if (!addressResponse.ok) {
+        //     throw new Error("Erro ao buscar informações do endereço.");
+        // }
 
-        const addressData = await addressResponse.json();
+        // const addressData = await addressResponse.json();
 
-        // Atualiza os dados do endereço no HTML
-        document.getElementById("address").value = `${addressData.rua}, ${addressData.numero}, ${addressData.bairro || ''}, ${addressData.cidade}, ${addressData.estado}`;
+        // // Atualiza os dados do endereço no HTML
+        // document.getElementById("address").value = `${addressData.rua}, ${addressData.numero}, ${addressData.bairro || ''}, ${addressData.cidade}, ${addressData.estado}`;
 
     } catch (error) {
         console.error("Erro ao carregar informações:", error);
