@@ -25,9 +25,9 @@ async function loadHomePageData() {
         });
 
         if (!userResponse.ok) throw new Error("Erro ao buscar usuário.");
-        const userData = await userResponse.json();      
-        
-        
+        const userData = await userResponse.json();
+
+
 
         const deviceResponse = await fetch("http://localhost:8000/app/dispositivos/", {
             method: "GET",
@@ -37,9 +37,9 @@ async function loadHomePageData() {
         if (!deviceResponse.ok) throw new Error("Erro ao buscar dispositivo.");
         const deviceData = await deviceResponse.json();
 
-        console.log("Dispositivos:", deviceData);          
+        console.log("Dispositivos:", deviceData);
 
-        
+
 
     } catch (error) {
         console.error("Erro ao carregar dados da página de alertas:", error);
@@ -54,48 +54,49 @@ async function loadAlert() {
         return;
     }
 
-    try {
-        const response = await fetch("http://localhost:8000/app/alertas/", {
-            method: "GET",
-            headers: {
-                "Authorization": `Token ${token}`
+    setInterval(async () => {
+        try {
+            const response = await fetch("http://localhost:8000/app/alertas/", {
+                method: "GET",
+                headers: {
+                    "Authorization": `Token ${token}`
+                }
+            });
+
+            if (!response.ok) {
+                throw new Error("Erro ao buscar alertas.");
             }
-        });
 
-        if (!response.ok) {
-            throw new Error("Erro ao buscar alertas.");
-        }
+            const data = await response.json();
 
-        const data = await response.json();
+            updateDaysWithoutCriticalAlerts(data);
 
-        updateDaysWithoutCriticalAlerts(data);
-        
-        // Referência ao corpo da tabela
-        const tbody = document.querySelector(".alerts-section table tbody");
-        tbody.innerHTML = ""; // Limpa as linhas antigas
+            // Referência ao corpo da tabela
+            const tbody = document.querySelector(".alerts-section table tbody");
+            tbody.innerHTML = ""; // Limpa as linhas antigas
 
-        // Mapeia os níveis de prioridade
-        const prioridadeMap = {
-            "Baixa": { texto: "Baixa", classe: "low" },
-            "Média": { texto: "Média", classe: "medium" },
-            "Alta": { texto: "Alta", classe: "high" },
-            "Crítica": { texto: "Crítica", classe: "urgent" }
-        };
+            // Mapeia os níveis de prioridade
+            const prioridadeMap = {
+                "Baixa": { texto: "Baixa", classe: "low" },
+                "Média": { texto: "Média", classe: "medium" },
+                "Alta": { texto: "Alta", classe: "high" },
+                "Crítica": { texto: "Crítica", classe: "urgent" }
+            };
 
-        // Adiciona os alertas à tabela
-        data.forEach((alerta, index) => {
-            const row = document.createElement("tr");
-        
-        // **Adiciona o atributo data-prioridade corretamente**
-            row.setAttribute("data-prioridade", alerta.prioridade);
+            // Adiciona os alertas à tabela
+            data.forEach((alerta, index) => {
+                const row = document.createElement("tr");
 
-            // Formata a data para DD/MM/YYYY
-            const dataFormatada = new Date(alerta.criado_em).toLocaleDateString("pt-BR");
+                // **Adiciona o atributo data-prioridade corretamente**
+                row.setAttribute("data-prioridade", alerta.prioridade);
 
-            row.innerHTML = `
+                // Formata a data para DD/MM/YYYY
+                const dataFormatada = new Date(alerta.criado_em).toLocaleDateString("pt-BR");
+
+                row.innerHTML = `
                 <td>${(index + 1).toString().padStart(5, "0")}</td>
                 <td class="${prioridadeMap[alerta.prioridade].classe}">${prioridadeMap[alerta.prioridade].texto}</td>
-                <td>${alerta.tipo}</td>
+                <td>${alerta.descricao}</td>
                 <td>${dataFormatada}</td>
                 <td><button class="btn resolver-btn ${alerta.resolvido ? 'resolved' : ''}" 
                 data-id="${alerta.id}" 
@@ -106,16 +107,18 @@ async function loadAlert() {
                 <td><button class="btn report">Reportar alerta</button></td>
             `;
 
-            tbody.appendChild(row);
-        });
+                tbody.appendChild(row);
+            });
 
-        // Mensagem caso não haja alertas
-        const msgSemAlertas = document.querySelector(".alerts-section p");
-        msgSemAlertas.style.display = data.length > 0 ? "none" : "block";
+            // Mensagem caso não haja alertas
+            const msgSemAlertas = document.querySelector(".alerts-section p");
+            msgSemAlertas.style.display = data.length > 0 ? "none" : "block";
 
-    } catch (error) {
-        console.error("Erro ao carregar informações dos alertas:", error);
-    }
+        } catch (error) {
+            console.error("Erro ao carregar informações dos alertas:", error);
+        }
+        console.log("atualizar alertas");
+    }, 1000);
 }
 
 async function loadGeneralInfo() {
@@ -143,7 +146,7 @@ async function loadGeneralInfo() {
             return;
         }
 
-        
+
         // Agora busca os dados do sensor
         const sensorDataResponse = await fetch("http://localhost:8000/app/dados_sensores/", {
             method: "GET",
@@ -157,7 +160,7 @@ async function loadGeneralInfo() {
         }
         const sensorData = await sensorDataResponse.json();
 
-        
+
     } catch (error) {
         console.error("Erro ao carregar informações gerais dos sensores:", error);
     }
@@ -188,8 +191,8 @@ async function loadSensorData() {
         document.getElementById("total-alertas").innerText = `${data.length} alerta(s)`;
         //data.length
     } catch (error) {
-    console.error("Erro ao carregar informações dos alertas:", error);
-    } 
+        console.error("Erro ao carregar informações dos alertas:", error);
+    }
 }
 
 // **Atualiza os "Dias sem alertas críticos"**
@@ -215,7 +218,7 @@ document.querySelector(".search-input").addEventListener("input", function () {
     const rows = document.querySelectorAll(".alerts-section table tbody tr");
 
     rows.forEach(row => {
-        
+
         const tipo = row.cells[2].textContent.toLowerCase();
 
         if (tipo.includes(searchValue)) {
