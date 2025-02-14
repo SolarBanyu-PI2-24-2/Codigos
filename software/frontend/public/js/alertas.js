@@ -18,7 +18,7 @@ async function loadHomePageData() {
 
     try {
         // Fazer as chamadas da API separadamente
-        const userResponse = await fetch("http://localhost:8000/api/user/profile/", {
+        const userResponse = await fetch("http://localhost:8000/app/user/profile/", {
             method: "GET",
             headers: { "Authorization": `Token ${token}` }
         });
@@ -28,7 +28,7 @@ async function loadHomePageData() {
         
         
 
-        const deviceResponse = await fetch("http://localhost:8000/api/dispositivos/", {
+        const deviceResponse = await fetch("http://localhost:8000/app/dispositivos/", {
             method: "GET",
             headers: { "Authorization": `Token ${token}` }
         });
@@ -54,7 +54,7 @@ async function loadAlert() {
     }
 
     try {
-        const response = await fetch("http://localhost:8000/api/alertas/", {
+        const response = await fetch("http://localhost:8000/app/alertas/", {
             method: "GET",
             headers: {
                 "Authorization": `Token ${token}`
@@ -125,7 +125,7 @@ async function loadGeneralInfo() {
     }
 
     try {
-        const response = await fetch("http://localhost:8000/api/dispositivos/", {
+        const response = await fetch("http://localhost:8000/app/dispositivos/", {
             method: "GET",
             headers: {
                 "Authorization": `Token ${token}`
@@ -144,7 +144,7 @@ async function loadGeneralInfo() {
 
         
         // Agora busca os dados do sensor
-        const sensorDataResponse = await fetch("http://localhost:8000/api/dados-sensores/", {
+        const sensorDataResponse = await fetch("http://localhost:8000/app/dados_sensores/", {
             method: "GET",
             headers: {
                 "Authorization": `Token ${token}`
@@ -172,7 +172,7 @@ async function loadSensorData() {
     }
 
     try {
-        const response = await fetch("http://localhost:8000/api/alertas/", {
+        const response = await fetch("http://localhost:8000/app/alertas/", {
             method: "GET",
             headers: {
                 "Authorization": `Token ${token}`
@@ -284,7 +284,7 @@ function addEventListenersToButtons() {
             try {
                 const token = localStorage.getItem("token");
 
-                const response = await fetch(`http://localhost:8000/api/alertas/${alertId}/`, {
+                const response = await fetch(`http://localhost:8000/app/alertas/${alertId}/`, {
                     method: "PATCH",
                     headers: {
                         "Authorization": `Token ${token}`,

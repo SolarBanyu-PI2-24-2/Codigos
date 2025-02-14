@@ -15,7 +15,7 @@ async function loadConfigurationData() {
 
     try {
         // Buscar informações do dispositivo
-        const deviceResponse = await fetch("http://localhost:8000/api/dispositivos/", {
+        const deviceResponse = await fetch("http://localhost:8000/app/dispositivos/", {
             method: "GET",
             headers: { "Authorization": `Token ${token}` }
         });

@@ -23,12 +23,12 @@ async function validateLogin() {
     }
 
     try {
-        const response = await fetch("http://localhost:8000/api/login/", {
+        const response = await fetch("http://localhost:8000/app/login/", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
             },
-            body: JSON.stringify({ email, password }),
+            body: JSON.stringify({ username: email, password }),
         });
 
         const data = await response.json();
@@ -68,7 +68,7 @@ document.addEventListener("DOMContentLoaded", function () {
             }
 
             try {
-                const response = await fetch("http://localhost:8000/api/logout/", {
+                const response = await fetch("http://localhost:8000/app/logout/", {
                     method: "POST",
                     headers: {
                         "Authorization": `Token ${token}`
@@ -110,7 +110,7 @@ async function loadUserInfo() {
     }
 
     try {
-        const response = await fetch("http://localhost:8000/api/user/profile/", {
+        const response = await fetch("http://localhost:8000/app/user/profile/", {
             method: "GET",
             headers: {
                 "Authorization": `Token ${token}`
@@ -145,7 +145,7 @@ async function loadUserAddress() {
     }
 
     try {
-        const response = await fetch("http://localhost:8000/api/address/user/", {
+        const response = await fetch("http://localhost:8000/app/address/user/", {
             method: "GET",
             headers: {
                 "Authorization": `Token ${token}`
@@ -177,7 +177,7 @@ async function loadUserInfoConfig() {
 
     try {
         // Buscar informações do usuário
-        const userResponse = await fetch("http://localhost:8000/api/user/profile/", {
+        const userResponse = await fetch("http://localhost:8000/app/user/profile/", {
             method: "GET",
             headers: {
                 "Authorization": `Token ${token}`
@@ -196,7 +196,7 @@ async function loadUserInfoConfig() {
         document.getElementById("profession").value = userData.profissao || "Não informado";
 
         // Buscar informações do endereço
-        const addressResponse = await fetch("http://localhost:8000/api/address/user/", {
+        const addressResponse = await fetch("http://localhost:8000/app/address/user/", {
             method: "GET",
             headers: {
                 "Authorization": `Token ${token}`
@@ -228,7 +228,7 @@ async function loadUserDevice() {
     }
 
     try {
-        const response = await fetch("http://localhost:8000/api/dispositivos/", {
+        const response = await fetch("http://localhost:8000/app/dispositivos/", {
             method: "GET",
             headers: {
                 "Authorization": `Token ${token}`
@@ -353,7 +353,7 @@ if (notificationButton) {
 
 //async function testBackendCommunication() {
 //    try {
-//        const response = await fetch('http://localhost:8000/app/api/data'); // Ajuste para a rota real do backend
+//        const response = await fetch('http://localhost:8000/app/app/data'); // Ajuste para a rota real do backend
 //        if (response.ok) {
 //            const data = await response.json();
 //            console.log('Dados do backend:', data); // Exibe no console do navegador

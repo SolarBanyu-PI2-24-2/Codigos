@@ -34,12 +34,12 @@ app.get("/monitoramento", async (req, res) => {
         const token = "cbea691eab6b1acecc5fea9557f64e66f4904d9a"// Ajuste para pegar dinamicamente do usuário autenticado.
 
         // ✅ Agora usamos `await` para buscar os dados da API
-        const responseSensores = await fetch("http://localhost:8000/api/dados-sensores/", {
+        const responseSensores = await fetch("http://localhost:8000/app/dados_sensores/", {
             method: "GET",
             headers: { "Authorization": `Token ${token}` }
         });
 
-        const responseAlertas = await fetch("http://localhost:8000/api/alertas/", {
+        const responseAlertas = await fetch("http://localhost:8000/app/alertas/", {
             method: "GET",
             headers: { "Authorization": `Token ${token}` }
         });
@@ -99,7 +99,7 @@ app.get('/configuracoes', (req, res) => {
 
 
 // Iniciar o servidor
-const PORT = 3000;
+const PORT = 3001;
 app.listen(PORT, () => {
     console.log(`Servidor rodando em http://localhost:${PORT}`);
 });

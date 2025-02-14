@@ -8,7 +8,7 @@ async function loadUnresolvedAlerts() {
     }
 
     try {
-        const response = await fetch("http://localhost:8000/api/alertas/", {
+        const response = await fetch("http://localhost:8000/app/alertas/", {
             method: "GET",
             headers: { "Authorization": `Token ${token}` }  // Corrigido para usar template literals
         });
@@ -51,7 +51,7 @@ async function loadLastUpdate() {
     }
 
     try {
-        const response = await fetch("http://localhost:8000/api/dados-sensores/", {
+        const response = await fetch("http://localhost:8000/app/dados_sensores/", {
             method: "GET",
             headers: { "Authorization": `Token ${token}` }  // Corrigido para usar template literals
         });
@@ -107,7 +107,7 @@ function loadReportChart() {
     }
 
     // Chama a API para pegar os dados necessários (Agora com período "Mensal")
-    fetch("http://localhost:8000/api/dados-sensores?sensor_id=2&period=Mensal", {
+    fetch("http://localhost:8000/app/dados-sensores?sensor_id=2&period=Mensal", {
         method: 'GET',
         headers: {
             'Authorization': `Token ${token}`,

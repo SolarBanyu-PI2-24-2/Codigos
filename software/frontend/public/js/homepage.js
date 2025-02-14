@@ -18,7 +18,7 @@ async function loadHomePageData() {
 
     try {
         // Fazer as chamadas da API separadamente
-        const userResponse = await fetch("http://localhost:8000/api/user/profile/", {
+        const userResponse = await fetch("http://localhost:8000/app/user/profile/", {
             method: "GET",
             headers: { "Authorization": `Token ${token}` }
         });
@@ -29,7 +29,7 @@ async function loadHomePageData() {
         document.getElementById("user-name-home").textContent = `Seja bem-vinda, ${userData.first_name}`;
         document.getElementById("installation-title").textContent = `SolarBanyu da ${userData.first_name}`;
 
-        const addressResponse = await fetch("http://localhost:8000/api/address/user/", {
+        const addressResponse = await fetch("http://localhost:8000/app/address/user/", {
             method: "GET",
             headers: { "Authorization": `Token ${token}` }
         });
@@ -40,7 +40,7 @@ async function loadHomePageData() {
         document.getElementById("installation-address").textContent = `${addressData.rua}, ${addressData.numero}`;
         document.getElementById("installation-state").textContent = `${addressData.estado}, Brasil`;
 
-        const deviceResponse = await fetch("http://localhost:8000/api/dispositivos/", {
+        const deviceResponse = await fetch("http://localhost:8000/app/dispositivos/", {
             method: "GET",
             headers: { "Authorization": `Token ${token}` }
         });
@@ -86,7 +86,7 @@ async function loadAlert() {
     }
 
     try {
-        const response = await fetch("http://localhost:8000/api/alertas/", {
+        const response = await fetch("http://localhost:8000/app/alertas/", {
             method: "GET",
             headers: {
                 "Authorization": `Token ${token}`
@@ -145,7 +145,7 @@ async function loadGeneralInfo() {
     }
 
     try {
-        const response = await fetch("http://localhost:8000/api/dispositivos/", {
+        const response = await fetch("http://localhost:8000/app/dispositivos/", {
             method: "GET",
             headers: {
                 "Authorization": `Token ${token}`
@@ -171,7 +171,7 @@ async function loadGeneralInfo() {
         document.getElementById("current-days-home").innerText = `${currentDays} dia(s)`;
 
         // Agora busca os dados do sensor
-        const sensorDataResponse = await fetch("http://localhost:8000/api/dados-sensores/", {
+        const sensorDataResponse = await fetch("http://localhost:8000/app/dados_sensores/", {
             method: "GET",
             headers: {
                 "Authorization": `Token ${token}`
@@ -213,7 +213,7 @@ async function loadSensorData() {
     }
 
     try {
-        const response = await fetch("http://localhost:8000/api/alertas/", {
+        const response = await fetch("http://localhost:8000/app/alertas/", {
             method: "GET",
             headers: {
                 "Authorization": `Token ${token}`

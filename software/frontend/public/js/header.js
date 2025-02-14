@@ -180,7 +180,7 @@ async function updateNotificationCount() {
     }
 
     try {
-        const response = await fetch("http://localhost:8000/api/alertas/", {
+        const response = await fetch("http://localhost:8000/app/alertas/", {
             method: "GET",
             headers: { "Authorization": `Token ${token}` }
         });

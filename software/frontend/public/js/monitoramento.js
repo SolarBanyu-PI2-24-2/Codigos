@@ -7,7 +7,7 @@ async function loadAlertQtd() {
     }
 
     try {
-        const response = await fetch("http://localhost:8000/api/alertas/", {
+        const response = await fetch("http://localhost:8000/app/alertas/", {
             method: "GET",
             headers: {
                 "Authorization": `Token ${token}`
@@ -34,14 +34,14 @@ async function loadGeneralInfo() {
 
     try {
         const token = localStorage.getItem("token");
-        const response = await fetch("http://localhost:8000/api/dados-sensores/", {
+        const response = await fetch("http://localhost:8000/app/dados_sensores/", {
             method: "GET",
             headers: {
                 "Authorization": `Token ${token}`
             }
         }); console.log("Dados carregados do sensor:", sensor_data);
 
-        const deviceResponse = await fetch("http://localhost:8000/api/dispositivos/", {
+        const deviceResponse = await fetch("http://localhost:8000/app/dispositivos/", {
             method: "GET",
             headers: { "Authorization": `Token ${token}` }
         });
@@ -120,7 +120,7 @@ async function loadSensorData() {
     }
 
     try {
-        const response = await fetch("http://localhost:8000/api/alertas/", {
+        const response = await fetch("http://localhost:8000/app/alertas/", {
             method: "GET",
             headers: {
                 "Authorization": `Token ${token}`
