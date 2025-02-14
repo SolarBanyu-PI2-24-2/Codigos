@@ -40,21 +40,24 @@ async function loadHomePageData() {
 
         console.log("Dispositivos:", deviceData);
 
-        const deviceAddressData = deviceData.map(async device => {
+        const deviceAddressData = await Promise.all(
+            deviceData.map(async (device) => {
 
-            const addressResponse = await fetch(`http://localhost:8000/app/endereco/${device.endereco_id}`, {
-                method: "GET",
-                headers: { "Authorization": `Token ${token}` }
-            });
-
-            if (!addressResponse.ok) throw new Error("Erro ao buscar endereço.");
-            const addressData = await addressResponse.json();
-
-            return {...device, endereco: addressData}     
-        });
+                const addressResponse = await fetch(`http://localhost:8000/app/endereco/${device.endereco_id}`, {
+                    method: "GET",
+                    headers: { "Authorization": `Token ${token}` }
+                });
+    
+                if (!addressResponse.ok) throw new Error("Erro ao buscar endereço.");
+                const addressData = await addressResponse.json();
+    
+                return {...device, endereco: addressData}     
+            })
+        );
 
         const device = deviceAddressData[0];
-        
+
+        console.log(device);
 
         document.getElementById("installation-address").textContent = `${device.endereco.rua}, ${device.endereco.numero}`;
         document.getElementById("installation-state").textContent = `${device.endereco.estado}, Brasil`;
