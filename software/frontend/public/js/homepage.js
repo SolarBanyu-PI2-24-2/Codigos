@@ -17,8 +17,9 @@ async function loadHomePageData() {
     }
 
     try {
+        const id = localStorage.getItem("userId");
         // Fazer as chamadas da API separadamente
-        const userResponse = await fetch("http://localhost:8000/app/user/profile/", {
+        const userResponse = await fetch(`http://localhost:8000/app/usuario/${id}`, {
             method: "GET",
             headers: { "Authorization": `Token ${token}` }
         });
@@ -26,19 +27,8 @@ async function loadHomePageData() {
         if (!userResponse.ok) throw new Error("Erro ao buscar usuário.");
         const userData = await userResponse.json();
 
-        document.getElementById("user-name-home").textContent = `Seja bem-vinda, ${userData.first_name}`;
-        document.getElementById("installation-title").textContent = `SolarBanyu da ${userData.first_name}`;
-
-        const addressResponse = await fetch("http://localhost:8000/app/address/user/", {
-            method: "GET",
-            headers: { "Authorization": `Token ${token}` }
-        });
-
-        if (!addressResponse.ok) throw new Error("Erro ao buscar endereço.");
-        const addressData = await addressResponse.json();
-
-        document.getElementById("installation-address").textContent = `${addressData.rua}, ${addressData.numero}`;
-        document.getElementById("installation-state").textContent = `${addressData.estado}, Brasil`;
+        document.getElementById("user-name-home").textContent = `Seja bem-vinda, ${userData.nome}`;
+        document.getElementById("installation-title").textContent = `SolarBanyu da ${userData.nome}`;
 
         const deviceResponse = await fetch("http://localhost:8000/app/dispositivos/", {
             method: "GET",
@@ -50,7 +40,26 @@ async function loadHomePageData() {
 
         console.log("Dispositivos:", deviceData);
 
-        if (deviceData.length === 0) {
+        const deviceAddressData = deviceData.map(async device => {
+
+            const addressResponse = await fetch(`http://localhost:8000/app/endereco/${device.endereco_id}`, {
+                method: "GET",
+                headers: { "Authorization": `Token ${token}` }
+            });
+
+            if (!addressResponse.ok) throw new Error("Erro ao buscar endereço.");
+            const addressData = await addressResponse.json();
+
+            return {...device, endereco: addressData}     
+        });
+
+        const device = deviceAddressData[0];
+        
+
+        document.getElementById("installation-address").textContent = `${device.endereco.rua}, ${device.endereco.numero}`;
+        document.getElementById("installation-state").textContent = `${device.endereco.estado}, Brasil`;
+
+        if (deviceAddressData.length === 0) {
             document.getElementById("unit-count").textContent = "Nenhuma unidade instalada";
             document.getElementById("installation-date").textContent = "Não cadastrado";
             document.getElementById("serial-number").textContent = "Não cadastrado";
@@ -59,11 +68,10 @@ async function loadHomePageData() {
             return;
         }
 
-        const device = deviceData[0];
 
-       
 
-        document.getElementById("unit-count").textContent = `${deviceData.length} Unidade(s) instalada(s)`;
+
+        document.getElementById("unit-count").textContent = `${deviceAddressData.length} Unidade(s) instalada(s)`;
         const installationDate = new Date(device.data_instalacao + "T00:00:00");
         const currentDate = new Date();
         const currentDays = Math.floor((currentDate - installationDate) / (1000 * 60 * 60 * 24));
@@ -98,7 +106,7 @@ async function loadAlert() {
         }
 
         const data = await response.json();
-        
+
         // Referência ao corpo da tabela
         const tbody = document.querySelector(".alerts-section table tbody");
         tbody.innerHTML = ""; // Limpa as linhas antigas
@@ -228,8 +236,8 @@ async function loadSensorData() {
         document.getElementById("total-alertas").innerText = `${data.length} alerta(s)`;
         //data.length
     } catch (error) {
-    console.error("Erro ao carregar informações dos alertas:", error);
-    } 
+        console.error("Erro ao carregar informações dos alertas:", error);
+    }
 }
 
 

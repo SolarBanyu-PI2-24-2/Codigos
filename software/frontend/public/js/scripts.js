@@ -32,15 +32,41 @@ async function validateLogin() {
         });
 
         const data = await response.json();
-        
+
         if (response.ok) {
             console.log("Login bem-sucedido:", data);
             localStorage.setItem("token", data.token); // Armazena o token
 
-            // Redirecionamento seguro após 1 segundo
-            setTimeout(() => {
-                window.location.href = "/home";
-            }, 1000);
+            const usersResponse = await fetch("http://localhost:8000/app/usuarios/", {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            });
+
+            console.log(usersResponse);
+
+
+            if (usersResponse.ok) {
+                const usersData = await usersResponse.json();
+
+
+                console.error(usersData);
+                console.error(data.user.username);
+                const user = usersData.find((user) => user.nome === data.user.username);
+                
+                if (user) {
+                    localStorage.setItem("userId", user.id);
+                    // Redirecionamento seguro após 1 segundo
+                    setTimeout(() => {
+                        window.location.href = "/home";
+                    }, 1000);
+                } else {
+                    console.error("Usuário não encontrado:", data.user.username);
+                }
+            }
+
+
         } else {
             console.warn("Erro no login:", data);
             alert(data.error || "Credenciais inválidas.");
@@ -103,14 +129,17 @@ document.addEventListener("DOMContentLoaded", function () {
 // Dados do usuário
 async function loadUserInfo() {
     const token = localStorage.getItem("token");
-    
+
     if (!token) {
         console.warn("Usuário não autenticado.");
         return;
     }
 
+
+
     try {
-        const response = await fetch("http://localhost:8000/app/user/profile/", {
+        const id = localStorage.getItem("userId");
+        const response = await fetch(`http://localhost:8000/app/usuario/${id}`, {
             method: "GET",
             headers: {
                 "Authorization": `Token ${token}`
