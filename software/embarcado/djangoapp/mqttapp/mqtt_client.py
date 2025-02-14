@@ -58,10 +58,41 @@ def on_message(client, userdata, msg):
                 print(f"Enviando: {req_json}")
                 response = requests.post(f"{API_HOST}/dados_sensores/", headers=headers, json=req_json)
                 
+                if sensor_value is None or sensor_value <= 0:
+                    print(f"Valor zero detectado no {sensor['tipo']}")
+                    requests.post(f"{API_HOST}/alertas/", headers=headers, json={
+                        "tipo": sensor["tipo"],
+                        "descricao": f"Valor zero no {sensor['tipo']}",
+                        "prioridade": "Média",
+                        "dispositivo_id": sensor["dispositivo_id"],
+                    })
+                    
+                if (sensor_value) > 50 and sensor['tipo'] == "TEMPERATURA_AGUA":
+                    requests.post(f"{API_HOST}/alertas/", headers=headers, json={
+                        "tipo": sensor["tipo"],
+                        "descricao": f"Temperatura está muito alta: {sensor_value} oC",
+                        "prioridade": "Média",
+                        "dispositivo_id": sensor["dispositivo_id"],
+                    })
+                    
+                if (sensor_value < 5 or sensor_value > 8) and sensor['tipo'] == "PH_AGUA":
+                    requests.post(f"{API_HOST}/alertas/", headers=headers, json={
+                        "tipo": sensor["tipo"],
+                        "descricao": f"Ph está fora do intervalo de 6 a 8: {sensor_value} oC",
+                        "prioridade": "Baixa",
+                        "dispositivo_id": sensor["dispositivo_id"],
+                    })
+                
                 if response.status_code == 201:
                     print(f"Dado enviado com sucesso.")
                 else:
                     print(f"Falha ao enviar dados: {response.status_code} - {response.text}")
+                    requests.post(f"{API_HOST}/alertas/", headers=headers, json={
+                        "tipo": sensor['tipo'],
+                        "descricao": f"Falha no envio de dados {sensor['tipo']}",
+                        "prioridade": "Crítica",
+                        "dispositivo_id": sensor["dispositivo_id"],
+                    })
         else:
             print(f"Sensor {sensor_type} não encontrado.")
 
