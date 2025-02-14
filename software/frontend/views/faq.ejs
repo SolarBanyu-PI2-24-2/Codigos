@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FAQ - SolarBanyu</title>
+    <link rel="stylesheet" href="/css/styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="icon" href="/assets/favicon.png" type="image/png">
+</head>
+<body>
+    <%- include('partials/sidebar') %>
+    <div class="main-content">
+        <%- include('partials/header') %>
+        <h1>FAQ's</h1>
+        <p>Encontre respostas rápidas para suas dúvidas.</p>
+        <div class="faq-container">
+            <div class="faq-item">
+                <button class="faq-question">
+                    Como monitorar a produção de água doce no sistema? 
+                    <i class="fas fa-chevron-down"></i>
+                </button>
+                <div class="faq-answer">
+                    <p>Acesse a página de <strong>Monitoramento</strong>  no menu principal. Lá, você verá gráficos detalhados com dados sobre o volume de água dessalinizada, consumo de energia e outras informações importantes.</p>
+                </div>
+            </div>
+
+            <div class="faq-item-2">
+                <button class="faq-question">
+                    Quando preciso trocar o filtro do meu sistema? 
+                    <i class="fas fa-chevron-down"></i>
+                </button>
+                <div class="faq-answer">
+                    <p>Recomenda-se trocar o filtro a cada 6 meses ou conforme as indicações do sistema.</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <button class="faq-question">
+                    Posso gerar relatórios com os dados do sistema? 
+                    <i class="fas fa-chevron-down"></i>
+                </button>
+                <div class="faq-answer">
+                    <p>Sim, você pode acessar a seção de relatórios no menu principal e exportar dados em formato PDF ou Excel.</p>
+                </div>
+            </div>
+
+            <div class="faq-item-2">
+                <button class="faq-question">
+                    O que fazer se meu sistema apresentar um alerta urgente? 
+                    <i class="fas fa-chevron-down"></i>
+                </button>
+                <div class="faq-answer">
+                    <p>Entre em contato com o suporte técnico imediatamente e siga as instruções apresentadas no alerta.</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <button class="faq-question">
+                    Como configurar notificações personalizadas no SolarBanyu? 
+                    <i class="fas fa-chevron-down"></i>
+                </button>
+                <div class="faq-answer">
+                    <p>Acesse as configurações no menu principal e personalize as notificações de acordo com suas preferências.</p>
+                </div>
+            </div>
+
+            <div class="faq-item-2">
+                <button class="faq-question">
+                    Devo trocar a bateria? 
+                    <i class="fas fa-chevron-down"></i>
+                </button>
+                <div class="faq-answer">
+                    <p>É recomendado que a cada 3 anos a bateria seja trocada. </p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <button class="faq-question">
+                    Como acessar os dados históricos do sistema? 
+                    <i class="fas fa-chevron-down"></i>
+                </button>
+                <div class="faq-answer">
+                    <p>Você pode acessar os dados históricos na seção <strong>Relatórios</strong> no menu principal. Lá, é possível visualizar e exportar informações detalhadas sobre o desempenho do sistema ao longo do tempo.</p>
+                </div>
+            </div>
+
+            <div class="faq-item-2">
+                <button class="faq-question">
+                    Como adicionar uma nova unidade ao sistema?
+                    <i class="fas fa-chevron-down"></i>
+                </button>
+                <div class="faq-answer">
+                    <p>Entre em contato com a nossa equipe de <strong>suporte</strong>.</p>
+                </div>
+            </div>
+
+        </div>
+        <div class="botao">
+            <button class="btn-yellow" id="supportButton">Pedir suporte</button> </div>
+            <div id="supportModal" class="modal">
+                <div class="modal-content">
+                    <span class="close-modal" id="closeSupportModal">&times;</span>
+                    <h2>Pedir Suporte</h2>
+                    <p>Escolha uma opção de suporte:</p>
+                    <ul>
+                        <li><a href="tel:+551199999999" class="support-option-modal">📞 Ligue para nós</a></li>
+                        <li><a href="mailto:suporte@solarbanyu.com" class="support-option-modal">📧 Enviar um e-mail</a></li>
+                        <li><button class="support-option-modal" id="startChat">💬 Iniciar um chat</button></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <script>
+
+document.querySelectorAll('.faq-question').forEach(button => {
+    button.addEventListener('click', () => {
+        const faqAnswer = button.nextElementSibling;
+        const icon = button.querySelector('i');
+
+        if (faqAnswer.style.display === 'block') {
+            faqAnswer.style.display = 'none';
+            icon.classList.remove('active');
+        } else {
+            faqAnswer.style.display = 'block';
+            icon.classList.add('active');
+        }
+    });
+});
+
+
+        document.addEventListener("DOMContentLoaded", () => {
+            const supportButton = document.getElementById("supportButton");
+            const supportModal = document.getElementById("supportModal");
+            const closeSupportModals= document.getElementById("closeSupportModal");
+
+            supportButton.addEventListener("click", () => {
+                supportModal.style.display = "flex";
+            });
+
+            closeSupportModal.addEventListener("click", () => {
+                supportModal.style.display = "none";
+            });
+
+            window.addEventListener("click", (event) => {
+                if (event.target === supportModal) {
+                    supportModal.style.display = "none";
+                }
+            });
+        });
+    </script>
+
+</body>
+</html>

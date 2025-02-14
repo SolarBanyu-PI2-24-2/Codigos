@@ -1,0 +1,48 @@
+<div class="sidebar">
+    <div class="logo">
+        <img src="/assets/solarbanyu.png" alt="Solar Banyu">
+    </div>
+    <ul class="menu">
+        <li><a href="/home" class="<%= currentUrl === '/home' ? 'active' : '' %>">
+            <i class="fas fa-home"></i> Home
+        </a></li>
+        <li><a href="/monitoramento" class="<%= currentUrl === '/monitoramento' ? 'active' : '' %>">
+            <i class="fas fa-chart-line"></i> Monitoramento
+        </a></li>
+        <li><a href="/relatorio" class="<%= currentUrl === '/relatorio' ? 'active' : '' %>">
+            <i class="fas fa-file-alt"></i> Relatório
+        </a></li>
+        <li><a href="/alertas" class="<%= currentUrl === '/alertas' ? 'active' : '' %>">
+            <i class="fas fa-bell"></i> Alertas
+        </a></li>
+    </ul>
+    <div class="support-section">
+        <h3>Suporte</h3>
+        <ul class="support-menu">
+            <li><a href="/faq" class="<%= currentUrl === '/faq' ? 'active' : '' %>">
+                <i class="fas fa-question-circle"></i> FAQ's
+            </a></li>
+            <li><a href="/tutorial" class="<%= currentUrl === '/tutorial' ? 'active' : '' %>">
+                <i class="fas fa-book"></i> Tutoriais
+            </a></li>
+            <li><a href="/info-gerais" class="<%= currentUrl === '/info-gerais' ? 'active' : '' %>">
+                <i class="fas fa-info-circle"></i> Informações Gerais
+            </a></li>
+            <li><a href="/solarBanyu" class="<%= currentUrl === '/solarbanyu' ? 'active' : '' %>">
+                <i class="fas fa-sun"></i> SolarBanyu
+            </a></li>
+            <li><a href="/configuracoes" class="<%= currentUrl === '/configuracoes' ? 'active' : '' %>">
+                <i class="fas fa-cogs"></i> Configurações
+            </a></li>
+        </ul>
+    </div>
+    <div class="user-info">
+        <img src="/assets/default_user.png" alt="Foto do Usuário">
+        <p id="user-name">Carregando...</p>
+        <small id="user-profession">Carregando...</small>
+    </div>    
+</div>
+<script src="/js/scripts.js"></script>
+
+
+

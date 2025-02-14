@@ -1,0 +1,59 @@
+services:
+  djangoapp:
+    container_name: solarbanyu_back
+    build:
+      context: .
+    ports:
+      - 8000:8000
+    volumes:
+      - ./solarbanyu_app:/solarbanyu_app
+      - ./data/web/static:/data/web/static/
+      - ./data/web/media:/data/web/media/
+    env_file:
+      - ./.env
+    depends_on:
+      - psql
+    networks:
+      - app-network
+  
+  psql:
+    container_name: psql
+    image: postgres:13-alpine
+    volumes:
+      - ./data/postgres/data:/var/lib/postgresql/data/
+    env_file:
+      - ./.env
+    networks:
+      - app-network
+
+  pgadmin:
+    container_name: pgadmin
+    image: dpage/pgadmin4:latest
+    env_file:
+      - ./.env
+    ports:
+      - 8080:80
+    user: '$UID:$GID'
+    volumes:
+      - ./data/pgadmin:/var/lib/pgadmin
+    networks:
+      - app-network
+    depends_on:
+      - psql
+
+  frontend:
+    container_name: solarbanyu_front
+    build:
+      context: ../frontend
+    ports:
+      - 3000:3000
+    volumes:
+      - ../frontend:/app
+    depends_on:
+      - djangoapp
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    external: true

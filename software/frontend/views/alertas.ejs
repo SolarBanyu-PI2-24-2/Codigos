@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alertas - SolarBanyu</title>
+    <link rel="stylesheet" href="/css/styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;900&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="icon" href="/assets/favicon.png" type="image/png">
+</head>
+<body>
+    <%- include('partials/sidebar') %>
+    <div class="main-content">
+        <%- include('partials/header') %>
+        <div class="dashboard">
+            <h1>Alertas</h1>
+            <p>Confira os alertas ativos e o histórico de notificações.</p>
+            <div class="days-without-alerts">
+                <i class="fas fa-exclamation-triangle"></i>
+                <p>Dias sem alertas críticos</p>
+                <h2>4 dias</h2>
+            </div>
+            <div class="alerts-container">
+                <div class="alerts-header">
+                    <input type="text" placeholder="Procurar alerta por descrição" class="search-input">                    
+                    <select class="sort-dropdown">
+                        <option value="recent">Ordenar por: Mais recente</option>
+                        <option value="oldest">Mais antigo</option>
+                        <option value="priority">Prioridade</option>
+                        
+                    </select>
+                </div>
+
+                <div class="alerts-section">
+                    <h2>Alertas</h2>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Prioridade</th>
+                                <th>Descrição</th>
+                                <th>Data</th>
+                                <th>Status</th>
+                                <th>Reportar</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                    <p>Não há alertas antigos</p>
+                </div>
+                
+
+                
+            </div>
+        </div>
+    </div>
+
+<!-- Modal de Reporte de Alerta -->
+<div id="reportModal" class="modal">
+    <div class="modal-content">
+        <span class="close-modal" id="closeReportModal">&times;</span>
+        <h2>Reportar Alerta</h2>
+        <form id="reportForm">
+            <label for="reason">Motivo do reporte:</label>
+            <select id="reason" required>
+                <option value="">Selecione um motivo</option>
+                <option value="outros">Outros</option>
+                <option value="alerta_errado">Alerta errado</option>
+                <option value="ja_arrumei">Já arrumei</option>
+                <option value="nao_relevante">Não é relevante</option>
+            </select>
+
+            <label for="phone">Telefone para contato (opcional):</label>
+            <input type="tel" id="phone" class="modal-input" placeholder="(XX) XXXXX-XXXX">
+
+            <div class="modal-actions">
+                <button type="button" id="cancelReport" class="cancel-btn">Cancelar</button>
+                <button type="submit" id="submitReport" class="btn-submit-modal">Enviar</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+    <script src="/js/alertas.js"></script>
+</body>
+</html>
