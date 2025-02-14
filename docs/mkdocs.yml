@@ -1,0 +1,14 @@
+site_name: SolarBanyu Docs
+nav:
+  - Home: index.md
+  - Landing Page: landing.md
+  - Sobre o Projeto: sobre.md
+  - Como Funciona: funcionamento.md
+  - Benefícios: beneficios.md
+  - Contato: contato.md
+
+theme:
+  name: material
+
+extra_css:
+  - stylesheets/extra.css
