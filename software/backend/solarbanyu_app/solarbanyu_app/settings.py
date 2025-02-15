@@ -34,7 +34,11 @@ SECRET_KEY = 'django-insecure-p0y_hver8@q21#oqg^cc&^r(s7njswmj16um%z0&t6q&ljj=5(
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["https://solarbanyu-backend.onrender.com/"]
+ALLOWED_HOSTS = [
+    "solarbanyu-backend.onrender.com",
+    "localhost",
+]
+
 
 
 # Application definition
