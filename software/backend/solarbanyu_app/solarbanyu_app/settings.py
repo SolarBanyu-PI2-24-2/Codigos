@@ -87,14 +87,7 @@ WSGI_APPLICATION = 'solarbanyu_app.wsgi.application'
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'solarbanyu_db',
-        'USER': 'admin',
-        'PASSWORD': 'admin',
-        'HOST': 'psql',
-        'PORT': '5432',
-    }
+    'default': { "postgresql://adm:RSZB9ZHev6uuz1RzaCg6NG579Agq0fzJ@dpg-cuoh598gph6c73dn1640-a.oregon-postgres.render.com/solarbanyu_db" }
 }
 
 
