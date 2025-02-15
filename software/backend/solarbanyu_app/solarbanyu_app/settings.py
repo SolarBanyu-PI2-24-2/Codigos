@@ -39,6 +39,9 @@ ALLOWED_HOSTS = [
     "localhost",
 ]
 
+CSRF_TRUSTED_ORIGINS = [
+    "https://solarbanyu-backend.onrender.com",
+]
 
 
 # Application definition
