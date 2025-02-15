@@ -3,6 +3,7 @@ services:
     container_name: solarbanyu_back
     build:
       context: .
+      dockerfile: Dockerfile  # Dockerfile do backend
     ports:
       - 8000:8000
     volumes:
@@ -15,7 +16,7 @@ services:
       - psql
     networks:
       - app-network
-  
+
   psql:
     container_name: psql
     image: postgres:13-alpine
@@ -41,16 +42,18 @@ services:
     depends_on:
       - psql
 
-  frontend:
-    container_name: solarbanyu_front
+  mqtta:
+    container_name: mqtta
     build:
-      context: ../frontend
+      context: ../embarcado  # Caminho para o diretório do mqttapp
+      dockerfile: Dockerfile  # Dockerfile do mqttapp
+    command: [ "sh", "scripts/start.sh" ]
     ports:
-      - 3000:3000
+      - 5000:5000
     volumes:
-      - ../frontend:/app
-    depends_on:
-      - djangoapp
+      - ../embarcado:/app  # Ajustando o volume para o mqttapp
+    env_file:
+      - .env
     networks:
       - app-network
 
