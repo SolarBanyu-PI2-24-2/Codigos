@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 
 import os
 from pathlib import Path
+import dj_database_url
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -86,9 +87,14 @@ WSGI_APPLICATION = 'solarbanyu_app.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
+
 DATABASES = {
-    'default': { "postgresql://adm:RSZB9ZHev6uuz1RzaCg6NG579Agq0fzJ@dpg-cuoh598gph6c73dn1640-a.oregon-postgres.render.com/solarbanyu_db" }
+    'default': dj_database_url.config(
+        default="postgresql://adm:RSZB9ZHev6uuz1RzaCg6NG579Agq0fzJ@dpg-cuoh598gph6c73dn1640-a.oregon-postgres.render.com/solarbanyu_db",
+        conn_max_age=600
+    )
 }
+
 
 
 # Password validation
