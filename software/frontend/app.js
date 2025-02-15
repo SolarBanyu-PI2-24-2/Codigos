@@ -64,14 +64,13 @@ app.get('/landing', (req, res) => {
     res.render('landing');
 });
 
+// Exporta a aplicação para os testes
+module.exports = app;
 
-
-// Iniciar o servidor
-const PORT = 3000;
-app.listen(PORT, () => {
-    console.log(`Servidor rodando em http://localhost:${PORT}`);
-});
-
-
-
-
+// Iniciar o servidor apenas se o arquivo for executado diretamente
+if (require.main === module) {
+    const PORT = 3000;
+    app.listen(PORT, () => {
+        console.log(`Servidor rodando em http://localhost:${PORT}`);
+    });
+}
