@@ -34,7 +34,7 @@ SECRET_KEY = 'django-insecure-p0y_hver8@q21#oqg^cc&^r(s7njswmj16um%z0&t6q&ljj=5(
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["https://solarbanyu-backend.onrender.com/"]
 
 
 # Application definition
@@ -148,7 +148,7 @@ REST_FRAMEWORK = {
 }
 
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:3000",  # Permite requisições do frontend
+    "http://localhost:3000", "https://solarbanyu-backend.onrender.com/"
 ]
 
 CORS_ALLOW_CREDENTIALS = True
