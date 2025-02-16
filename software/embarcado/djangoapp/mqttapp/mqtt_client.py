@@ -7,6 +7,7 @@ import json
 
 from paho import mqtt
 from pathlib import Path
+from time import sleep
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 DATA_DIR = BASE_DIR.parent / 'data' / 'web'
@@ -98,10 +99,16 @@ def on_message(client, userdata, msg):
 
 def start_mqtt():
     global sensors
-    response = requests.get(f"{API_HOST}/sensores/")
-    sensors = response.json()
     
-    print(f"Sensores: {sensors}")
+    try:
+        response = requests.get(f"{API_HOST}/sensores/")
+        sensors = response.json()
+        
+        print(f"Sensores: {sensors}")
+    except requests.exceptions.RequestException as e:
+        print(f"Falha ao conectar com o API. Tentando novamente...")
+        sleep(1)
+        return start_mqtt()
     
     sslSettings = ssl.SSLContext(mqtt.client.ssl.PROTOCOL_TLS)
     auth = {

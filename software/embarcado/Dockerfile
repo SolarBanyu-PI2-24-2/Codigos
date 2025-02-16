@@ -3,11 +3,12 @@ FROM python:3.11-alpine3.17
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
 
-COPY . /app
+COPY . /mqtt
+COPY ./scripts/start.sh /mqtt/start.sh
 
-ENV PATH="/scripts:/venv/bin:$PATH"
+WORKDIR /mqtt
 
-WORKDIR /app
+ENV PATH="./scripts/start.sh:/venv/bin:$PATH"
 
 RUN pip install --no-cache-dir -r djangoapp/requirements.txt
 
