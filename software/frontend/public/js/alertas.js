@@ -19,7 +19,7 @@ async function loadHomePageData() {
     try {
         // Fazer as chamadas da API separadamente
         const userId = localStorage.getItem("userId");
-        const userResponse = await fetch(`http://localhost:8000/app/usuario/${userId}`, {
+        const userResponse = await fetch(`https://solarbanyu-backend.onrender.com/app/usuario/${userId}`, {
             method: "GET",
             headers: { "Authorization": `Token ${token}` }
         });
@@ -29,7 +29,7 @@ async function loadHomePageData() {
 
 
 
-        const deviceResponse = await fetch("http://localhost:8000/app/dispositivos/", {
+        const deviceResponse = await fetch("https://solarbanyu-backend.onrender.com/app/dispositivos/", {
             method: "GET",
             headers: { "Authorization": `Token ${token}` }
         });
@@ -56,7 +56,7 @@ async function loadAlert() {
 
     setInterval(async () => {
         try {
-            const response = await fetch("http://localhost:8000/app/alertas/", {
+            const response = await fetch("https://solarbanyu-backend.onrender.com/app/alertas/", {
                 method: "GET",
                 headers: {
                     "Authorization": `Token ${token}`
@@ -129,7 +129,7 @@ async function loadGeneralInfo() {
     }
 
     try {
-        const response = await fetch("http://localhost:8000/app/dispositivos/", {
+        const response = await fetch("https://solarbanyu-backend.onrender.com/app/dispositivos/", {
             method: "GET",
             headers: {
                 "Authorization": `Token ${token}`
@@ -148,7 +148,7 @@ async function loadGeneralInfo() {
 
 
         // Agora busca os dados do sensor
-        const sensorDataResponse = await fetch("http://localhost:8000/app/dados_sensores/", {
+        const sensorDataResponse = await fetch("https://solarbanyu-backend.onrender.com/app/dados_sensores/", {
             method: "GET",
             headers: {
                 "Authorization": `Token ${token}`
@@ -176,7 +176,7 @@ async function loadSensorData() {
     }
 
     try {
-        const response = await fetch("http://localhost:8000/app/alertas/", {
+        const response = await fetch("https://solarbanyu-backend.onrender.com/app/alertas/", {
             method: "GET",
             headers: {
                 "Authorization": `Token ${token}`
@@ -288,7 +288,7 @@ function addEventListenersToButtons() {
             try {
                 const token = localStorage.getItem("token");
 
-                const response = await fetch(`http://localhost:8000/app/alertas/${alertId}/`, {
+                const response = await fetch(`https://solarbanyu-backend.onrender.com/app/alertas/${alertId}/`, {
                     method: "PATCH",
                     headers: {
                         "Authorization": `Token ${token}`,
