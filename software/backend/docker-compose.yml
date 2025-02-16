@@ -9,6 +9,7 @@ services:
       - ./solarbanyu_app:/solarbanyu_app
       - ./data/web/static:/data/web/static/
       - ./data/web/media:/data/web/media/
+      - ../embarcado/scripts:/solarbanyu_app/scripts
     env_file:
       - ./.env
     depends_on:
@@ -49,6 +50,23 @@ services:
       - 3000:3000
     volumes:
       - ../frontend:/app
+    depends_on:
+      - djangoapp
+    networks:
+      - app-network
+
+  mqttapp:
+    container_name: mqttapp
+    build:
+      context: ../embarcado
+      dockerfile: ../embarcado/Dockerfile
+    command: [ "sh", "scripts/start.sh" ]
+    ports:
+      - 5000:5000
+    volumes:
+      - .:/app
+    env_file:
+      - ../embarcado/.env
     depends_on:
       - djangoapp
     networks:
