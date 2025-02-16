@@ -13,6 +13,10 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 import environ
 from pathlib import Path
 
+# from dotenv import load_dotenv
+
+# load_dotenv()  # Carrega as variáveis do .env
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -43,6 +47,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'mqttapp',
+    'rest_framework',
 ]
 
 MIDDLEWARE = [
