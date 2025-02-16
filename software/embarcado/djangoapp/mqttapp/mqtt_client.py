@@ -35,7 +35,11 @@ unidades = {
     "FLUXO_AGUA": "L/min"
 }
 
+mqtt_logs = []
+
 def on_message(client, userdata, msg):
+    global mqtt_logs
+    
     print(f"Mensagem recebida no tópico {msg.topic}: {msg.payload.decode()}")
     
     sensors_data_updated = json.loads(msg.payload.decode())
@@ -87,8 +91,13 @@ def on_message(client, userdata, msg):
                 
                 if response.status_code == 201:
                     print(f"Dado enviado com sucesso.")
-                    from .models import Log
-                    Log.objects.create(mensagem=req_json, timestamp=now())
+                    if len(mqtt_logs) > 30:
+                        mqtt_logs.clear()
+                    
+                    mqtt_logs.append({
+                        'timestamp': now(),  # Timestamp da mensagem MQTT
+                        'message': req_json  # Conteúdo da mensagem
+                    })
                 else:
                     print(f"Falha ao enviar dados: {response.status_code} - {response.text}")
                     requests.post(f"{API_HOST}/alertas/", headers=headers, json={
