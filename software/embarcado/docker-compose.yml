@@ -1,0 +1,18 @@
+services:
+  mqttapp:
+    container_name: mqttapp
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: [ "sh", "scripts/start.sh" ]
+    ports:
+      - 5000:5000
+    volumes:
+      - .:/app
+    env_file:
+      - .env
+
+networks:
+  app-network:
+    external: true
+    driver: bridge
