@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 import os
 from pathlib import Path
+import dj_database_url
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -83,15 +84,16 @@ WSGI_APPLICATION = 'project.wsgi.application'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': os.getenv('DB_ENGINE', 'change-me'),
-        'NAME': os.getenv('POSTGRES_DB', 'change-me'),
-        'USER': os.getenv('POSTGRES_USER', 'change-me'),
-        'PASSWORD': os.getenv('POSTGRES_PASSWORD', 'change-me'),
-        'HOST': os.getenv('POSTGRES_HOST', 'change-me'),
-        'PORT': os.getenv('POSTGRES_PORT', 'change-me'),
-    }
+    'default': dj_database_url.config(
+        default="postgresql://adm:RSZB9ZHev6uuz1RzaCg6NG579Agq0fzJ@dpg-cuoh598gph6c73dn1640-a.oregon-postgres.render.com/solarbanyu_db",
+        conn_max_age=600
+    )
 }
+
+
+CSRF_TRUSTED_ORIGINS = [
+    "https://solarbanyu-backend.onrender.com",
+]
 
 
 # Password validation
