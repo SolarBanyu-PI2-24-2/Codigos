@@ -48,7 +48,19 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'mqttapp',
     'rest_framework',
+    'channels',
 ]
+
+ASGI_APPLICATION = 'app.asgi.application'
+
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            "hosts": [('redis', 6379)],
+        },
+    },
+}
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',

@@ -55,12 +55,20 @@ services:
     networks:
       - app-network
 
-  mqttapp:
+  redis:    # Novo serviço Redis para o mqttapp
+    container_name: redis
+    image: redis:6-alpine
+    ports:
+      - "6379:6379"
+    networks:
+      - app-network
+
+  mqttapp:    
     container_name: mqttapp
     build:
       context: ../embarcado
       dockerfile: ../embarcado/Dockerfile
-    command: [ "sh", "scripts/start.sh" ]
+    command: ["sh", "scripts/start.sh"]
     ports:
       - 5000:5000
     volumes:
@@ -69,6 +77,7 @@ services:
       - ../embarcado/.env
     depends_on:
       - djangoapp
+      - redis    
     networks:
       - app-network
 

@@ -10,6 +10,8 @@ from paho import mqtt
 from pathlib import Path
 from time import sleep
 from django.utils.timezone import now
+from asgiref.sync import async_to_sync
+from channels.layers import get_channel_layer
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 DATA_DIR = BASE_DIR.parent / 'data' / 'web'
@@ -37,6 +39,21 @@ unidades = {
 }
 
 mqtt_logs = []
+
+def send_critical_alert(sensor_type, description, device_id):
+    channel_layer = get_channel_layer()
+    async_to_sync(channel_layer.group_send)(
+        "alerts",
+        {
+            "type": "alert_message",
+            "message": {
+                "tipo": sensor_type,
+                "descricao": description,
+                "prioridade": "Crítica",
+                "dispositivo_id": device_id,
+            }
+        }
+    )
 
 def on_message(client, userdata, msg):
     global mqtt_logs
@@ -106,7 +123,9 @@ def on_message(client, userdata, msg):
                         "descricao": f"Falha no envio de dados {sensor['tipo']}",
                         "prioridade": "Crítica",
                         "dispositivo_id": sensor["dispositivo_id"],
-                    })     
+                    })
+                    send_critical_alert(sensor['tipo'], f"Falha no envio de dados {sensor['tipo']}", sensor["dispositivo_id"])
+                    
             
         else:
             print(f"Sensor {sensor_type} não encontrado.")
