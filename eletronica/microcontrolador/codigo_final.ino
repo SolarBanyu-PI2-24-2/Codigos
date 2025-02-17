@@ -116,7 +116,7 @@ return temp;
 float sensor_tensao(){
 
 //constantes
-const float tensaoReferencia = 3.4;
+const float tensaoReferencia = 3.65;
 
 // Resolução do ADC da ESP32
 const int resolucaoADC = 4095;
@@ -240,7 +240,7 @@ int measurings_ph = 0;
     //Serial.println(from_ad);
   }
   
-  // Cálculo da média e conversão para tensão
+  // Cálculo da média e conversão para ph
   float averageAdc = measurings_ph / (float)samples_ph;
   float voltage_ph = (averageAdc / adc_resolution_ph) * vRef_ph;
 
