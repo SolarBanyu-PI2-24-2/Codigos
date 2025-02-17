@@ -86,7 +86,8 @@ WSGI_APPLICATION = 'project.wsgi.application'
 DATABASES = {
     'default': dj_database_url.config(
         default="postgresql://adm:BxbduNjS4aRWfRJF8AyZ5Pd4AY7MIdrA@dpg-cuotamaj1k6c739d8j8g-a.oregon-postgres.render.com/solarbanyu_db_lc23",
-        conn_max_age=600
+        conn_max_age=120,
+        conn_health_checks=True
     )
 }
 
