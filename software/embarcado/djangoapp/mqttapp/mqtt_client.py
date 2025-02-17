@@ -8,6 +8,7 @@ import json
 from paho import mqtt
 from pathlib import Path
 from time import sleep
+from django.utils.timezone import now
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 DATA_DIR = BASE_DIR.parent / 'data' / 'web'
@@ -34,7 +35,11 @@ unidades = {
     "FLUXO_AGUA": "L/min"
 }
 
+mqtt_logs = []
+
 def on_message(client, userdata, msg):
+    global mqtt_logs
+    
     print(f"Mensagem recebida no tópico {msg.topic}: {msg.payload.decode()}")
     
     sensors_data_updated = json.loads(msg.payload.decode())
@@ -86,6 +91,13 @@ def on_message(client, userdata, msg):
                 
                 if response.status_code == 201:
                     print(f"Dado enviado com sucesso.")
+                    if len(mqtt_logs) > 30:
+                        mqtt_logs.clear()
+                    
+                    mqtt_logs.append({
+                        'timestamp': now(),  # Timestamp da mensagem MQTT
+                        'message': req_json  # Conteúdo da mensagem
+                    })
                 else:
                     print(f"Falha ao enviar dados: {response.status_code} - {response.text}")
                     requests.post(f"{API_HOST}/alertas/", headers=headers, json={
@@ -94,6 +106,8 @@ def on_message(client, userdata, msg):
                         "prioridade": "Crítica",
                         "dispositivo_id": sensor["dispositivo_id"],
                     })
+                    
+            
         else:
             print(f"Sensor {sensor_type} não encontrado.")
 

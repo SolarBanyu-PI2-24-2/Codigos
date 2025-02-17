@@ -1,0 +1,16 @@
+<!-- myapp/templates/myapp/logs.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>MQTT Logs</title>
+    <meta http-equiv="refresh" content="1">
+</head>
+<body>
+    <h1>MQTT Logs</h1>
+    <ul>
+        {% for log in logs %}
+            <li>{{ log.timestamp }}: {{ log.message }}</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
