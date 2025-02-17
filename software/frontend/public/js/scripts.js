@@ -36,7 +36,7 @@ async function validateLogin() {
         if (response.ok) {
             console.log("Login bem-sucedido:", data);
             localStorage.setItem("token", data.token); // Armazena o token
-
+            localStorage.setItem("userId", data.user.id);
             // Redirecionamento seguro após 1 segundo
             setTimeout(() => {
                 window.location.href = "/home";
@@ -139,7 +139,6 @@ document.addEventListener("DOMContentLoaded", loadUserInfo);
 // Configurações: Endereço e Informações do Usuário
 async function loadUserAddress() {
     // usuario não possui endereço
-    return;
     const token = localStorage.getItem("token");
 
     if (!token) {

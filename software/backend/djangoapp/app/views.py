@@ -528,8 +528,18 @@ class UsuariosView(generics.ListCreateAPIView):
   serializer_class = UsuarioSerializer
 
 class UsuarioView(generics.RetrieveUpdateDestroyAPIView):
-  queryset = Usuario.objects.all()
-  serializer_class = UsuarioSerializer
+    queryset = Usuario.objects.all()
+    serializer_class = UsuarioSerializer
+
+    def get_object(self):
+        # Obtém o valor de 'auth_id' da URL (se você estiver usando o URL como 'usuario/<int:auth_id>/')
+        auth_id = self.kwargs['auth_id']
+        
+        # Busca o usuário com base no 'auth_id' (chave estrangeira)
+        usuario = get_object_or_404(Usuario, auth_id=auth_id)
+        
+        # Retorna o objeto 'Usuario'
+        return usuario
 
 class EnderecosView(generics.ListCreateAPIView):
   queryset = Endereco.objects.all()

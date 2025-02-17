@@ -8,7 +8,7 @@ urlpatterns = [
     re_path('test_token', views.test_token),
     path('', views.index, name='index'),
     path('usuarios/', views.UsuariosView.as_view(), name='usuarios_view'),
-    path('usuario/<uuid:pk>/', views.UsuarioView.as_view(), name='usuario_view'),
+    path('usuario/<int:auth_id>/', views.UsuarioView.as_view(), name='usuario_view'),
     path('enderecos/', views.EnderecosView.as_view(), name='enderecos_view'),
     path('endereco/<uuid:pk>/', views.EnderecoView.as_view(), name='endereco_view'),
     path('dispositivos/', views.DispositivosView.as_view(), name='dispositivos_view'),

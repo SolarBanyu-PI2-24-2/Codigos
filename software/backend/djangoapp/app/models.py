@@ -1,5 +1,5 @@
 from django.db import models
-
+from django.contrib.auth.models import User
 from django.db import models
 import uuid
 
@@ -13,7 +13,7 @@ class Usuario(models.Model):
     profissao = models.CharField(max_length=50, null=False)
     criado_em = models.DateTimeField(auto_now_add=True)
     atualizado_em = models.DateTimeField(auto_now=True)
-
+    auth_id = models.ForeignKey(User, on_delete=models.CASCADE, default=1, related_name='usuarios')
     def __str__(self):
         return self.nome
 
