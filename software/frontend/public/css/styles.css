@@ -914,35 +914,40 @@ html, body {
 
 .days-without-alerts {
     display: flex;
-    align-items: center; /* Centraliza verticalmente */
-    background: #fff7e6;
-    border-radius: 8px;
+    align-items: center; /* Alinha verticalmente todos os elementos */
+    gap: 0.5rem; /* Espaço entre o ícone, o texto e o número */
     padding: 1rem;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    min-width: 150px; /* Largura mínima */
+    background-color: #FFF7E6;
+    border-radius: 8px;
+    text-align: center;
 }
 
 .days-without-alerts i {
     font-size: 1.5rem;
     color: #FFB300; 
-    margin-right: 1rem; 
+    margin-right: 0.5rem; 
+    display: flex;
+    align-items: center;
 }
 
 .days-without-alerts p {
-    margin: 0;
-    font-size: 0.9rem;
-    color: #555;
-    text-align: center;
+    font-size: 1rem;
+    color: #333;
+    margin: 0; /* Remove margens padrão */
+    display: flex;
+    align-items: center;
 }
 
 .days-without-alerts h2 {
-    margin: 4;
     font-size: 1.2rem;
     font-weight: bold;
-    text-align: center;
-    color: #FF6E00; 
-    margin-left: 1rem;
+    color: #FF6E00;
+    margin: 0; /* Remove margens padrão */
+    display: flex;
+    align-items: center;
 }
+
+
 
 .sort-dropdown {
     padding: 0.5rem;
@@ -1354,7 +1359,7 @@ select, input {
 }
 
 .chart-container {
-    width: 60%; 
+    width: 70%; 
     max-width: 100%;
     margin: 0 auto; 
     text-align: center; /* Centraliza os elementos textualmente */
@@ -1415,10 +1420,11 @@ h2 {
     border-radius: 50%;
 }
 
-.line.red { background-color: red; }
-.line.lightblue { background-color: lightblue; }
-.line.blue { background-color: blue; }
-.line.energy { background-color: yellow; }
+.line.vazao { background-color: #36A2EB;}
+.line.tensao { background-color: #FF6384; }
+.line.nivel { background-color: #FF9F40; }
+.line.ph { background-color: #FFCD56; }
+.line.temperatura { background-color: #4BC0C0; }
 
 .btn-yellow {
     display: block;
@@ -1639,14 +1645,18 @@ input[readonly] {
     padding: 0;
     margin: 0;
     border-radius: 5px;
-    width: 150px;
+    min-width: 100%; /* Faz o dropdown ter o mesmo tamanho do botão */
+    width: auto; /* Permite que o tamanho se ajuste ao conteúdo */
+    max-width: 300px; /* Define um limite máximo se necessário */
     z-index: 1000;
+    white-space: nowrap; /* Evita quebras de linha */
 }
 
 .dropdown-menu li {
-    padding: 10px;
+    padding: 12px 20px;
     cursor: pointer;
     transition: background 0.3s ease;
+    font-size: 1rem; /* Ajusta o tamanho da fonte */
 }
 
 .dropdown-menu li:hover {
