@@ -79,8 +79,8 @@ async function loadAlert() {
             const prioridadeMap = {
                 "Baixa": { texto: "Baixa", classe: "low" },
                 "Média": { texto: "Média", classe: "medium" },
-                "Alta": { texto: "Alta", classe: "high" },
-                "Crítica": { texto: "Crítica", classe: "urgent" }
+                "Rotina": { texto: "Alta", classe: "high" },
+                "Urgente": { texto: "Crítica", classe: "urgent" }
             };
 
             // Adiciona os alertas à tabela
@@ -98,9 +98,9 @@ async function loadAlert() {
                 <td class="${prioridadeMap[alerta.prioridade].classe}">${prioridadeMap[alerta.prioridade].texto}</td>
                 <td>${alerta.descricao}</td>
                 <td>${dataFormatada}</td>
-                <td><button class="btn resolver-btn ${alerta.resolvido ? 'resolved' : ''}" 
-                data-id="${alerta.id}" 
-                data-resolvido="${alerta.resolvido}" 
+                <td><button class="btn resolver-btn ${alerta.resolvido ? 'resolved' : ''}"
+                data-id="${alerta.id}"
+                data-resolvido="${alerta.resolvido}"
                 ${alerta.resolvido ? 'disabled' : ''}>
             ${alerta.resolvido ? "Resolvido" : "Resolver"}
         </button>
@@ -113,7 +113,7 @@ async function loadAlert() {
             // Mensagem caso não haja alertas
             const msgSemAlertas = document.querySelector(".alerts-section p");
             msgSemAlertas.style.display = data.length > 0 ? "none" : "block";
-
+            addEventListenersToButtons();
         } catch (error) {
             console.error("Erro ao carregar informações dos alertas:", error);
         }
@@ -288,7 +288,7 @@ function addEventListenersToButtons() {
             try {
                 const token = localStorage.getItem("token");
 
-                const response = await fetch(`https://solarbanyu-backend.onrender.com/app/alertas/${alertId}/`, {
+                const response = await fetch(`https://solarbanyu-backend.onrender.com/app/alerta/${alertId}/`, {
                     method: "PATCH",
                     headers: {
                         "Authorization": `Token ${token}`,
@@ -341,4 +341,3 @@ document.addEventListener("DOMContentLoaded", () => {
         addEventListenersToButtons(); // Adiciona eventos após carregar alertas
     });
 });
-
