@@ -19,7 +19,7 @@ async function loadHomePageData() {
     try {
         const id = localStorage.getItem("userId");
         // Fazer as chamadas da API separadamente
-        const userResponse = await fetch(`https://solarbanyu-backend.onrender.com/app/usuario/${id}`, {
+        const userResponse = await fetch(`http://localhost:8000/app/usuario/${id}`, {
             method: "GET",
             headers: { "Authorization": `Token ${token}` }
         });
@@ -30,7 +30,7 @@ async function loadHomePageData() {
         document.getElementById("user-name-home").textContent = `Seja bem-vinda, ${userData.nome}`;
         document.getElementById("installation-title").textContent = `SolarBanyu da ${userData.nome}`;
 
-        const deviceResponse = await fetch("https://solarbanyu-backend.onrender.com/app/dispositivos/", {
+        const deviceResponse = await fetch("http://localhost:8000/app/dispositivos/", {
             method: "GET",
             headers: { "Authorization": `Token ${token}` }
         });
@@ -43,7 +43,7 @@ async function loadHomePageData() {
         const deviceAddressData = await Promise.all(
             deviceData.map(async (device) => {
 
-                const addressResponse = await fetch(`https://solarbanyu-backend.onrender.com/app/endereco/${device.endereco_id}`, {
+                const addressResponse = await fetch(`http://localhost:8000/app/endereco/${device.endereco_id}`, {
                     method: "GET",
                     headers: { "Authorization": `Token ${token}` }
                 });
@@ -97,7 +97,7 @@ async function loadAlert() {
     }
 
     try {
-        const response = await fetch("https://solarbanyu-backend.onrender.com/app/alertas/", {
+        const response = await fetch("http://localhost:8000/app/alertas/", {
             method: "GET",
             headers: {
                 "Authorization": `Token ${token}`
@@ -156,7 +156,7 @@ async function loadGeneralInfo() {
     }
 
     try {
-        const response = await fetch("https://solarbanyu-backend.onrender.com/app/dispositivos/", {
+        const response = await fetch("http://localhost:8000/app/dispositivos/", {
             method: "GET",
             headers: {
                 "Authorization": `Token ${token}`
@@ -182,7 +182,7 @@ async function loadGeneralInfo() {
         document.getElementById("current-days-home").innerText = `${currentDays} dia(s)`;
 
         // Agora busca os dados do sensor
-        const sensorDataResponse = await fetch("https://solarbanyu-backend.onrender.com/app/dados_sensores/", {
+        const sensorDataResponse = await fetch("http://localhost:8000/app/dados_sensores/", {
             method: "GET",
             headers: {
                 "Authorization": `Token ${token}`
@@ -193,21 +193,16 @@ async function loadGeneralInfo() {
             throw new Error("Erro ao buscar informações gerais dos sensores.");
         }
         const sensorData = await sensorDataResponse.json();
+        console.log(sensorData);
+
 
         // Filtra os dados do sensor de volume de água (verifique o ID correto)
         const sum_litros = Math.round(sensorData
-            .filter(item => item.sensor === 2)  // Verifique se '6' é o ID correto
-            .reduce((acumulador, item) => acumulador + item.valor, 0));
+            .filter(item => item.sensor_id === "03f6b35e-df01-424e-a9be-b4908a7729c8")  // Verifique se  é o ID correto
+            .reduce((acumulador, item) => acumulador + parseFloat(item.valor), 0));
 
         // Atualiza a quantidade de água dessalinizada
-        document.getElementById("total-water-home").innerText = `${sum_litros} L`;
-
-        const sum_energia = Math.round(sensorData
-            .filter(item => item.sensor === 3)  // Verifique se '6' é o ID correto
-            .reduce((acumulador, item) => acumulador + item.valor, 0));
-
-        // Atualiza a quantidade de água dessalinizada
-        document.getElementById("total-energy-home").innerText = `${sum_energia} kWh`;
+        document.getElementById("total-water-home").innerText = `${sum_litros} L`;        
 
     } catch (error) {
         console.error("Erro ao carregar informações gerais dos sensores:", error);
@@ -224,7 +219,7 @@ async function loadSensorData() {
     }
 
     try {
-        const response = await fetch("https://solarbanyu-backend.onrender.com/app/alertas/", {
+        const response = await fetch("http://localhost:8000/app/alertas/", {
             method: "GET",
             headers: {
                 "Authorization": `Token ${token}`
