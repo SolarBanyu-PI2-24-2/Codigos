@@ -22,13 +22,13 @@ Os arquivos de teste estão localizados na pasta `tests/`. A estrutura é a segu
 frontend/
 │── public/
 │── views/
-│── tests/               # Pasta onde ficam os testes
+│── tests/               
 │   ├── app.test.js      # Testes das rotas principais
 │   ├── controllers/     # Testes dos controllers
 │   ├── utils/           # Testes das funções auxiliares
 │── app.js               # Aplicação principal
 │── package.json         # Configuração do projeto
-│── README.md            # Documentação
+│── README.md           
 ```
 
 ---
