@@ -7,7 +7,7 @@ async function loadAlertQtd() {
     }
 
     try {
-        const response = await fetch("http://localhost:8000/app/alertas/", {
+        const response = await fetch("https://solarbanyu-backend.onrender.com/app/alertas/", {
             method: "GET",
             headers: {
                 "Authorization": `Token ${token}`
@@ -34,14 +34,14 @@ async function loadGeneralInfo() {
 
     try {
         const token = localStorage.getItem("token");
-        const response = await fetch("http://localhost:8000/app/dados_sensores/", {
+        const response = await fetch("https://solarbanyu-backend.onrender.com/app/dados_sensores/", {
             method: "GET",
             headers: {
                 "Authorization": `Token ${token}`
             }
         }); console.log("Dados carregados do sensor:", sensor_data);
 
-        const deviceResponse = await fetch("http://localhost:8000/app/dispositivos/", {
+        const deviceResponse = await fetch("https://solarbanyu-backend.onrender.com/app/dispositivos/", {
             method: "GET",
             headers: { "Authorization": `Token ${token}` }
         });
@@ -120,7 +120,7 @@ async function loadSensorData() {
     }
 
     try {
-        const response = await fetch("http://localhost:8000/app/alertas/", {
+        const response = await fetch("https://solarbanyu-backend.onrender.com/app/alertas/", {
             method: "GET",
             headers: {
                 "Authorization": `Token ${token}`
@@ -165,16 +165,8 @@ window.updateChartData = (type) => {
     typeSelected = type;
 }
 
-const GRAPH_BORDER_COLOR = {
-    "FLUXO_AGUA": "blue",
-    "NIVEL_AGUA": "green",
-    "PH_AGUA": "orange",
-    "TENSAO": "gray",
-    "TEMPERATURA_AGUA": "red",
-};
-
 async function buildSensorsGraph(myChart, sensores, token) {
-    const responseDataSensores = await fetch("http://localhost:8000/app/dados_sensores/", {
+    const responseDataSensores = await fetch("https://solarbanyu-backend.onrender.com/app/dados_sensores/", {
         method: "GET",
         headers: {
             "Authorization": `Token ${token}`
@@ -233,7 +225,6 @@ async function buildSensorsGraph(myChart, sensores, token) {
                 label: tipo,
                 data: itens.map(it => it.valor),
                 borderWidth: 2,
-                backgroundColor: GRAPH_BORDER_COLOR[tipo],
                 tension: 0.3
             });
             myChart.options.scales.x.title.text = "tempo";
@@ -289,7 +280,7 @@ document.addEventListener("DOMContentLoaded", async function () {
 
     const token = localStorage.getItem("token");
 
-    const response = await fetch("http://localhost:8000/app/sensores/", {
+    const response = await fetch("https://solarbanyu-backend.onrender.com/app/sensores/", {
         method: "GET",
         headers: {
             "Authorization": `Token ${token}`
