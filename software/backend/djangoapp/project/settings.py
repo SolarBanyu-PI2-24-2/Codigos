@@ -93,7 +93,7 @@ DATABASES = {
 
 
 CSRF_TRUSTED_ORIGINS = [
-    "http://localhost:8000",
+    "https://solarbanyu-backend.onrender.com",
 ]
 
 

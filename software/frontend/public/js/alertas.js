@@ -13,12 +13,12 @@ async function loadHomePageData() {
 
     try {
         const userId = localStorage.getItem("userId");
-        const userResponse = await fetch(`http://localhost:8000/app/usuario/${userId}`, {
+        const userResponse = await fetch(`https://solarbanyu-backend.onrender.com/app/usuario/${userId}`, {
             method: "GET", headers: { "Authorization": `Token ${token}` }
         });
         if (!userResponse.ok) throw new Error("Erro ao buscar usuário.");
 
-        const deviceResponse = await fetch("http://localhost:8000/app/dispositivos/", {
+        const deviceResponse = await fetch("https://solarbanyu-backend.onrender.com/app/dispositivos/", {
             method: "GET", headers: { "Authorization": `Token ${token}` }
         });
         if (!deviceResponse.ok) throw new Error("Erro ao buscar dispositivo.");
@@ -37,7 +37,7 @@ async function loadAlert() {
 
     setInterval(async () => {
         try {
-            const response = await fetch("http://localhost:8000/app/alertas/", {
+            const response = await fetch("https://solarbanyu-backend.onrender.com/app/alertas/", {
                 method: "GET", headers: { "Authorization": `Token ${token}` }
             });
             if (!response.ok) throw new Error("Erro ao buscar alertas.");
@@ -165,7 +165,7 @@ function addEventListenersToButtons() {
 
             try {
                 const token = localStorage.getItem("token");
-                const response = await fetch(`http://localhost:8000/app/alerta/${alertId}/`, {
+                const response = await fetch(`https://solarbanyu-backend.onrender.com/app/alerta/${alertId}/`, {
                     method: "PATCH",
                     headers: {
                         "Authorization": `Token ${token}`,

@@ -23,7 +23,7 @@ async function validateLogin() {
     }
 
     try {
-        const response = await fetch("http://localhost:8000/app/login/", {
+        const response = await fetch("https://solarbanyu-backend.onrender.com/app/login/", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -68,7 +68,7 @@ document.addEventListener("DOMContentLoaded", function () {
             }
 
             try {
-                const response = await fetch("http://localhost:8000/app/logout/", {
+                const response = await fetch("https://solarbanyu-backend.onrender.com/app/logout/", {
                     method: "POST",
                     headers: {
                         "Authorization": `Token ${token}`
@@ -111,7 +111,7 @@ async function loadUserInfo() {
     }
 
     try {
-        const response = await fetch(`http://localhost:8000/app/usuario/${userId}`, {
+        const response = await fetch(`https://solarbanyu-backend.onrender.com/app/usuario/${userId}`, {
             method: "GET",
             headers: {
                 "Authorization": `Token ${token}`
@@ -147,7 +147,7 @@ async function loadUserAddress() {
     }
 
     try {
-        const response = await fetch("http://localhost:8000/app/address/user/", {
+        const response = await fetch("https://solarbanyu-backend.onrender.com/app/address/user/", {
             method: "GET",
             headers: {
                 "Authorization": `Token ${token}`
@@ -180,7 +180,7 @@ async function loadUserInfoConfig() {
 
     try {
         // Buscar informações do usuário
-        const userResponse = await fetch(`http://localhost:8000/app/usuario/${userId}`, {
+        const userResponse = await fetch(`https://solarbanyu-backend.onrender.com/app/usuario/${userId}`, {
             method: "GET",
             headers: {
                 "Authorization": `Token ${token}`
@@ -200,7 +200,7 @@ async function loadUserInfoConfig() {
 
         // TODO: usuario não possui endereco
         // Buscar informações do endereço
-        // const addressResponse = await fetch("http://localhost:8000/app/address/user/", {
+        // const addressResponse = await fetch("https://solarbanyu-backend.onrender.com/app/address/user/", {
         //     method: "GET",
         //     headers: {
         //         "Authorization": `Token ${token}`
@@ -232,7 +232,7 @@ async function loadUserDevice() {
     }
 
     try {
-        const response = await fetch("http://localhost:8000/app/dispositivos/", {
+        const response = await fetch("https://solarbanyu-backend.onrender.com/app/dispositivos/", {
             method: "GET",
             headers: {
                 "Authorization": `Token ${token}`
@@ -357,7 +357,7 @@ if (notificationButton) {
 
 //async function testBackendCommunication() {
 //    try {
-//        const response = await fetch('http://localhost:8000/app/app/data'); // Ajuste para a rota real do backend
+//        const response = await fetch('https://solarbanyu-backend.onrender.com/app/app/data'); // Ajuste para a rota real do backend
 //        if (response.ok) {
 //            const data = await response.json();
 //            console.log('Dados do backend:', data); // Exibe no console do navegador
