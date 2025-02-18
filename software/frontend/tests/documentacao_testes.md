@@ -22,13 +22,13 @@ Os arquivos de teste estão localizados na pasta `tests/`. A estrutura é a segu
 frontend/
 │── public/
 │── views/
-│── tests/               
+│── tests/
 │   ├── app.test.js      # Testes das rotas principais
 │   ├── controllers/     # Testes dos controllers
 │   ├── utils/           # Testes das funções auxiliares
 │── app.js               # Aplicação principal
 │── package.json         # Configuração do projeto
-│── README.md           
+│── README.md
 ```
 
 ---
@@ -73,13 +73,21 @@ npm test -- --coverage
 
 A execução do comando `npm test -- --coverage` gera um relatório como o mostrado abaixo:
 
-![Relatório de Cobertura](./tests/coverage-report.png)
+![Relatório de Cobertura](../tests/assets/coverage-report.png)
 
 ---
 
 ## 6. Exemplos de Testes Baseados no Projeto
 
-Os exemplos de testes podem ser encontrados na seção de imagens acima.
+Aqui estão alguns exemplos de testes automatizados implementados:
+
+### Teste de Redirecionamento da Raiz
+
+![Teste de Redirecionamento](../tests/assets/img_tests1.png)
+
+### Teste de Carregamento da Página de Login
+
+![Teste de Login](../tests/assets/img_tests2.png)
 
 ---
 
