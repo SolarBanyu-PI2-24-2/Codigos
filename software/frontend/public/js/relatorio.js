@@ -8,7 +8,7 @@ async function loadUnresolvedAlerts() {
     }
 
     try {
-        const response = await fetch("http://localhost:8000/app/alertas/", {
+        const response = await fetch("https://solarbanyu-backend.onrender.com/app/alertas/", {
             method: "GET",
             headers: { "Authorization": `Token ${token}` }  // Corrigido para usar template literals
         });
@@ -51,7 +51,7 @@ async function loadLastUpdate() {
     }
 
     try {
-        const response = await fetch("http://localhost:8000/app/dados_sensores/", {
+        const response = await fetch("https://solarbanyu-backend.onrender.com/app/dados_sensores/", {
             method: "GET",
             headers: { "Authorization": `Token ${token}` }  // Corrigido para usar template literals
         });
@@ -106,7 +106,7 @@ async function loadReportChart() {
 
     try {
         // Busca todos os dados dos sensores
-        const response = await fetch("http://localhost:8000/app/dados_sensores", {
+        const response = await fetch("https://solarbanyu-backend.onrender.com/app/dados_sensores", {
             method: 'GET',
             headers: {
                 'Authorization': `Token ${token}`,
