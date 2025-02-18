@@ -193,21 +193,16 @@ async function loadGeneralInfo() {
             throw new Error("Erro ao buscar informações gerais dos sensores.");
         }
         const sensorData = await sensorDataResponse.json();
+        console.log(sensorData);
+
 
         // Filtra os dados do sensor de volume de água (verifique o ID correto)
         const sum_litros = Math.round(sensorData
-            .filter(item => item.sensor === 2)  // Verifique se '6' é o ID correto
-            .reduce((acumulador, item) => acumulador + item.valor, 0));
+            .filter(item => item.sensor_id === "03f6b35e-df01-424e-a9be-b4908a7729c8")  // Verifique se  é o ID correto
+            .reduce((acumulador, item) => acumulador + parseFloat(item.valor), 0));
 
         // Atualiza a quantidade de água dessalinizada
-        document.getElementById("total-water-home").innerText = `${sum_litros} L`;
-
-        const sum_energia = Math.round(sensorData
-            .filter(item => item.sensor === 3)  // Verifique se '6' é o ID correto
-            .reduce((acumulador, item) => acumulador + item.valor, 0));
-
-        // Atualiza a quantidade de água dessalinizada
-        document.getElementById("total-energy-home").innerText = `${sum_energia} kWh`;
+        document.getElementById("total-water-home").innerText = `${sum_litros} L`;        
 
     } catch (error) {
         console.error("Erro ao carregar informações gerais dos sensores:", error);

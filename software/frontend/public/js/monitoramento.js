@@ -54,8 +54,8 @@ async function loadGeneralInfo() {
         sensor_data.push(data);
 
         const sum_litros = Math.round(sensor_data[0]
-            .filter(item => item.sensor === 2)
-            .reduce((acumulador, item) => acumulador + item.valor, 0));
+            .filter(item => item.sensor_id === "03f6b35e-df01-424e-a9be-b4908a7729c8")
+            .reduce((acumulador, item) => acumulador + parseFloat(item.valor), 0));
         document.getElementById("total-water").innerText = `${sum_litros} L`;
 
 
@@ -224,7 +224,7 @@ async function buildSensorsGraph(myChart, sensores, token) {
             database.push({
                 label: tipo,
                 data: itens.map(it => it.valor),
-                borderWidth: 2,
+                borderWidth: 3,
                 tension: 0.3
             });
             myChart.options.scales.x.title.text = "tempo";
@@ -234,8 +234,8 @@ async function buildSensorsGraph(myChart, sensores, token) {
                 database.push({
                     label: tipo,
                     data: itens.map(it => it.valor),
-                    borderWidth: 2,
-                    tension: 0.3,
+                    borderWidth: 3,
+                    tension: 0.3
                 });
                 myChart.options.scales.x.title.text = "tempo";
                 myChart.options.scales.y.title.text = itens[0].unidade;

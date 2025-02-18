@@ -161,7 +161,7 @@ async function loadUserAddress() {
         const data = await response.json();
 
         // Atualiza o campo de endereço no HTML
-        document.getElementById("address").value = `${data.rua}, ${data.numero}, ${data.bairro || ''}, ${data.cidade}, ${data.estado}`;
+        document.getElementById("address").value = `${data.rua}, ${data.numero}, ${data.complemento || ''}, ${data.cidade}, ${data.estado}`;
 
     } catch (error) {
         console.error("Erro ao carregar informações do endereço:", error);

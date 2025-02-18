@@ -96,123 +96,185 @@ async function loadLastUpdate() {
 }
 
 // Função para carregar o gráfico do relatório
-// Função para carregar o gráfico do relatório (agora com dados mensais)
-function loadReportChart() {
+async function loadReportChart() {
     const token = localStorage.getItem("token");
 
-    // Verifica se o token existe
     if (!token) {
         console.warn("Usuário não autenticado.");
         return;
     }
 
-    // Chama a API para pegar os dados necessários (Agora com período "Mensal")
-    fetch("https://solarbanyu-backend.onrender.com/app/dados-sensores?sensor_id=2&period=Mensal", {
-        method: 'GET',
-        headers: {
-            'Authorization': `Token ${token}`,
-            'Accept': 'application/json',
+    try {
+        // Busca todos os dados dos sensores
+        const response = await fetch("https://solarbanyu-backend.onrender.com/app/dados_sensores", {
+            method: 'GET',
+            headers: {
+                'Authorization': `Token ${token}`,
+                'Accept': 'application/json',
+            }
+        });
+
+        if (!response.ok) {
+            throw new Error("Erro ao buscar dados dos sensores.");
         }
-    })
-    .then(response => response.json())
-    .then(data => {
-        // Agrupar dados por mês
-        const groupedData = groupDataByMonth(data);
 
-        // Formata as datas e valores para o gráfico
-        const labels = Object.keys(groupedData);  // Meses
-        const volumeDeAgua = labels.map(month => groupedData[month].volumeDeAgua);  // Volume de água
-        const temperatura = labels.map(month => groupedData[month].temperatura);  // Temperatura
-        const phAgua = labels.map(month => groupedData[month].phAgua);  // pH da água
-        const energia = labels.map(month => groupedData[month].energia);  // Energia consumida
+        const data = await response.json();
 
-        // Criar o gráfico
+        // Agrupa os dados por mês/ano
+        const groupedData = groupDataByYearAndMonth(data);
+
+        // Extrai os dados para o gráfico
+        const labels = Object.keys(groupedData).sort(); // Ex: 01-2025, 02-2025
+        const volumeDeAgua = labels.map(month => groupedData[month].volumeDeAgua);
+        const temperatura = labels.map(month => groupedData[month].temperatura);
+        const phAgua = labels.map(month => groupedData[month].phAgua);
+        const energia = labels.map(month => groupedData[month].energia);
+
+        // Renderiza o gráfico
         const ctx = document.getElementById('solarChart').getContext('2d');
-
         new Chart(ctx, {
             type: 'line',
-            data: {
-                labels: labels,  // Meses como labels
+            data: {            
+                labels: labels,
                 datasets: [
                     {
                         label: 'Temperatura (°C)',
                         data: temperatura,
-                        borderColor: 'rgb(255, 99, 132)',  // Cor vermelha
-                        borderWidth: 2,
-                        fill: false
+                        borderColor: '#8B0000', 
+                        backgroundColor: '#8B0000', 
+                        borderWidth: 5,
+                        fill: true
                     },
                     {
                         label: 'pH da água',
                         data: phAgua,
-                        borderColor: 'rgb(173, 216, 230)',  // Cor azul claro
-                        borderWidth: 2,
-                        fill: false
+                        borderColor: '#FF1493', 
+                        backgroundColor: '#FF1493', 
+                        borderWidth: 5,
+                        fill: true
                     },
                     {
                         label: 'Volume de água dessalinizada (L)',
                         data: volumeDeAgua,
-                        borderColor: 'rgb(54, 162, 235)',  // Cor azul
-                        borderWidth: 2,
-                        fill: false
+                        borderColor: '#0000CD', 
+                        backgroundColor: '#0000CD', 
+                        borderWidth: 5,
+                        fill: true
                     },
                     {
-                        label: 'Consumo de energia (kWh)',
+                        label: 'Tensão (kWh)',
                         data: energia,
-                        borderColor: 'rgb(255, 159, 64)',  // Cor laranja
-                        borderWidth: 2,
-                        fill: false
+                        borderColor: '#FF8C00', 
+                        backgroundColor: '#FF8C00', 
+                        borderWidth: 5,
+                        fill: true
                     }
                 ]
             },
             options: {
                 responsive: true,
+                plugins: {
+                    title: {
+                        display: true,
+                        text: 'Médias Mensais dos Sensores - SolarBanyu',
+                        color: '#333',
+                        font: {
+                            size: 18
+                        }
+                    },
+                    legend: {
+                        display: true  // Oculta a legenda completa
+                    }
+                },
                 scales: {
+                    x: {
+                        ticks: {
+                            font: {
+                                size: 14 // Fonte dos rótulos no eixo X
+                            }
+                        },
+                        title: {
+                            display: true,
+                            text: 'Ano/Mês',
+                            color: '#333',
+                            font: {
+                                size: 18
+                            }
+                        }
+                    },
                     y: {
-                        beginAtZero: true
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: 'Média dos Valores',
+                            color: '#333',
+                            font: {
+                                size: 18
+                            }
+                        }
                     }
                 }
             }
         });
-    })
-    .catch(error => {
+
+    } catch (error) {
         console.error("Erro ao carregar dados para o gráfico:", error);
-    });
+    }
 }
 
-// Função para agrupar os dados por mês
-function groupDataByMonth(data) {
+// Função para agrupar os dados por ano/mês e calcular as médias
+function groupDataByYearAndMonth(data) {
     const grouped = {};
 
     data.forEach(dado => {
         const date = new Date(dado.criado_em);
-        const month = `${date.getMonth() + 1}-${date.getFullYear()}`; // Ex: 01-2025
+        const yearMonth = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`; // Ex: 2025-02
 
-        // Inicializa o mês no objeto agrupado
-        if (!grouped[month]) {
-            grouped[month] = {
+        // Inicializa o agrupamento se não existir
+        if (!grouped[yearMonth]) {
+            grouped[yearMonth] = {
                 volumeDeAgua: 0,
                 temperatura: 0,
                 phAgua: 0,
                 energia: 0,
-                count: 0
+                volumeCount: 0,
+                tempCount: 0,
+                phCount: 0,
+                energiaCount: 0
             };
         }
 
-        // Agrupa os dados
-        if (dado.sensor === 2) grouped[month].volumeDeAgua += dado.valor;
-        if (dado.sensor === 3) grouped[month].energia += dado.valor;
-        if (dado.sensor === 4) grouped[month].temperatura += dado.valor;
-        if (dado.sensor === 5) grouped[month].phAgua += dado.valor;
+        // Associa os dados com os sensores conhecidos
+        switch (dado.sensor_id) {
+            case "03f6b35e-df01-424e-a9be-b4908a7729c8": // FLUXO_AGUA
+                grouped[yearMonth].volumeDeAgua += parseFloat(dado.valor);
+                grouped[yearMonth].volumeCount++;
+                break;
 
-        grouped[month].count++;
+            case "c21273ba-5c8e-4f48-ac3b-570e68688923": // TEMPERATURA_AGUA
+                grouped[yearMonth].temperatura += parseFloat(dado.valor);
+                grouped[yearMonth].tempCount++;
+                break;
+
+            case "1860f484-e5de-4f25-89e3-70ee65ea7bf8": // PH_AGUA
+                grouped[yearMonth].phAgua += parseFloat(dado.valor);
+                grouped[yearMonth].phCount++;
+                break;
+
+            case "baf40a3e-8bf7-48db-a187-0b0d6cbf9a09": // TENSAO
+                grouped[yearMonth].energia += parseFloat(dado.valor);
+                grouped[yearMonth].energiaCount++;
+                break;
+        }
     });
 
-    // Calcular a média para cada mês
+    // Calcula as médias para cada mês
     Object.keys(grouped).forEach(month => {
-        grouped[month].volumeDeAgua /= grouped[month].count;
-        grouped[month].temperatura /= grouped[month].count;
-        grouped[month].phAgua /= grouped[month].count;
-        grouped[month].energia /= grouped[month].count;
+        const g = grouped[month];
+        g.volumeDeAgua = g.volumeCount > 0 ? (g.volumeDeAgua / g.volumeCount).toFixed(2) : 0;
+        g.temperatura = g.tempCount > 0 ? (g.temperatura / g.tempCount).toFixed(2) : 0;
+        g.phAgua = g.phCount > 0 ? (g.phAgua / g.phCount).toFixed(2) : 0;
+        g.energia = g.energiaCount > 0 ? (g.energia / g.energiaCount).toFixed(2) : 0;
     });
 
     return grouped;
