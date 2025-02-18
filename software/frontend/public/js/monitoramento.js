@@ -7,7 +7,7 @@ async function loadAlertQtd() {
     }
 
     try {
-        const response = await fetch("https://solarbanyu-backend.onrender.com/app/alertas/", {
+        const response = await fetch("http://localhost:8000/app/alertas/", {
             method: "GET",
             headers: {
                 "Authorization": `Token ${token}`
@@ -34,14 +34,14 @@ async function loadGeneralInfo() {
 
     try {
         const token = localStorage.getItem("token");
-        const response = await fetch("https://solarbanyu-backend.onrender.com/app/dados_sensores/", {
+        const response = await fetch("http://localhost:8000/app/dados_sensores/", {
             method: "GET",
             headers: {
                 "Authorization": `Token ${token}`
             }
         }); console.log("Dados carregados do sensor:", sensor_data);
 
-        const deviceResponse = await fetch("https://solarbanyu-backend.onrender.com/app/dispositivos/", {
+        const deviceResponse = await fetch("http://localhost:8000/app/dispositivos/", {
             method: "GET",
             headers: { "Authorization": `Token ${token}` }
         });
@@ -54,8 +54,8 @@ async function loadGeneralInfo() {
         sensor_data.push(data);
 
         const sum_litros = Math.round(sensor_data[0]
-            .filter(item => item.sensor === 2)
-            .reduce((acumulador, item) => acumulador + item.valor, 0));
+            .filter(item => item.sensor_id === "03f6b35e-df01-424e-a9be-b4908a7729c8")
+            .reduce((acumulador, item) => acumulador + parseFloat(item.valor), 0));
         document.getElementById("total-water").innerText = `${sum_litros} L`;
 
 
@@ -120,7 +120,7 @@ async function loadSensorData() {
     }
 
     try {
-        const response = await fetch("https://solarbanyu-backend.onrender.com/app/alertas/", {
+        const response = await fetch("http://localhost:8000/app/alertas/", {
             method: "GET",
             headers: {
                 "Authorization": `Token ${token}`
@@ -166,7 +166,7 @@ window.updateChartData = (type) => {
 }
 
 async function buildSensorsGraph(myChart, sensores, token) {
-    const responseDataSensores = await fetch("https://solarbanyu-backend.onrender.com/app/dados_sensores/", {
+    const responseDataSensores = await fetch("http://localhost:8000/app/dados_sensores/", {
         method: "GET",
         headers: {
             "Authorization": `Token ${token}`
@@ -223,7 +223,7 @@ async function buildSensorsGraph(myChart, sensores, token) {
             database.push({
                 label: tipo,
                 data: itens.map(it => it.valor),
-                borderWidth: 2,
+                borderWidth: 3,
                 tension: 0.3
             });
             myChart.options.scales.x.title.text = "tempo";
@@ -233,7 +233,7 @@ async function buildSensorsGraph(myChart, sensores, token) {
                 database.push({
                     label: tipo,
                     data: itens.map(it => it.valor),
-                    borderWidth: 2,
+                    borderWidth: 3,
                     tension: 0.3
                 });
                 myChart.options.scales.x.title.text = "tempo";
@@ -279,7 +279,7 @@ document.addEventListener("DOMContentLoaded", async function () {
 
     const token = localStorage.getItem("token");
 
-    const response = await fetch("https://solarbanyu-backend.onrender.com/app/sensores/", {
+    const response = await fetch("http://localhost:8000/app/sensores/", {
         method: "GET",
         headers: {
             "Authorization": `Token ${token}`
