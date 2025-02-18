@@ -7,7 +7,7 @@ async function loadAlertQtd() {
     }
 
     try {
-        const response = await fetch("https://solarbanyu-backend.onrender.com/app/alertas/", {
+        const response = await fetch("http://localhost:8000/app/alertas/", {
             method: "GET",
             headers: {
                 "Authorization": `Token ${token}`
@@ -34,14 +34,14 @@ async function loadGeneralInfo() {
 
     try {
         const token = localStorage.getItem("token");
-        const response = await fetch("https://solarbanyu-backend.onrender.com/app/dados_sensores/", {
+        const response = await fetch("http://localhost:8000/app/dados_sensores/", {
             method: "GET",
             headers: {
                 "Authorization": `Token ${token}`
             }
         }); console.log("Dados carregados do sensor:", sensor_data);
 
-        const deviceResponse = await fetch("https://solarbanyu-backend.onrender.com/app/dispositivos/", {
+        const deviceResponse = await fetch("http://localhost:8000/app/dispositivos/", {
             method: "GET",
             headers: { "Authorization": `Token ${token}` }
         });
@@ -120,7 +120,7 @@ async function loadSensorData() {
     }
 
     try {
-        const response = await fetch("https://solarbanyu-backend.onrender.com/app/alertas/", {
+        const response = await fetch("http://localhost:8000/app/alertas/", {
             method: "GET",
             headers: {
                 "Authorization": `Token ${token}`
@@ -165,8 +165,16 @@ window.updateChartData = (type) => {
     typeSelected = type;
 }
 
+const GRAPH_BORDER_COLOR = {
+    "FLUXO_AGUA": "blue",
+    "NIVEL_AGUA": "green",
+    "PH_AGUA": "orange",
+    "TENSAO": "gray",
+    "TEMPERATURA_AGUA": "red",
+};
+
 async function buildSensorsGraph(myChart, sensores, token) {
-    const responseDataSensores = await fetch("https://solarbanyu-backend.onrender.com/app/dados_sensores/", {
+    const responseDataSensores = await fetch("http://localhost:8000/app/dados_sensores/", {
         method: "GET",
         headers: {
             "Authorization": `Token ${token}`
@@ -180,11 +188,11 @@ async function buildSensorsGraph(myChart, sensores, token) {
     const dadosSensores = await responseDataSensores.json();
 
     const dadosSensoresSorted = dadosSensores
-        .sort((a, b) => new Date(b.criado_em) - new Date(a.criado_em))
-        .slice(0, 100)
+        .sort((a, b) => new Date(a.criado_em) - new Date(b.criado_em))
+        .slice(0, 100);
 
     console.log("dadosSensoresSorted");
-    console.log(dadosSensoresSorted);
+    console.log(dadosSensoresSorted.slice(0, 40).filter(it => it.unidade == "pH"));
 
     // Inicializa o gráfico com "Por minutos"
     // updateChart("Mensal");
@@ -202,6 +210,7 @@ async function buildSensorsGraph(myChart, sensores, token) {
     }))];
 
     myChart.data.labels = labelsGraph
+        .slice(-20)
         .sort();
 
     const dadosAgrupados = agruparPorTipo(dadosSensoresSorted
@@ -224,6 +233,7 @@ async function buildSensorsGraph(myChart, sensores, token) {
                 label: tipo,
                 data: itens.map(it => it.valor),
                 borderWidth: 2,
+                backgroundColor: GRAPH_BORDER_COLOR[tipo],
                 tension: 0.3
             });
             myChart.options.scales.x.title.text = "tempo";
@@ -234,7 +244,7 @@ async function buildSensorsGraph(myChart, sensores, token) {
                     label: tipo,
                     data: itens.map(it => it.valor),
                     borderWidth: 2,
-                    tension: 0.3
+                    tension: 0.3,
                 });
                 myChart.options.scales.x.title.text = "tempo";
                 myChart.options.scales.y.title.text = itens[0].unidade;
@@ -279,7 +289,7 @@ document.addEventListener("DOMContentLoaded", async function () {
 
     const token = localStorage.getItem("token");
 
-    const response = await fetch("https://solarbanyu-backend.onrender.com/app/sensores/", {
+    const response = await fetch("http://localhost:8000/app/sensores/", {
         method: "GET",
         headers: {
             "Authorization": `Token ${token}`
