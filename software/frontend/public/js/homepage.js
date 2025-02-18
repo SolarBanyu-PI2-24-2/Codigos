@@ -30,7 +30,7 @@ async function loadHomePageData() {
         document.getElementById("user-name-home").textContent = `Seja bem-vinda, ${userData.nome}`;
         document.getElementById("installation-title").textContent = `SolarBanyu da ${userData.nome}`;
 
-        const deviceResponse = await fetch("https://solarbanyu-backend.onrender.comapp/dispositivos/", {
+        const deviceResponse = await fetch("https://solarbanyu-backend.onrender.com/app/dispositivos/", {
             method: "GET",
             headers: { "Authorization": `Token ${token}` }
         });
