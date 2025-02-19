@@ -162,7 +162,7 @@ async function loadReportChart() {
                         fill: true
                     },
                     {
-                        label: 'Tensão (kWh)',
+                        label: 'Tensão (V)',
                         data: energia,
                         borderColor: '#FF8C00', 
                         backgroundColor: '#FF8C00', 
