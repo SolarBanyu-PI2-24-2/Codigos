@@ -43,7 +43,15 @@ def on_message(client, userdata, msg):
     
     print(f"Mensagem recebida no tópico {msg.topic}: {msg.payload.decode()}")
     
+    if len(mqtt_logs) > 30:
+        mqtt_logs.clear()
+    
     sensors_data_updated = json.loads(msg.payload.decode())
+    
+    mqtt_logs.append({
+        'timestamp': now(),  # Timestamp da mensagem MQTT
+        'message': sensors_data_updated  # Conteúdo da mensagem
+    })
     
     headers = {"Content-Type": "application/json"}
 
@@ -92,13 +100,6 @@ def on_message(client, userdata, msg):
                 
                 if response.status_code == 201:
                     print(f"Dado enviado com sucesso.")
-                    if len(mqtt_logs) > 30:
-                        mqtt_logs.clear()
-                    
-                    mqtt_logs.append({
-                        'timestamp': now(),  # Timestamp da mensagem MQTT
-                        'message': req_json  # Conteúdo da mensagem
-                    })
                 else:
                     print(f"Falha ao enviar dados: {response.status_code} - {response.text}")
                     requests.post(f"{API_HOST}/alertas/", headers=headers, json={

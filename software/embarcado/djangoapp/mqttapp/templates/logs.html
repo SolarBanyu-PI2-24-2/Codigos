@@ -3,14 +3,48 @@
 <html>
 <head>
     <title>MQTT Logs</title>
-    <meta http-equiv="refresh" content="15">
+    <script>
+        // Função para buscar logs usando fetch
+        function fetchLogs() {
+            fetch("{% url 'get_logs' %}")  // URL do endpoint
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error("Erro ao buscar logs.");
+                    }
+                    return response.json();  // Converte a resposta para JSON
+                })
+                .then(data => {
+                    // Limpa a lista atual e adiciona os novos logs
+                    const logList = document.getElementById("log-list");
+                    logList.innerHTML = "";  // Limpa a lista
+                    data.logs.forEach(log => {
+                        const logItem = document.createElement("li");
+                        const mqttData = JSON.stringify(log.message);
+                        const data = new Date(log.timestamp).toLocaleDateString();
+                        const hora = new Date(log.timestamp).toLocaleTimeString();
+                        console.log(log);
+                        logItem.textContent = `[${data} ${hora}] -> ${mqttData}`;
+                        logList.appendChild(logItem);
+                    });
+                })
+                .catch(error => {
+                    console.error(error);
+                });
+        }
+
+        // Atualiza os logs a cada 10 segundo
+        setInterval(fetchLogs, 10000);
+
+        // Busca os logs imediatamente ao carregar a página
+        document.addEventListener("DOMContentLoaded", function() {
+            fetchLogs();
+        });
+    </script>
 </head>
 <body>
     <h1>MQTT Logs</h1>
-    <ul>
-        {% for log in logs %}
-            <li>{{ log.timestamp }}: {{ log.message }}</li>
-        {% endfor %}
+    <ul id="log-list">
+        <!-- Os logs serão preenchidos dinamicamente via JavaScript -->
     </ul>
 </body>
 </html>
