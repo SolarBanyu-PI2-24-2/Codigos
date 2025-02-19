@@ -1,9 +1,9 @@
-#!/bin/sh
+    #!/bin/sh
 
-cd djangoapp
+    cd djangoapp
 
-python manage.py collectstatic --noinput
-python manage.py makemigrations --noinput
-python manage.py migrate --noinput
+    python manage.py collectstatic --noinput
+    python manage.py makemigrations --noinput
+    python manage.py migrate --noinput
 
-python manage.py runserver 0.0.0.0:5000
+    daphne -b 0.0.0.0 -p 5000 app.asgi:application
