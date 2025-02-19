@@ -198,6 +198,64 @@ async function loadUserInfoConfig() {
         document.getElementById("email").value = userData.email;
         document.getElementById("profession").value = userData.profissao || "Não informado";
 
+        // Buscar dispositivos do usuário
+        const deviceResponse = await fetch("https://solarbanyu-backend.onrender.com/app/dispositivos/", {
+            method: "GET",
+            headers: {
+                "Authorization": `Token ${token}`
+            }
+        });
+
+        if (!deviceResponse.ok) {
+            throw new Error("Erro ao buscar dispositivos do usuário.");
+        }
+
+        const devices = await deviceResponse.json();
+
+        if (devices.length === 0) {
+            console.warn("Nenhum dispositivo encontrado para este usuário.");
+            document.getElementById("address").value = "Endereço não cadastrado";
+            return;
+        }
+
+        const device = devices.find(dev => dev.usuario_id === userData.id);
+
+        if (!device) {
+            console.warn("Nenhum dispositivo encontrado para este usuário.");
+            document.getElementById("address").value = "Endereço não cadastrado";
+            return;
+        }
+
+        const enderecoId = device.endereco_id;
+
+        // Buscar todos os endereços
+        const adressResponse = await fetch(`https://solarbanyu-backend.onrender.com/app/enderecos`, {
+            method: "GET",
+            headers: {
+                "Authorization": `Token ${token}`
+            }
+        });
+
+        if (!adressResponse.ok) {
+            throw new Error("Erro ao buscar endereços.");
+        }
+
+        const addresses = await adressResponse.json();
+
+        const address = addresses.find(addr => addr.id === enderecoId);
+
+        if (!address) {
+            console.warn("Endereço não encontrado para este dispositivo.");
+            document.getElementById("address").value = "Endereço não cadastrado";
+            return;
+        }
+
+        // Formatar o endereço
+        const formattedAddress = `${address.rua}, ${address.numero}, ${address.complemento} - ${address.cidade}/${address.estado}, CEP: ${address.cep}`;
+
+        // Atualizar campo de endereço no HTML
+        document.getElementById("address").value = formattedAddress;
+
         // TODO: usuario não possui endereco
         // Buscar informações do endereço
         // const addressResponse = await fetch("https://solarbanyu-backend.onrender.com/app/address/user/", {

@@ -4,6 +4,7 @@ import ssl
 import paho.mqtt.client as paho
 import paho.mqtt.subscribe as subscribe
 import json
+import math
 
 from paho import mqtt
 from pathlib import Path
@@ -55,7 +56,7 @@ def on_message(client, userdata, msg):
         
         if sensor is not None:
             req_json = {
-                "valor": round(sensor_value, 2),
+                "valor": math.floor(sensor_value * 100) / 100,
                 "unidade": sensor_value_unit,
                 "sensor_id": sensor["id"]
             }
@@ -105,8 +106,7 @@ def on_message(client, userdata, msg):
                         "descricao": f"Falha no envio de dados {sensor['tipo']}",
                         "prioridade": "Crítica",
                         "dispositivo_id": sensor["dispositivo_id"],
-                    })
-                    
+                    })     
             
         else:
             print(f"Sensor {sensor_type} não encontrado.")

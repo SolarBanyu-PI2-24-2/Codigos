@@ -180,11 +180,11 @@ async function buildSensorsGraph(myChart, sensores, token) {
     const dadosSensores = await responseDataSensores.json();
 
     const dadosSensoresSorted = dadosSensores
-        .sort((a, b) => new Date(b.criado_em) - new Date(a.criado_em))
-        .slice(0, 100)
+        .sort((a, b) => new Date(a.criado_em) - new Date(b.criado_em))
+        .slice(0, 100);
 
     console.log("dadosSensoresSorted");
-    console.log(dadosSensoresSorted);
+    console.log(dadosSensoresSorted.slice(0, 40).filter(it => it.unidade == "pH"));
 
     // Inicializa o gráfico com "Por minutos"
     // updateChart("Mensal");
@@ -202,6 +202,7 @@ async function buildSensorsGraph(myChart, sensores, token) {
     }))];
 
     myChart.data.labels = labelsGraph
+        .slice(-20)
         .sort();
 
     const dadosAgrupados = agruparPorTipo(dadosSensoresSorted
