@@ -180,7 +180,7 @@ async function buildSensorsGraph(myChart, sensores, token) {
     const dadosSensores = await responseDataSensores.json();
 
     const dadosSensoresSorted = dadosSensores
-        .sort((a, b) => new Date(a.criado_em) - new Date(b.criado_em))
+        .sort((a, b) => new Date(b.criado_em) - new Date(a.criado_em))
         .slice(0, 100);
 
     console.log("dadosSensoresSorted");
