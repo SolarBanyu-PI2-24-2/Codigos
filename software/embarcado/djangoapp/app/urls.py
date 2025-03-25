@@ -17,9 +17,11 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from mqttapp.views import logs_page
+from mqttapp import consumers
 
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('logs/', logs_page, name='logs'),
+    path('ws/alerts/', consumers.AlertConsumer.as_asgi()),
 ]
